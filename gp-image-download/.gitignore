@@ -5,5 +5,6 @@
 out
 gen
 images/**
+!images/
 
 node_modules
