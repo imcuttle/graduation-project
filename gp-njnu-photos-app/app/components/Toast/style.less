@@ -1,0 +1,37 @@
+.main {
+	position: fixed;
+	z-index: 10;
+	left: 50%;
+	top : 0px;
+	transform: translate(-50%, -100%);
+	
+	font-size: 18px;
+	transition: margin-top .5s ease-out;
+	margin-top: 0px;
+	
+	
+	padding: 12px 20px;
+	border: 1px solid transparent;
+	// box-shadow: 0px 0px 5px 3px #bbb;
+	overflow: hidden;
+
+	&.active {
+		margin-top: 60px;
+	}
+	
+	&.success {
+	    color: #3c763d;
+    	background-color: #dff0d8;
+    	border-color: #d6e9c6;
+	}
+	&.error {
+		color: #a94442;
+	    background-color: #f2dede;
+	    border-color: #ebccd1;
+	}
+	&.warn {
+		color: #8a6d3b;
+	    background-color: #fcf8e3;
+	    border-color: #faebcc;
+	}
+}

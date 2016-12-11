@@ -1,0 +1,119 @@
+
+.left, .right {
+	list-style: none;
+	padding-left: 0;
+	span {
+		display: inline;
+		padding: 5px 8px;
+		color: rgb(218, 218, 218);
+		transition: all 0.3s ease 0s;
+		cursor: pointer;
+		&:hover{
+			color: white;
+		}
+	}
+	li {
+		user-select: none;
+		float: left;
+		margin: 0 10px;
+		text-align: center;
+		padding-top: 6px;
+		padding-bottom: 6px;
+		box-sizing: border-box;
+		&.active {
+			> span {
+				
+			}
+			border-bottom: 3px solid #00A4E3;
+		}
+	}
+	.dropdown {
+		position: absolute;
+		background-color: #171717; 
+		ul {
+			padding-left: 0;
+			margin-top: 16px;
+			transition: all .5s ease 0s;
+			list-style: none;
+			max-height: 0;
+			overflow: hidden;
+			li {
+				margin: auto 0;
+				padding: 8px 13px;
+			}
+		}
+		&:hover {
+			ul {max-height: 200px;}
+		}
+	}
+
+	&:before {
+		content: " ";
+    	display: table;    	
+	}
+	&:after {
+	    clear: both;
+		display: table;
+    	content: " ";
+	}
+}
+
+.left {
+	margin-left: 20px;
+	float: left;
+}
+.right {
+	margin-right: 20px;
+	float: right;
+}
+.logo {
+
+}
+
+.main {
+	background: #171717;
+	&:before {
+		content: " ";
+    	display: table;    	
+	}
+	&:after {
+		display: table;
+    	content: " ";
+		clear: both;
+	}
+}
+
+.icon {
+	display: inline-block;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    width: 10px;
+    height: 5px;
+    background-image: url("https://bj-mc-prod-asset.oss-cn-beijing.aliyuncs.com/mc-official/images/icons/nav-arr-down.png");
+}
+
+.btn {
+	margin-left: 10px;
+    display: inline-block;
+    padding: 0px 12px;
+    margin-bottom: 0;
+    
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    /*vertical-align: bottom;*/
+    touch-action: manipulation;
+    cursor: pointer;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+
+    border-radius: 4px;
+
+    background-color: rgb(0, 164, 227);
+	color: rgb(255, 255, 255);
+	&:hover {
+		background-color: rgb(72, 155, 249);
+	}
+}
+

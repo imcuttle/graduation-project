@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "babel-core": "^6.20.0",
+    "babel-preset-stage-3": "^6.17.0"
+  }
+}
