@@ -8,6 +8,14 @@ var minimize = process.argv.indexOf('--mini') !== -1;
 
 
 var config = {
+    devServer: {
+        proxy: {
+            '/api': {
+                target: 'http://localhost:8778',
+                secure: false
+            }
+        }
+    },
     entry: {
         app: [
             'babel-polyfill',
