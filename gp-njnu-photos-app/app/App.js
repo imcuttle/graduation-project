@@ -32,7 +32,8 @@ class App extends React.Component {
         const {active} = state
         const {title, path} = active;    const titlePath = {
             '学生签到': '/',
-            '关于': '/about'
+            '关于': '/about',
+            '语音录入': '/audio-import'
         }
         const dataMap = (text)=> {
             return {
@@ -41,10 +42,9 @@ class App extends React.Component {
             }
         }
         
-        
         return {
-            leftItems: [dataMap('学生签到')],
-            rightItems: [ dataMap('关于'),  {text: '管理员入口', type: 'btn'}]
+            leftItems: [dataMap('学生签到'), dataMap('语音录入')],
+            rightItems: [ dataMap('关于'), {text: '管理员入口', type: 'btn'}]
         }
     }
     componentWillReceiveProps(nextProps) {
@@ -54,7 +54,6 @@ class App extends React.Component {
         const {pathname} = location
         
         if(pathname!==path) {
-
             actions.pushRoute(pathname)
         }
     }
@@ -71,7 +70,7 @@ class App extends React.Component {
             <div>
                 <Toast {...toast}/>
                 <Header {...this.getHeaderPorps()}/>
-                <Jumbotron {...other}/>
+                <div className="animated lightSpeedIn"><Jumbotron {...other}/></div>
                 {
                     React.Children.map(children, (child, i) =>
                         React.cloneElement(child, Object.assign({

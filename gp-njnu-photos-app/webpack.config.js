@@ -53,8 +53,13 @@ var config = {
                 test:/\.jsx?$/
             },
             {
-                test: /\.less$/,
+                test: /^(.(?!\.global))*\.less$/,  //http://www.cnblogs.com/bvbook/archive/2010/11/03/1867775.html
                 loader: 'style-loader!css-loader?modules' +
+                '!postcss!less-loader'
+            },
+            {
+                test: /\.global\.less$/,
+                loader: 'style-loader!css-loader' +
                 '!postcss!less-loader'
             },
             {

@@ -36,11 +36,11 @@ export default class extends React.Component {
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
                 <Tabs items={this.getTabsProps()} />
                 <div style={{ minHeight: 400}}>
-                    <div style={{display: activeSrc!=='camera'?'none':''}}><TakePhoto onPhotoCallback={actions.setCameraData}/></div>
-                    {activeSrc==='file' && <div style={{width: 400, margin: '30px auto auto'}}>
+                    <div className="animated fadeInLeft" style={{display: activeSrc!=='camera'?'none':''}}><TakePhoto onPhotoCallback={actions.setCameraData}/></div>
+                    {activeSrc==='file' && <div className="animated fadeInDown" style={{width: 400, margin: '30px auto auto'}}>
                         <InputGroup btnText="上传图片" inputProps={{disabled: true}}/>
                     </div>}
-                    {activeSrc==='network' && <div style={{width: 400, margin: '30px auto auto'}}>
+                    {activeSrc==='network' && <div className="animated fadeInRight" style={{width: 400, margin: '30px auto auto'}}>
                         <InputGroup btnText="网络图片" inputProps={{disabled: false}}/>
                     </div>}
                 </div>

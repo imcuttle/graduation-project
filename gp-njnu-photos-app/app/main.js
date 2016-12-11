@@ -8,10 +8,11 @@ import thunkMiddleware from 'redux-thunk'
 import loggerMiddleware from 'redux-logger'
 import {createHashHistory} from 'history'
 
-import './common/css/base.less'
+import './common/css/base.global.less'
 import appReducers from './reducers/appReducers'
 import App from './App'
 import StuSignPage from './pages/StuSignPage'
+import AudioImportPage from './pages/AudioImportPage'
 
 
 function configureStore(rootReducer, initialState) {
@@ -48,6 +49,7 @@ render((
             <Route path="/" component={App}>
                 <IndexRoute component={StuSignPage}/>
                 <Route path="about" />
+                <Route path="audio-import" component={AudioImportPage}/>
                 <Route path="*" onEnter={(loc, replace) => replace('/')} />
             </Route>
         </Router>

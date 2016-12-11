@@ -4,8 +4,8 @@ import css from './style.less'
 
 
 
-export default ({btnText="确定", btnProps={}, inputProps={}}) =>
+export default ({btnText="确定", btnProps={}, inputProps={}, showBtn=true, showIpt=true}) =>
     <div className={css.main}>
-        <input {...inputProps}/>
-        <span className={css.btn} {...btnProps}>{btnText}</span>
+        {showIpt && <input style={showBtn?{}:{paddingRight: 0, marginRight: 0}} {...inputProps}/>}
+        {showBtn && <span style={showIpt?{}:{padding: '0px 26px', width: 'auto'}} className={css.btn} {...btnProps}>{btnText}</span>}
     </div>
