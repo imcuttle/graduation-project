@@ -4,7 +4,7 @@
 *.iml
 out
 gen
-images/**
-!images/
+images/*
+
 
 node_modules
