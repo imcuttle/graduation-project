@@ -14,3 +14,8 @@
 - 2016年12月11日
 	1. 搭建学生签到系统开发环境，采用`react + redux + react-router + webpack`技术栈，利用web前端技术实现界面，后续可以使用`electron`打包为跨平台app
 	2. 注册`face++`账号，打算采用第三方人脸识别比对api
+	
+- 2016年12月12日
+	1. 初步开发前端页面+后端服务(node express), 前后端分离
+	2. 使用`Sublime`编辑器，默认缩进为`Tab`，书写脚本`updateIndent.js`，批量修改`Tab`为四空格
+	
