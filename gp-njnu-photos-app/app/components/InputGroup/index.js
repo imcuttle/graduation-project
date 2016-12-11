@@ -5,7 +5,7 @@ import css from './style.less'
 
 
 export default ({btnText="确定", btnProps={}, inputProps={}}) =>
-	<div className={css.main}>
-		<input {...inputProps}/>
-		<span className={css.btn} {...btnProps}>{btnText}</span>
-	</div>
+    <div className={css.main}>
+        <input {...inputProps}/>
+        <span className={css.btn} {...btnProps}>{btnText}</span>
+    </div>

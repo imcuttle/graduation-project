@@ -11,7 +11,7 @@ fi
 cd images
 
 if [ ! -z "$1" ]; then
-	year=$1
+    year=$1
 fi
 echo year=$year
 
@@ -28,13 +28,13 @@ readarray arr < ../../data/student-ids-$year.txt
 echo ${arr[-1]}
 
 down() {
-	URL=$1
-	echo wget -q -N $URL
-	wget -q -N $URL
+    URL=$1
+    echo wget -q -N $URL
+    wget -q -N $URL
 }
 
 for id in ${arr[@]}; do
-	if [ ! -z $id ]; then
-		down "$base""$year"/${id//$\s/}.jpg
-	fi
+    if [ ! -z $id ]; then
+        down "$base""$year"/${id//$\s/}.jpg
+    fi
 done
