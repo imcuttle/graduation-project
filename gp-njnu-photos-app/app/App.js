@@ -8,6 +8,7 @@ import {Map} from 'immutable'
 import Jumbotron from './components/Jumbotron'
 import Header from './components/Header'
 import Toast from './components/Toast'
+import Modal from './components/Modal'
 
 const utils = require('./common/utils')
 
@@ -63,11 +64,13 @@ class App extends React.Component {
         const {actions, state} = this.props
         const {active, base} = state
         const {path, ...other} = active
-        const {toast} = base
+        const {toast, modal} = base
         const {text, show, type} = toast
+        // const {size, content, title, show} = modal
         return (
             <div>
                 <Toast {...toast}/>
+                <Modal {...modal} />
                 <Header {...this.getHeaderPorps()}/>
                 <div className="animated lightSpeedIn"><Jumbotron {...other}/></div>
                 {

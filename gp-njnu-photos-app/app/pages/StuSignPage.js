@@ -97,11 +97,13 @@ export default class extends React.Component {
                                             utils.showToast('请输入签到的班级或课程号')
                                         }
                                     } else {
-                                        if(!searching) {
-                                            actions.setUpFaceStart(!isStart)
-                                        } else {
-                                            utils.showToast('请稍等，有同学在签到中')
-                                        }
+                                        utils.showModal("是否确定结束签到？", ()=>{
+                                            if(!searching) {
+                                                actions.setUpFaceStart(!isStart)
+                                            } else {
+                                                utils.showToast('请稍等，有同学在签到中')
+                                            }
+                                        })
                                     }
                                 }
                             }}

@@ -30,3 +30,5 @@ export const setAudioStuInfo = (info) => _type("SET_AUDIO_STUINFO", {...info});
 export const hideToast = () => _type("HIDE_TOAST");
 export const showToast = (text, tp="error") => _type("SHOW_TOAST", {tp, text});
 
+export const showModal = (content, onOk, onCancel, title="", size="sm") => _type("SHOW_MODAL", {onOk, onCancel, content, title, size});
+export const hideModal = () => _type("HIDE_MODAL");

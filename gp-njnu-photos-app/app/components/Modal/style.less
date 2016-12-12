@@ -1,37 +1,131 @@
 .main {
+    
     position: fixed;
-    z-index: 10;
-    left: 50%;
-    top : 0px;
-    transform: translate(-50%, -100%);
-    
-    font-size: 18px;
-    transition: margin-top .5s ease-out;
-    margin-top: 0px;
-    
-    
-    padding: 12px 20px;
-    border: 1px solid transparent;
-    // box-shadow: 0px 0px 5px 3px #bbb;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
     overflow: hidden;
-
-    &.active {
-        margin-top: 60px;
+    outline: 0;
+    -webkit-overflow-scrolling: touch;
+    .backdrop {
+        opacity: .5;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: #000;
+        // z-index: 1000;
     }
     
-    &.success {
-        color: #3c763d;
-        background-color: #dff0d8;
-        border-color: #d6e9c6;
-    }
-    &.error {
-        color: #a94442;
-        background-color: #f2dede;
-        border-color: #ebccd1;
-    }
-    &.warn {
-        color: #8a6d3b;
-        background-color: #fcf8e3;
-        border-color: #faebcc;
+    .dialog {
+        // z-index: 1000;
+        margin: auto;
+        top: 50%;
+        transform: translateY(-100%);
+        width: 400px;
+        position: relative;
+        .content {
+            position: relative;
+            background-color: #fff;            
+            background-clip: padding-box;
+            text-align: center;
+            color: #2a6496;
+            font-size: 18px;
+            //border: 1px solid #999;
+            border: 1px solid rgba(0,0,0,.2);
+            border-radius: 6px;
+            outline: 0;
+            box-shadow: 0 3px 9px rgba(0,0,0,.5);
+            .header {
+                min-height: 16.43px;
+                padding: 15px;
+                border-bottom: 1px solid #e5e5e5;
+                .close {
+                    margin-top: -2px;
+                    -webkit-appearance: none;
+                    padding: 0;
+                    cursor: pointer;
+                    background: 0 0;
+                    border: 0;
+
+                    float: right;
+                    font-size: 21px;
+                    font-weight: 700;
+                    line-height: 1;
+                    color: #000;
+                    text-shadow: 0 1px 0 #fff;
+                    filter: alpha(opacity=20);
+                    opacity: .2;
+                }
+                .title {
+                    font-size: 18px;
+                    margin: 0;
+                    line-height: 1.43;
+                }
+            }
+            .body {
+                position: relative;
+                padding: 15px;
+            }
+            .footer {
+                &:before {
+                    display: table;
+                    content: " ";
+                }
+                &:after {
+                    display: table;
+                    content: " ";
+                    clear: both;
+                }
+                padding: 15px;
+                text-align: right;
+                border-top: 1px solid #e5e5e5;
+                button {
+                    outline: none;
+                    display: inline-block;
+                    padding: 6px 12px;
+                    margin-bottom: 0;
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 1.42857143;
+                    text-align: center;
+                    white-space: nowrap;
+                    vertical-align: middle;
+                    touch-action: manipulation;
+                    cursor: pointer;
+                    user-select: none;
+                    background-image: none;
+                    border: 1px solid transparent;
+                    border-radius: 4px;
+                    &.default {
+                        color: #333;
+                        background-color: #fff;
+                        border-color: #ccc;
+                        &:hover {
+                            color: #333;
+                            background-color: #e6e6e6;
+                            border-color: #adadad;
+                        }
+                    }
+                    &.primary {
+                        color: #fff;
+                        background-color: #428bca;
+                        border-color: #357ebd;
+                        &:hover {
+                            color: #fff;
+                            background-color: #3071a9;
+                            border-color: #285e8e;
+                        }
+                    }
+                }
+                button + button {
+                    margin-bottom: 0;
+                    margin-left: 5px;
+                }
+            }
+        }
     }
 }

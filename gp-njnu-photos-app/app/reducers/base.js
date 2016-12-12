@@ -4,30 +4,31 @@ const initState={
         text: '欢迎来到学生签到系统',
         show: false,
         tp: 'success'
+    },
+    modal: {
+    	title: '',
+    	size: 'sm',
+    	content: ' ',
+    	show: false,
+    	onCancel: null,
+    	onOk: null
     }
 }
 
-
-const getNewRouteState = (path) => {
-    switch(path) {
-        case '/': 
-            return initState;
-        case '/about': 
-            return {title: '关于', subtitle: '关于本系统', path}
-        default: 
-            return {title: '', subtitle: '', path}
-    }
-}
 
 
 export default function (state=initState, action) {
     let newState = {...state}
-    
-    switch(action.type) {
+    const {type, ...other} = action
+    switch(type) {
         case 'SHOW_TOAST': 
-            return {...newState, toast: {text: action.text, tp: action.tp, show: true}}
+            return {...newState, toast: {...other, show: true}}
         case 'HIDE_TOAST': 
             return {...newState, toast: Object.assign({}, newState.toast, {show: false}) }
+        case 'SHOW_MODAL': 
+            return {...newState, modal: {...other, show: true} }
+        case 'HIDE_MODAL': 
+            return {...newState, modal: Object.assign({}, newState.modal, {show: false}) }
         default:
             return newState;
     }

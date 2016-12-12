@@ -10,6 +10,24 @@ export const showToast = (text, tp) => {
     window.toast_timer = setTimeout(actions.hideToast, 2000);
 }
 
+export const showModal = (content, onOk, onCancel=hideModal, title, size) => {
+    const actions = window.actions
+    var _onOk=onOk
+    if(_onOk) {
+        _onOk = () => {
+            onOk();
+            hideModal()
+        }
+    }
+    actions.showModal(content, _onOk, onCancel, title, size);
+}
+
+export const hideModal = () => {
+    const actions = window.actions
+    
+    actions.hideModal();
+}
+
 const umap = {
     stuInfo: '/api/njnu/info'
 }
