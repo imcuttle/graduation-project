@@ -30,9 +30,11 @@ app.use((req, res, next) => {
     next()
 })
 
-app.use('/api', (req, res) => {
+app.all('/api', (req, res) => {
     res.end('By Moyu.');
 })
+
 app.use('/api/up', require('./routes/up'))
+app.use('/api/njnu', require('./routes/njnu'))
 
 app.listen(process.env.PORT, () => console.log("Server Run On http://localhost:%s", process.env.PORT))

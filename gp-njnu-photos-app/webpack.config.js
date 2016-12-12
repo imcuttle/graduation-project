@@ -11,7 +11,7 @@ var config = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://localhost:8778/api',
+                target: 'http://localhost:8778/',
                 secure: false
             }
         }

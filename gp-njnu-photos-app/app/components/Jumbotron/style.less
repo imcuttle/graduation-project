@@ -4,10 +4,31 @@
     background-repeat: no-repeat;
     background-position: 50%;
 
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
     
+}
+.container{
+    position: relative;
+    color: #fff;
+    background-color: #0a0a0a;
     height: 330px;
 }
-
+.container:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: hsla(0,0%,4%, .25);
+    -webkit-transition: background-color .4s ease-in-out;
+    transition: background-color .4s ease-in-out;
+}
 .title {
     margin-top: 0;
     padding-top: 110px;

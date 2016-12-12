@@ -8,16 +8,24 @@ export default class extends React.Component {
     constructor(props) {
         super(props);
         this.clickBtn = this.clickBtn.bind(this)
+        this.videoPlay = this.videoPlay.bind(this)
+    }
+
+    videoPlay() {
+        const {canvas, video, img} = this
+        // img.width=video.clientWidth;
+        // img.height=video.clientHeight;
     }
 
     componentDidMount() {
-        const {canvas, video} = this
+        const {canvas, video, img} = this
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
 
         navigator.getUserMedia &&
         navigator.getUserMedia({ video: { facingMode: "user" } }, (stream) => {
             video.src = window.URL.createObjectURL(stream);  
-            video.play();  
+            video.play();
+            
         }, console.error);  
         
     }
@@ -30,16 +38,19 @@ export default class extends React.Component {
         canvas.height = video.clientHeight
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
 
-        onPhotoCallback && onPhotoCallback(canvas.toDataURL('image/png', 1.0))
+        const data = canvas.toDataURL('image/png', 1.0)
+        onPhotoCallback && onPhotoCallback(data)
+
     }
 
     render() {
-        const {text="拍照", onPhotoCallback} = this.props
+        const {text="拍照", onPhotoCallback, data} = this.props
         return (
             <div className={css.main}>
                 <div className={css.content}>
-                    <video ref={r=>this.video=r} />
-                    <canvas ref={r=>this.canvas=r} width="1000" />
+                    <video ref={r=>this.video=r} onPlay={this.videoPlay}/>
+                    <img ref={r=>this.img=r} src={data}/>
+                    <canvas style={{display: 'none'}} ref={r=>this.canvas=r} />
                 </div>
                 <div><span className={css.btn} onClick={this.clickBtn}>{text}</span></div>
             </div>

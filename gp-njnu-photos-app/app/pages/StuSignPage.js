@@ -30,18 +30,58 @@ export default class extends React.Component {
     render() {
         const {actions, state} = this.props
         const {upface} = state
-        const {activeSrc, searchText, searching} = upface
+        const {activeSrc, searchText, searching, camera, file, network} = upface
+        const {data} = camera
+        const {data: fData} = file
+        const {url} = network
+
         console.log(state)
         return (
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
                 <Tabs items={this.getTabsProps()} />
-                <div style={{ minHeight: 400}}>
-                    <div className="animated fadeInLeft" style={{display: activeSrc!=='camera'?'none':''}}><TakePhoto onPhotoCallback={actions.setCameraData}/></div>
-                    {activeSrc==='file' && <div className="animated fadeInDown" style={{width: 400, margin: '30px auto auto'}}>
-                        <InputGroup btnText="上传图片" inputProps={{disabled: true}}/>
+                <div style={{ minHeight: 400, overflowX: 'hidden'}}>
+                    <div className="animated fadeInLeft" style={{display: activeSrc!=='camera'?'none':''}}>
+                        <TakePhoto onPhotoCallback={actions.setCameraData} data={data}/>
+                    </div>
+                    {activeSrc==='file' && <div className="animated fadeInDown" style={{width: 500,  textAlign: 'center', margin: '30px auto auto'}}>
+                        <InputGroup ref={r=>this.file=r} btnText="上传图片" 
+                            btnProps={{
+                                disabled: searching,
+                                onClick: ()=>{
+                                    const {input, btn} = this.file
+                                    input.click()
+                                }
+                            }}
+                            inputProps={{
+                                disabled: false, accept: "image/*", style: {textIndent: 0, lineHeight: '32px'}, type:"file", placeholder: "选择文件",
+                                onChange: e=>{
+                                    const {input, btn} = this.file
+                                    const file = input.files[0]
+                                    const size = file.size
+                                    if(size>1024*1024*2) {
+                                        utils.showToast("文件大小不能大于2M")
+                                        return
+                                    }
+
+                                    const fr = new FileReader()
+                                    fr.readAsDataURL(file);
+                                    fr.onload=()=>{
+                                        actions.setFileData(fr.result)
+                                    }
+                                }
+                            }}/>
+                        <img style={{maxWidth: '100%'}} src={fData} />
                     </div>}
-                    {activeSrc==='network' && <div className="animated fadeInRight" style={{width: 400, margin: '30px auto auto'}}>
-                        <InputGroup btnText="网络图片" inputProps={{disabled: false}}/>
+                    {activeSrc==='network' && <div className="animated fadeInRight" style={{width: 500, textAlign: 'center', margin: '30px auto auto'}}>
+                        <InputGroup showBtn={false} btnText="网络图片" 
+                            inputProps={{
+                                disabled: false, value: url, placeholder: "图片URL",
+                                onChange: e=>{
+                                    actions.setNetUrl(e.target.value)
+                                }
+                            }}
+                        />
+                        <img style={{maxWidth: '100%'}} src={url} />
                     </div>}
                 </div>
                 <hr/>
@@ -51,7 +91,7 @@ export default class extends React.Component {
                             disabled: searching,
                             onClick: ()=>{
                                 if(searchText.trim()!=='') db.set('search-text', searchText);
-                                else utils.showToast(actions, '不能为空')
+                                else utils.showToast('不能为空')
                             }
                         }}
                         inputProps={{

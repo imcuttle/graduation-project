@@ -9,10 +9,10 @@ const initState={
         data: ''
     },
     file: {
-        uploading: false
+        data: ''
     },
     network: {
-        uploading: false
+    	url: ''
     }
 }
 
@@ -30,6 +30,10 @@ export default function (state=initState, action) {
             return newState.set('searchText', action.text).toObject()
         case 'SET_CAMERA_DATA': 
             return updateState(state, 'camera', 'data', action.data)
+        case 'SET_FILE_DATA': 
+            return updateState(state, 'file', 'data', action.data)
+        case 'SET_NET_URL': 
+            return updateState(state, 'network', 'url', action.url)
         default:
             return newState.toObject();
     }

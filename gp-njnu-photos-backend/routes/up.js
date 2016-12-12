@@ -3,7 +3,7 @@ const express = require('express')
 const up = express()
 const p = require('path')
 
-const utils = require('../utils')
+const utils = require('../lib/utils')
 const obj = utils.obj
 
 

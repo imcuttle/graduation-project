@@ -23,8 +23,8 @@ class App extends React.Component {
     
     componentDidMount() {
         const {actions, state} = this.props
-        setTimeout(utils.showToast.bind(null, actions, '欢迎来到学生签到系统', 'success'), 100)
-        
+        window.actions = actions;
+        setTimeout(utils.showToast.bind(null, '欢迎来到学生签到系统', 'success'), 120)
     }
     getHeaderPorps() {
         const {actions, state} = this.props
@@ -65,7 +65,6 @@ class App extends React.Component {
         const {path, ...other} = active
         const {toast} = base
         const {text, show, type} = toast
-
         return (
             <div>
                 <Toast {...toast}/>
