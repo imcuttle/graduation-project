@@ -12,7 +12,7 @@ const getNewRouteState = (path) => {
         case '/': 
             return initState;
         case '/about': 
-            return {title: '关于', subtitle: '关于本系统', path}
+            return {title: '关于', subtitle: '关于本系统', path, bg: "http://cn.technode.com/files/2016/09/shutterstock_379199359.jpg"}
         case '/audio-import':
         	return {title: '语音录入', subtitle: '本系统还提供语音识别，提高识别正确率', path, bg: "http://dingyue.nosdn.127.net/46Ns54pGkSRgsD5MnbZPq4Eq8sE1UYTUF1iAEOdhwBQ5i1467960737268compressflag.jpg"}
         default: 

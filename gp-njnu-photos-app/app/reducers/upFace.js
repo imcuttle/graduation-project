@@ -13,7 +13,9 @@ const initState={
     },
     network: {
     	url: ''
-    }
+    },
+    isStart: false,
+    signId: ''
 }
 
 const updateState = (state, key, subKey, newVal) => {
@@ -28,6 +30,8 @@ export default function (state=initState, action) {
             return newState.set('activeSrc', action.src).toObject()
         case 'CHANGE_SEARCHTEXT':
             return newState.set('searchText', action.text).toObject()
+        case 'SET_UPFACE_START':
+        	return newState.set('isStart', action.isStart).toObject()
         case 'SET_CAMERA_DATA': 
             return updateState(state, 'camera', 'data', action.data)
         case 'SET_FILE_DATA': 

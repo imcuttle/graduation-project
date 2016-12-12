@@ -1,9 +1,13 @@
 var querystring = require('querystring');
-var request = require('http').request;
+
 var u = require('url');
 var zlib = require("zlib");
 var $ = require('cheerio');
 
+function request(options) {
+    const _request = options.protocol==='http:'?require('http').request:require('https').request
+    return _request.apply(this, Array.from(arguments))
+}
 
 module.exports = {
     getGzip(url, params, type) {
@@ -62,7 +66,7 @@ module.exports = {
             var req = request(
                 Object.assign(u.parse(url), {
                     method: 'POST',
-                    headers: headers || {}
+                    headers: headers || {'content-type': 'application/x-www-form-urlencoded'}
                 }),
                 res => {
                     if(res.statusCode!==200) {

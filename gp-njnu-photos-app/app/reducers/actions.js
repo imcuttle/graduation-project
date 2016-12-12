@@ -10,6 +10,7 @@ export const pushRoute = (path) => _type("PUSH_ROUTE", {path});
 
 export const switchUpFaceSrc = (src) => _type("SWITCH_UPFACE_SRC", {src});
 
+export const setUpFaceStart = (isStart) => _type("SET_UPFACE_START", {isStart});
 export const setSearchText = (text) => _type("CHANGE_SEARCHTEXT", {text});
 export const setCameraData = (data) => _type("SET_CAMERA_DATA", {data});
 export const setFileData = (data) => _type("SET_FILE_DATA", {data});

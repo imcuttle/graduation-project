@@ -30,7 +30,7 @@ export default class extends React.Component {
     render() {
         const {actions, state} = this.props
         const {upface} = state
-        const {activeSrc, searchText, searching, camera, file, network} = upface
+        const {activeSrc, searchText, searching, camera, file, network, signId, isStart} = upface
         const {data} = camera
         const {data: fData} = file
         const {url} = network
@@ -85,20 +85,39 @@ export default class extends React.Component {
                     </div>}
                 </div>
                 <hr/>
-                <div style={{minWidth: 400, width: '67%', margin: 'auto'}}>
-                    <InputGroup btnText="签到" 
-                        btnProps={{
-                            disabled: searching,
-                            onClick: ()=>{
-                                if(searchText.trim()!=='') db.set('search-text', searchText);
-                                else utils.showToast('不能为空')
-                            }
-                        }}
-                        inputProps={{
-                            disabled: searching, value: searchText, 
-                            onChange: (e)=>{actions.setSearchText(e.target.value)},
-                            placeholder: '输入班级号或者课程号（如191301）'
-                        }} />
+                <div style={{margin: 'auto', display: 'flex', justifyContent: 'center'}}>
+                    <div style={{display: 'inline-block', width: 460, marginRight: 20}}>
+                        <InputGroup btnText={!isStart?"开始签到":"结束签到"}
+                            btnProps={{
+                                onClick: ()=>{
+                                    if(!isStart) {
+                                        if(searchText.trim()!=='') {
+                                            actions.setUpFaceStart(!isStart)
+                                        } else {
+                                            utils.showToast('请输入签到的班级或课程号')
+                                        }
+                                    } else {
+                                        if(!searching) {
+                                            actions.setUpFaceStart(!isStart)
+                                        } else {
+                                            utils.showToast('请稍等，有同学在签到中')
+                                        }
+                                    }
+                                }
+                            }}
+                            inputProps={{
+                                disabled: isStart, value: searchText, 
+                                onChange: (e)=>{actions.setSearchText(e.target.value)},
+                                placeholder: '输入班级号或者课程号（如191301）'
+                            }} />
+                    </div>
+                    <InputGroup showIpt={false} btnText="签到" btnProps={{
+                        disabled: !(isStart && !searching),
+                        onClick: ()=>{
+                            if(searchText.trim()!=='') db.set('search-text', searchText);
+                            else utils.showToast('不能为空')
+                        }
+                    }} />
                 </div>
             </div>
         )
