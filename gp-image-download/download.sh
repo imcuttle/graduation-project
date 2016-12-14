@@ -30,19 +30,33 @@ done < ../../data/student-ids-$year.txt
 
 echo ${arr[-1]}
 
-down() {
-    URL=$1
-    Name=${URL##*/}
+assign_file() {
+    Name=${1##*/}
     Classno=${Name:0:6}
     if [ ! -d $Classno ]; then
         mkdir $Classno
     fi
-    echo wget -q -N $URL -O "$Classno"/"$Name"
-    wget -q -N $URL -O "$Classno"/"$Name"
+    mv $Name "$Classno"/
+}
+
+down() {
+    URL=$1
+    echo wget -q -N $URL
+    wget -q -N $URL
 }
 
 for id in ${arr[@]}; do
     if [ ! -z $id ]; then
-        down "$base""$year"/${id//$\s/}.jpg
+        Name=${id//$\s/}.jpg
+        down "$base""$year"/$Name
     fi
 done
+
+# cd $year
+
+arr=(*)
+for x in ${arr[@]}; do
+    assign_file $x
+done
+
+
