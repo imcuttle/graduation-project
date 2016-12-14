@@ -36,7 +36,7 @@
 	6. 构思管理员入口 => 登录(判断是否已经登录) => 查看学生信息(根据学号，姓名，班级号) + 签到信息查看 
 
 - 2016年12月13日
-	1. 重拾数学， [积分](https://zh.wikipedia.org/wiki/%E7%A7%AF%E5%88%86)，[方差](https://zh.wikipedia.org/wiki/%E6%96%B9%E5%B7%AE)，[协方差](https://zh.wikipedia.org/wiki/%E5%8D%8F%E6%96%B9%E5%B7%AE)，统计独立(https://zh.wikipedia.org/wiki/%E7%8B%AC%E7%AB%8B_(%E6%A6%82%E7%8E%87%E8%AE%BA))，[矩阵]()，[协方差矩阵]()
+	1. 重拾数学， [积分](https://zh.wikipedia.org/wiki/%E7%A7%AF%E5%88%86)，[方差](https://zh.wikipedia.org/wiki/%E6%96%B9%E5%B7%AE)，[协方差](https://zh.wikipedia.org/wiki/%E5%8D%8F%E6%96%B9%E5%B7%AE)，统计独立(https://zh.wikipedia.org/wiki/%E7%8B%AC%E7%AB%8B_\(%E6%A6%82%E7%8E%87%E8%AE%BA\))，[矩阵]()，[协方差矩阵]()
 	2. 方差描述的是它的离散程度，也就是该变量离其期望值的距离。
 	3. 协方差表示的是两个变量的总体的误差，这与只表示一个变量误差的方差不同。 如果两个变量的变化趋势一致，也就是说如果其中一个大于自身的期望值，另外一个也大于自身的期望值，那么两个变量之间的协方差就是正值。 如果两个变量的变化趋势相反，即其中一个大于自身的期望值，另外一个却小于自身的期望值，那么两个变量之间的协方差就是负值。
 	4. https://trackingjs.com/bower/tracking.js/examples/face_camera.html （Js人脸检测插件，去掉手动拍照，监控摄像头识别人脸，可以根据searching和是否有人脸进行对比操作，只发送多个人脸部分图像）
