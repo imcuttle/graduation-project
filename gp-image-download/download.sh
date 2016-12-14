@@ -21,9 +21,12 @@ if [ ! -d $year ]; then
 fi
 cd $year
 
-IFS=$'\r\n'
 
-readarray arr < ../../data/student-ids-$year.txt
+
+while IFS=$'\r\n' read var; do
+    arr+=($var)
+done < ../../data/student-ids-$year.txt
+
 
 echo ${arr[-1]}
 

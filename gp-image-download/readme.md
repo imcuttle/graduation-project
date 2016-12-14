@@ -52,4 +52,5 @@ bash实现 下载脚本（windows需要在git bash环境下）, 读取`data/stud
 - http://stackoverflow.com/questions/10442841/download-images-from-website
 - windows环境使用wget  http://gnuwin32.sourceforge.net/packages/wget.htm         
     wget 加入环境变量
+- linux下若不存在`wget`, 可以使用`brew install wget`, 需要已经安装`brew`.
 
