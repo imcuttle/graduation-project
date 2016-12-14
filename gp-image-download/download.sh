@@ -32,8 +32,13 @@ echo ${arr[-1]}
 
 down() {
     URL=$1
-    echo wget -q -N $URL
-    wget -q -N $URL
+    Name=${URL##*/}
+    Classno=${Name:0:6}
+    if [ ! -d $Classno ]; then
+        mkdir $Classno
+    fi
+    echo wget -q -N $URL -O "$Classno"/"$Name"
+    wget -q -N $URL -O "$Classno"/"$Name"
 }
 
 for id in ${arr[@]}; do
