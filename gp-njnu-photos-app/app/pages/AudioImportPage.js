@@ -35,8 +35,7 @@ export default class extends React.Component {
         setTimeout(()=>{ 
             const activeElement = document.activeElement // without timeout, = body
             if(!!id.trim() && !!pwd.trim() && activeElement!==eId && activeElement!==ePwd) {
-                utils.fetchStuInfo(id.trim(), pwd.trim())
-                .then(info=>info && actions.setAudioStuInfo(info))
+                actions.fetchStuInfo(id.trim(), pwd.trim())
             }
         }, 100)
     }

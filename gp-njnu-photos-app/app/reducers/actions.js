@@ -5,6 +5,28 @@ const _type = (type, obj) => {
     })
 }
 
+const urlStringify = require('../common/utils').urlStringify
+const uShowToast = require('../common/utils').showToast
+
+
+const umap = {
+    stuInfo: '/api/njnu/info'
+}
+const toastError = data => {
+    if(data.code!==200) {
+        uShowToast(data.result)
+        return true
+    }
+    return false
+}
+
+export const fetchStuInfo = (id, pwd) => 
+    (dispatch, getState)=>
+    fetch(umap.stuInfo+'?'+urlStringify({id, pwd}))
+    .then(res=>res.json())
+    .then(data=> !toastError(data) && dispatch(setAudioStuInfo(data.result)))
+
+
 
 export const pushRoute = (path) => _type("PUSH_ROUTE", {path});
 

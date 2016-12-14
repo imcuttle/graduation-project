@@ -28,21 +28,7 @@ export const hideModal = () => {
     actions.hideModal();
 }
 
-const umap = {
-    stuInfo: '/api/njnu/info'
-}
+
 export const urlStringify = json => Object.getOwnPropertyNames(json).map(k=>k+'='+(!!json[k]?json[k]:'')).join('&')
 
 
-const toastError = data => {
-    if(data.code!==200) {
-        showToast(data.result)
-        return true
-    }
-    return false
-}
-
-export const fetchStuInfo = (id, pwd) => 
-    fetch(umap.stuInfo+'?'+urlStringify({id, pwd}))
-    .then(res=>res.json())
-    .then(data=> !toastError(data) && data.result)
