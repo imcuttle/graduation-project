@@ -6,7 +6,7 @@ const URL = "http://urp.njnu.edu.cn/authorizeUsers.portal"
 const STU_FILE = "data/students.json"
 const YEAR = new Date().getFullYear()
 // http://urp.njnu.edu.cn  登陆cookie
-const COOKIE = "njnuurpnew=ac16ac66d341d8ba3018c0fe2378; safedog-flow-item=1E07F08BB54CF7E21E1378A006E99DEF; JSESSIONID=0001OakwzbSEqdjGVxYwMbWT8zv:17CBNNFJ3L"
+const COOKIE = "njnuurpnew=ac16c83bd341d8ba0c3f2f092378; JSESSIONID=0001gcUXI0GWjdQg_ptI6NGAFaf:-5B0INP"
 
 const get = (options) =>
     new Promise((resolve, reject) => {
@@ -52,7 +52,8 @@ async function getStuIds(limit) {
     }
 }
 
-// writeStudents()
+writeStudents()
+// assignStuIds()
 
 async function writeStudents() {
     const limit = await getLimit()
@@ -60,22 +61,29 @@ async function writeStudents() {
 
     console.log('writing "%s"', STU_FILE)
     fs.writeFileSync(STU_FILE, JSON.stringify(stus, null, 4))
+
+    assignStuIds()
 }
 
+function assignStuIds() {
+    const stus = JSON.parse(fs.readFileSync(STU_FILE))
 
-const stus = JSON.parse(fs.readFileSync(STU_FILE))
+    let all = stus.reduce((p, n) => {
+        //19130126
+        if(/^[\d]{8}$/.test(n.id)) {
+            let num = n.id.substr(2, 2);
+            let year = "20"+num;
+            if(year>YEAR || isNaN(num)) return p
+            p[year] = p[year] || ''
+            p[year] += n.id+'\r\n'
+        }
+        return p
+    }, {})
 
-let all = stus.reduce((p, n) => {
-    let num = n.id.substr(2, 2);
-    let year = "20"+num;
-    if(year>YEAR || isNaN(num)) return p
-    p[year] = p[year] || ''
-    p[year] += n.id+'\r\n'
-    return p
-}, {})
+    Object.keys(all).forEach(k =>{
+        let v = all[k];
+        console.log('writing "%s"', "data/student-ids-"+k+".txt")
+        fs.writeFile("data/student-ids-"+k+".txt", v.replace(/\r\n$/, ''), ()=>{})
+    })
+}
 
-Object.keys(all).forEach(k =>{
-    let v = all[k];
-    console.log('writing "%s"', "data/student-ids-"+k+".txt")
-    fs.writeFile("data/student-ids-"+k+".txt", v.replace(/\r\n$/, ''), ()=>{})
-})
