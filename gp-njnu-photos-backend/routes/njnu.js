@@ -3,8 +3,8 @@ const express = require('express')
 const njnu = express()
 const p = require('path')
 
-const utils = require('../lib/utils')
 const njnuApi = require('../lib/njnu')
+const utils = require('../lib/utils')
 const obj = utils.obj
 
 

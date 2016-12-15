@@ -53,7 +53,7 @@ export default class extends React.Component {
                                 }
                             }}
                             inputProps={{
-                                disabled: false, accept: "image/*", style: {textIndent: 0, lineHeight: '32px'}, type:"file", placeholder: "选择文件",
+                                disabled: false, accept: "image/*", style: {textIndent: 0, lineHeight: '33px'}, type:"file", placeholder: "选择文件",
                                 onChange: e=>{
                                     const {input, btn} = this.file
                                     const file = input.files[0]
