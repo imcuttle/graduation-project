@@ -48,7 +48,8 @@
 	4. https://trackingjs.com/bower/tracking.js/examples/face_camera.html （Js人脸检测插件，去掉手动拍照，监控摄像头识别人脸，可以根据searching和是否有人脸进行对比操作，只发送多个人脸部分图像）**看下源码，学习识别算法**
 
 - 2016年12月14日
-	1. opencv install: 
+	1. opencv install:  
+	
 			brew tap homebrew/science
 			brew install opencv
 		https://www.learnopencv.com/install-opencv-3-on-yosemite-osx-10-10-x/  
@@ -56,16 +57,20 @@
 		http://www.pyimagesearch.com/2015/06/15/install-opencv-3-0-and-python-2-7-on-osx/
 	2. 添加opencv依赖: http://docs.opencv.org/2.4/doc/tutorials/introduction/linux_gcc_cmake/linux_gcc_cmake.html
 	3. brew更改源
-			1. 替换formula 索引的镜像（即 brew update 时所更新内容）
-			cd "$(brew --repo)"
-			git remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git
+		替换formula 索引的镜像（即 brew update 时所更新内容）
+		```
+		cd "$(brew --repo)"
+		git remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git
 
-			cd "$(brew --repo)/Library/Taps/homebrew/homebrew-core"
-			git remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git
+		cd "$(brew --repo)/Library/Taps/homebrew/homebrew-core"
+		git remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git
 
-			brew update
-			2. 替换Homebrew 二进制预编译包的镜像
-			echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles' >> ~/.bash_profile
-			source ~/.bash_profile
+		brew update
+		```
+		替换Homebrew 二进制预编译包的镜像
+		```
+		echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles' >> ~/.bash_profile
+		source ~/.bash_profile
+		```
 	4. [node-opencv](https://github.com/peterbraden/node-opencv)  
 		Issue: https://github.com/peterbraden/node-opencv/issues/380#issuecomment-191492421
