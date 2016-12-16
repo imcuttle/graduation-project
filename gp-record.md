@@ -43,7 +43,6 @@
 		- [统计独立](https://zh.wikipedia.org/wiki/%E7%8B%AC%E7%AB%8B_(%E6%A6%82%E7%8E%87%E8%AE%BA))
 		- [矩阵]()
 		- [协方差矩阵*(写得好)](http://blog.csdn.net/itplus/article/details/11452743)
-		- PCA理论[1](http://blog.csdn.net/itplus/article/details/11451327), [2](http://blog.csdn.net/liulina603/article/details/7912950)
 	2. 方差描述的是它的离散程度，也就是该变量离其期望值的距离。
 	3. 协方差表示的是两个变量的总体的误差，这与只表示一个变量误差的方差不同。 如果两个变量的变化趋势一致，也就是说如果其中一个大于自身的期望值，另外一个也大于自身的期望值，那么两个变量之间的协方差就是正值。 如果两个变量的变化趋势相反，即其中一个大于自身的期望值，另外一个却小于自身的期望值，那么两个变量之间的协方差就是负值。
 	4. https://trackingjs.com/bower/tracking.js/examples/face_camera.html （Js人脸检测插件，去掉手动拍照，监控摄像头识别人脸，可以根据searching和是否有人脸进行对比操作，只发送多个人脸部分图像）**看下源码，学习识别算法**
@@ -75,3 +74,7 @@
 		```
 	4. [node-opencv](https://github.com/peterbraden/node-opencv)  
 		Issue: https://github.com/peterbraden/node-opencv/issues/380#issuecomment-191492421
+
+- 2016年12月16日
+	1. 使用node-opencv检测人脸，挑选出效果相对好的分类模板`lbpcascade_frontalface.xml`, 对比效果数据见`backend/data/summary.json`
+	2. 死嚼PCA理论[1](http://blog.csdn.net/itplus/article/details/11451327), [2](http://blog.csdn.net/liulina603/article/details/7912950)
