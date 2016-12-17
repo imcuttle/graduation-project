@@ -7,14 +7,16 @@
 #IncludeRegexTransform: 
 
 /Users/moyu/my-code/mixCode/Graduation-Project/gp-njnu-photos-backend/cppsrc/main.cpp
+opencv2/core/core.hpp
+/Users/moyu/my-code/mixCode/Graduation-Project/gp-njnu-photos-backend/cppsrc/opencv2/core/core.hpp
+opencv2/highgui/highgui.hpp
+/Users/moyu/my-code/mixCode/Graduation-Project/gp-njnu-photos-backend/cppsrc/opencv2/highgui/highgui.hpp
+opencv2/contrib/contrib.hpp
+/Users/moyu/my-code/mixCode/Graduation-Project/gp-njnu-photos-backend/cppsrc/opencv2/contrib/contrib.hpp
 iostream
 -
 fstream
 -
 sstream
--
-opencv2/core/core.hpp
--
-opencv2/highgui/highgui.hpp
 -
 

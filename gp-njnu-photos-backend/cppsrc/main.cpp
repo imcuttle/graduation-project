@@ -69,21 +69,14 @@ Mat asRowMatrix(const vector<Mat>& src, int rtype, double alpha = 1, double beta
 
 int main(int argc, const char *argv[])
 {
-
+    cout << "sss";
     vector<Mat> db;
 
-    string prefix = "../../att_faces/";
-
-    db.push_back(imread(prefix + "s1/1.pgm", IMREAD_GRAYSCALE));
-    db.push_back(imread(prefix + "s1/2.pgm", IMREAD_GRAYSCALE));
-    db.push_back(imread(prefix + "s1/3.pgm", IMREAD_GRAYSCALE));
-    db.push_back(imread(prefix + "s1/4.pgm", IMREAD_GRAYSCALE));
-    db.push_back(imread(prefix + "s1/5.pgm", IMREAD_GRAYSCALE));
-    db.push_back(imread(prefix + "s1/6.pgm", IMREAD_GRAYSCALE));
-    db.push_back(imread(prefix + "s1/7.pgm", IMREAD_GRAYSCALE));
-    db.push_back(imread(prefix + "s1/8.pgm", IMREAD_GRAYSCALE));
-    db.push_back(imread(prefix + "s1/9.pgm", IMREAD_GRAYSCALE));
-    db.push_back(imread(prefix + "s1/10.pgm", IMREAD_GRAYSCALE));
+    string prefix = "/Users/moyu/my-code/mixCode/Graduation-Project/gp-njnu-photos-backend/data/images/2013/191301/lbpcascade_frontalface/opts{\"scale\":1.95}/";
+    db.push_back(imread(prefix + "19130101.jpg", IMREAD_GRAYSCALE));
+    db.push_back(imread(prefix + "19130102.jpg", IMREAD_GRAYSCALE));
+    db.push_back(imread(prefix + "19130103.jpg", IMREAD_GRAYSCALE));
+    db.push_back(imread(prefix + "19130104.jpg", IMREAD_GRAYSCALE));
 
     // Build a matrix with the observations in row:
     Mat data = asRowMatrix(db, CV_32FC1);
