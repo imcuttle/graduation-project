@@ -1,4 +1,5 @@
 .*
 cppsrc/
+cppsrc/**
 data/images/
 node_modules/
