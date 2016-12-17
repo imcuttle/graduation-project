@@ -9,4 +9,12 @@
 /Users/moyu/my-code/mixCode/Graduation-Project/gp-njnu-photos-backend/cppsrc/main.cpp
 iostream
 -
+fstream
+-
+sstream
+-
+opencv2/core/core.hpp
+-
+opencv2/highgui/highgui.hpp
+-
 
