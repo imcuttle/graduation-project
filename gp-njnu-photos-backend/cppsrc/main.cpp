@@ -93,17 +93,16 @@ int main(int argc, const char *argv[])
     Mat eigenvectors = pca.eigenvectors.clone();
 
     //均值脸
-    imshow("avg", norm_0_255(mean.reshape(1, db[0].rows)));
+    imwrite("avg.jpg", norm_0_255(mean.reshape(1, db[0].rows)));
+
 
     //五个特征脸
-    imshow("pc1", norm_0_255(pca.eigenvectors.row(0)).reshape(1, db[0].rows));
-    imshow("pc2", norm_0_255(pca.eigenvectors.row(1)).reshape(1, db[0].rows));
-    imshow("pc3", norm_0_255(pca.eigenvectors.row(2)).reshape(1, db[0].rows));
-    imshow("pc4", norm_0_255(pca.eigenvectors.row(3)).reshape(1, db[0].rows));
-    imshow("pc5", norm_0_255(pca.eigenvectors.row(4)).reshape(1, db[0].rows));
+    imwrite("pc1.jpg", norm_0_255(pca.eigenvectors.row(0)).reshape(1, db[0].rows));
+    imwrite("pc2.jpg", norm_0_255(pca.eigenvectors.row(1)).reshape(1, db[0].rows));
+    imwrite("pc3.jpg", norm_0_255(pca.eigenvectors.row(2)).reshape(1, db[0].rows));
+    imwrite("pc4.jpg", norm_0_255(pca.eigenvectors.row(3)).reshape(1, db[0].rows));
+    imwrite("pc5.jpg", norm_0_255(pca.eigenvectors.row(4)).reshape(1, db[0].rows));
 
-    while(1)
-        waitKey(0);
 
     // Success!
     return 0;

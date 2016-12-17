@@ -83,6 +83,7 @@ function doClassFace (img_src_path, classifier, options, fn, save) {
                 const img_gray = im.copy()
 
                 // img_gray.inRange(lower_threshold, upper_threshold)
+                img_gray.PCA()
                 img_gray.convertGrayscale()
 
                 img_gray.detectObject(classifier,

@@ -2,6 +2,7 @@
 #include "Matrix.h"
 #include "OpenCV.h"
 #include "cv/lbp.h"
+#include "cv/pca.h"
 #include <string.h>
 #include <nan.h>
 
@@ -119,6 +120,7 @@ void Matrix::Init(Local<Object> target) {
   /* Added Begin */
   Nan::SetPrototypeMethod(ctor, "circleLBP", CircleLBP);
   Nan::SetPrototypeMethod(ctor, "rectLBP", RectLBP);
+  Nan::SetPrototypeMethod(ctor, "PCA", PCA);
   /* Added End */
 
   target->Set(Nan::New("Matrix").ToLocalChecked(), ctor->GetFunction());
@@ -149,9 +151,12 @@ NAN_METHOD(Matrix::CircleLBP) {
   info.GetReturnValue().Set(img_to_return);
 }
 
-NAN_METHOD(Matrix::RectLBP) {
-//  Nan::HandleScope scope;
+NAN_METHOD(Matrix::PCA) {
+  Matrix *self = Nan::ObjectWrap::Unwrap<Matrix>(info.This());
+  pca();
+}
 
+NAN_METHOD(Matrix::RectLBP) {
   Matrix *self = Nan::ObjectWrap::Unwrap<Matrix>(info.This());
 
   cv::Mat img = self->mat;
