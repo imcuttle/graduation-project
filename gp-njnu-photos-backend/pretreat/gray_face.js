@@ -1,7 +1,7 @@
 /**
  * Created by moyu on 16/12/16.
  */
-const cv = require('opencv')
+const cv = require('../opencv')
 const path = require('path')
 const fs = require('fs')
 
@@ -57,7 +57,7 @@ const data = JSON.parse(fs.readFileSync(data_path).toString() || "{}");
     })*/
 
 
-doClassFace('../../gp-image-download/images/2013/191302',
+doClassFace('../../gp-image-download/images/2013/191301',
     '/Users/moyu/my-code/mixCode/Graduation-Project/gp-njnu-photos-backend/data/lbpcascade_frontalface.xml',
     {scale: 1.95}, null, true
 )
@@ -83,7 +83,7 @@ function doClassFace (img_src_path, classifier, options, fn, save) {
                 const img_gray = im.copy()
 
                 // img_gray.inRange(lower_threshold, upper_threshold)
-                // img_gray.convertGrayscale()
+                img_gray.convertGrayscale()
 
                 img_gray.detectObject(classifier,
                     options,
@@ -93,7 +93,7 @@ function doClassFace (img_src_path, classifier, options, fn, save) {
                         // faces.forEach(face=>{
                         //     img_gray.rectangle([face.x, face.y], [face.width, face.height], [0, 255, 0], 2);
                         // })
-                        img_gray.crop(face.x, face.y, face.width, face.height).save(path.join(d_p, name));
+                        img_gray.crop(face.x, face.y, face.width, face.height).rectLBP().save(path.join(d_p, name));
                         // save && img_gray.save(path.join(d_p, name));
                         fn && fn(faces, name, index, files.length)
                     })
@@ -105,4 +105,34 @@ function doClassFace (img_src_path, classifier, options, fn, save) {
 }
 
 
+// function lbp(src, dst, radius, neighbors) {
+//     const sin = Math.sin, cos = Math.cos, floor = Math.floor, ceil = Math.ceil
+//     for(let n=0; n<neighbors; n++) {
+//         // 采样点的计算
+//         let x = -radius * sin(2.0*CV_PI*n/static_cast<float>(neighbors)),
+//             y = radius * cos(2.0*CV_PI*n/static_cast<float>(neighbors)),
+//         // 上取整和下取整的值
+//             fx = floor(x),
+//             fy = floor(y),
+//             cx = ceil(x),
+//             cy = ceil(y),
+//         // 小数部分
+//             ty = y - fy,
+//             tx = x - fx,
+//         // 设置插值权重
+//             w1 = (1 - tx) * (1 - ty),
+//             w2 =      tx  * (1 - ty),
+//             w3 = (1 - tx) *      ty,
+//             w4 =      tx  *      ty;
+//         // 循环处理图像数据
+//         for(let i=radius; i < src.height()-radius;i++) {
+//             for(let j=radius;j < src.cols-radius;j++) {
+//                 // 计算插值
+//                 let t = static_cast<float>(w1*src.at<uchar>(i+fy,j+fx) + w2*src.at<uchar>(i+fy,j+cx) + w3*src.at<uchar>(i+cy,j+fx) + w4*src.at<uchar>(i+cy,j+cx));
+//                 // 进行编码
+//                 dst.at<uchar>(i-radius,j-radius) += ((t > src.at<uchar>(i,j)) || (std::abs(t-src.at<uchar>(i,j)) < std::numeric_limits<float>::epsilon())) << n;
+//             }
+//         }
+//     }
+// }
 
