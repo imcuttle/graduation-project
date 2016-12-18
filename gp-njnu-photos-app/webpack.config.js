@@ -39,6 +39,8 @@ var config = {
     ],
     module: {
         loaders: [
+            { test: /\.worker\.js$/, loader: 'file-loader?name=worker/[name].[ext]' },
+            { test: /^tracking\.js$/, loader: 'file-loader?name=worker/[name].[ext]' },
             {
                 loaders: [
                     "react-hot/webpack", //[HMR] The following modules couldn't be hot updated: (They would need a full reload!)
@@ -68,10 +70,10 @@ var config = {
             },
             {
                 test: /\.(png|jpg|jpeg)$/,
-                loader: 'url-loader?limit=8192&name=_res/[name].[ext]?[hash]'
+                loader: 'url-loader?limit=8192&name=res/[name].[ext]?[hash]'
             },
             { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff&name=res/[name].[ext]?[hash]" },
-            { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader?name=res/[name].[ext]?[hash]" }
+            { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader?name=res/[name].[ext]?[hash]" },
         ]
     },
     postcss: function () {

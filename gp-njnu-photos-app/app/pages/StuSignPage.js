@@ -3,6 +3,7 @@ import {render} from 'react-dom'
 import Tabs from '../components/TabNav'
 import InputGroup from '../components/InputGroup'
 import TakePhoto from '../components/TakePhoto'
+import FaceRec from '../components/FaceRec'
 
 const db = require('../common/storage')
 const utils = require('../common/utils')
@@ -41,7 +42,7 @@ export default class extends React.Component {
                 <Tabs items={this.getTabsProps()} />
                 <div style={{ minHeight: 400, overflowX: 'hidden'}}>
                     <div className="animated fadeInLeft" style={{display: activeSrc!=='camera'?'none':''}}>
-                        <TakePhoto onPhotoCallback={actions.setCameraData} data={data}/>
+                        <FaceRec onDataCallback={actions.setCameraData} data={data}/>
                     </div>
                     {activeSrc==='file' && <div className="animated fadeInDown" style={{width: 500,  textAlign: 'center', margin: '30px auto auto'}}>
                         <InputGroup ref={r=>this.file=r} btnText="上传图片" 

@@ -72,7 +72,7 @@ int main(int argc, const char *argv[])
     cout << "sss";
     vector<Mat> db;
 
-    string prefix = "/Users/moyu/my-code/mixCode/Graduation-Project/gp-njnu-photos-backend/data/images/2013/191301/lbpcascade_frontalface/opts{\"scale\":1.95}/";
+    string prefix = "/Users/moyu/my-code/mixCode/Graduation-Project/gp-njnu-photos-backend/data/images/2013/191301/lbpcascade_frontalface/opts{\"scale\":2}/";
     db.push_back(imread(prefix + "19130101.jpg", IMREAD_GRAYSCALE));
     db.push_back(imread(prefix + "19130102.jpg", IMREAD_GRAYSCALE));
     db.push_back(imread(prefix + "19130103.jpg", IMREAD_GRAYSCALE));
@@ -82,7 +82,7 @@ int main(int argc, const char *argv[])
     Mat data = asRowMatrix(db, CV_32FC1);
 
     // PCA算法保持5主成分分量
-    int num_components = 5;
+    int num_components = 0;
 
     //执行pca算法
     PCA pca(data, Mat(), CV_PCA_DATA_AS_ROW, num_components);

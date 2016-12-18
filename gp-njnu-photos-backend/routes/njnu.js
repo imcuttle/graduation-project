@@ -21,4 +21,9 @@ njnu.get('/info', (req, res) => {
     }
 })
 
+njnu.get('/rec', (req, res) => {
+    const ent = req.ent
+    const id = ent.data, pwd = ent.pwd
+})
+
 module.exports = njnu

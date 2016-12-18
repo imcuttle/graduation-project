@@ -6,10 +6,12 @@ const path = require('path')
 const fs = require('fs')
 
 // const img_src_path = '../../gp-image-download/images/2013/191301'
-const img_dest_path = '../data/images'
+const img_dest_path = require('./utils').dest_path
+const dirs_walk = require('./utils').dirs_walk
+const mkdir = require('./utils').mkdir
+const touch = require('./utils').touch
 
-const mkdir = (path) => !fs.existsSync(path) && fs.mkdir(path)
-const touch = (path) => !fs.existsSync(path) && fs.closeSync(fs.openSync(path, 'w'));
+
 
 const decoName = (name) => {
     return {
@@ -56,15 +58,36 @@ const data = JSON.parse(fs.readFileSync(data_path).toString() || "{}");
         })
     })*/
 
+let sub_path = '2013/191301';
+let src_path = path.resolve(__dirname, '../../gp-image-download/images')
 
-doClassFace('../../gp-image-download/images/2013/191301',
-    '/Users/moyu/my-code/mixCode/Graduation-Project/gp-njnu-photos-backend/data/lbpcascade_frontalface.xml',
-    {scale: 1.95}, null, true
-)
+if(process.argv.length>2) {
+    let args = process.argv.slice(2)
+    sub_path = args.join('/')
+    if(args.length==1) {
+        dirs_walk(path.join(src_path, sub_path), 0, [], 1).forEach(action)
+    } else {
+        action(path.join(src_path, sub_path))
+    }
+} else {
+    dirs_walk(src_path, 0, [], 2).forEach(action)
+}
 
-function doClassFace (img_src_path, classifier, options, fn, save) {
+
+
+function action(p) {
+    doClassFace(p,
+        path.resolve(__dirname, '../data/lbpcascade_frontalface.xml'),
+        {scale: 1.95}, null, true, true
+    )
+}
+
+
+
+function doClassFace (img_src_path, classifier, options, fn, save, log) {
     const files = fs.readdirSync(img_src_path)
     mkdir(img_dest_path)
+    log && console.log(`Detect Face and Gray: ${img_src_path} => ${img_dest_path}`);
 
     files.filter(x=>x.endsWith('jpg')).forEach((name, index) => {
         const obj = decoName(name)
@@ -74,27 +97,33 @@ function doClassFace (img_src_path, classifier, options, fn, save) {
             mkdir(d_p)
             d_p = path.join(d_p, obj.class)
             mkdir(d_p)
-            d_p = path.join(d_p, path.basename(classifier).replace(/\..*$/, ''))
-            mkdir(d_p)
-            d_p = path.join(d_p, 'opts'+JSON.stringify(options))
-            mkdir(d_p)
+            // d_p = path.join(d_p, path.basename(classifier).replace(/\..*$/, ''))
+            // mkdir(d_p)
+            // d_p = path.join(d_p, 'opts'+JSON.stringify(options))
+            // mkdir(d_p)
             cv.readImage(s_p, (err, im) => {
                 if(err) throw err;
-                const img_gray = im.copy()
+                let img_gray = im.copy()
 
                 // img_gray.inRange(lower_threshold, upper_threshold)
-                img_gray.PCA()
+                // img_gray.PCA()
                 img_gray.convertGrayscale()
 
                 img_gray.detectObject(classifier,
                     options,
                     (err, faces) => {
                         if(err) throw err;
-                        var face = faces[0] || {x:0 , y:0, width: img_gray.width(), height: img_gray.height()}
+                        var face = faces[0]
                         // faces.forEach(face=>{
                         //     img_gray.rectangle([face.x, face.y], [face.width, face.height], [0, 255, 0], 2);
                         // })
-                        img_gray.crop(face.x, face.y, face.width, face.height).rectLBP().save(path.join(d_p, name));
+                        if(face && (face.width !== 91 || face.height !== 91)) {
+                            img_gray = img_gray.crop(face.x, face.y, face.width, face.height)
+                            img_gray.resize(91, 91);
+                            save && img_gray.save(path.join(d_p, name));
+                        } else {
+                            save && face && img_gray.crop(face.x, face.y, face.width, face.height)/*.rectLBP()*/.save(path.join(d_p, name));
+                        }
                         // save && img_gray.save(path.join(d_p, name));
                         fn && fn(faces, name, index, files.length)
                     })

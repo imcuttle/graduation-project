@@ -68,7 +68,6 @@ cv::Mat asRowMatrix(const vector<cv::Mat>& src, int rtype, double alpha = 1, dou
 }
 
 void pca() {
-    cout << "sss";
     vector<cv::Mat> db;
 
     string prefix = "/Users/moyu/my-code/mixCode/Graduation-Project/gp-njnu-photos-backend/data/images/2013/191301/lbpcascade_frontalface/opts{\"scale\":1.95}/";

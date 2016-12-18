@@ -78,3 +78,6 @@
 - 2016年12月16日
 	1. 使用node-opencv检测人脸，挑选出效果相对好的分类模板`lbpcascade_frontalface.xml`, 对比效果数据见`backend/data/summary.json`
 	2. 死嚼PCA理论[1](http://blog.csdn.net/itplus/article/details/11451327), [2](http://blog.csdn.net/liulina603/article/details/7912950)
+
+- 2016年12月18日
+    1. http://www.freeformatter.com/xml-to-json-converter.html(需VPN)

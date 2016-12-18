@@ -10,6 +10,10 @@ import Header from './components/Header'
 import Toast from './components/Toast'
 import Modal from './components/Modal'
 
+// global tracking
+import 'tracking'
+import 'tracking/build/data/face'
+
 const utils = require('./common/utils')
 
 class App extends React.Component {

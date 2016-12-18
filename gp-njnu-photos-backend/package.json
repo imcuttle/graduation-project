@@ -4,6 +4,10 @@
   "description": "",
   "main": "provider.js",
   "scripts": {
+    "gface": "node pretreat/gray_face.js",
+    "tforce": "node pretreat/train_save.js -f",
+    "tsmart": "node pretreat/train_save.js",
+    "savestus": "node pretreat/save_stus.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

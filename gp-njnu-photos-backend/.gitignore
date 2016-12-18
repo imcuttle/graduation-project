@@ -1,5 +1,9 @@
 .*
-cppsrc/
-cppsrc/**
+cpptest/
+!cpptest/*.cpp
+!cpptest/*.sh
 data/images/
 node_modules/
+data/images/
+data/face-recognizer/
+data/face-recognizer.json
