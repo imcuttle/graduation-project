@@ -120,6 +120,7 @@ void Matrix::Init(Local<Object> target) {
   /* Added Begin */
   Nan::SetPrototypeMethod(ctor, "circleLBP", CircleLBP);
   Nan::SetPrototypeMethod(ctor, "rectLBP", RectLBP);
+  Nan::SetPrototypeMethod(ctor, "toThree", ToThreeChannels);
   Nan::SetPrototypeMethod(ctor, "PCA", PCA);
   /* Added End */
 
@@ -391,6 +392,29 @@ NAN_METHOD(Matrix::GetData) {
   v8::Local<v8::Object> actualBuffer = bufferConstructor->NewInstance(3, constructorArgs);
 
   info.GetReturnValue().Set(actualBuffer);
+}
+
+NAN_METHOD(Matrix::ToThreeChannels) {
+  Nan::HandleScope scope;
+  Matrix *self = Nan::ObjectWrap::Unwrap<Matrix>(info.This());
+
+
+  cv::Mat image;
+
+  if (self->mat.channels() == 3) {
+    image = self->mat;
+  } else if (self->mat.channels() == 1) {
+    cv::Mat myimg = self->mat;
+    cv::cvtColor(myimg, image, CV_GRAY2RGB);
+  } else if(self->mat.channels() == 4){
+    cv::Mat myimg = self->mat;
+    cv::cvtColor(myimg, image, CV_BGRA2RGB);
+  } else {
+    Nan::ThrowError("those channels are not supported");
+  }
+
+  self->mat = image;
+  info.GetReturnValue().Set(Nan::Null());
 }
 
 NAN_METHOD(Matrix::Brightness) {

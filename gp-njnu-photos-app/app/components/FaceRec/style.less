@@ -5,19 +5,25 @@
         video, canvas {
             box-sizing: border-box;
             position: absolute;
-            padding: 10px;
-            width: 50%;
+            margin-top: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            
+            margin-left: 50%;
+            transform: translateX(-50%);
+            // width: 46%;
+        }
+        canvas {
+            border-color: transparent;
         }
         img {
+            box-sizing: border-box;
+            margin: 10px;
+            width: 46%;
             position: absolute;
         	right: 10px;
         }
-        canvas {
-            box-sizing: border-box;
-            padding: 10px;
-            width: 50%;
-            // border: 1px dotted #ccc;
-        }
+        
         &:after {
             content: ' ';
             display: table;

@@ -68,9 +68,10 @@ export default class extends React.Component {
         
         tracker.on('track', function(event) {
             if(this.unmount) return;
-            data_canvas.width = canvas.width = video.clientWidth
-            data_canvas.height = canvas.height = video.clientHeight
-            container.style.height = video.clientHeight+'px'
+            canvas.width = video.clientWidth
+            canvas.height = video.clientHeight
+
+            container.style.height = video.clientHeight+30+'px'
 
             context.clearRect(0, 0, canvas.width, canvas.height);
             event.data.forEach(function(rect, i) {
@@ -102,12 +103,16 @@ export default class extends React.Component {
         const {onDataCallback} = this.props
         const {data_canvas, video, img} = this
         const ctx = data_canvas.getContext('2d')
-        
-        ctx.drawImage(video, rect.x, rect.y, rect.width, rect.height)
-        img.width = rect.width;
-        img.height = rect.height
+        // console.log(rect)
+        data_canvas.width = rect.width
+        data_canvas.height = rect.height
+        console.log('Rect', rect)
+        ctx.drawImage(video, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height)
 
-        const data = data_canvas.toDataURL('image/png', 1.0)
+        // img.width = video.clientWidth;
+        // img.height = video.clientHeight
+
+        const data = data_canvas.toDataURL('image/jpeg', 1.0)
         onDataCallback && onDataCallback(data)
 
     }
@@ -119,7 +124,7 @@ export default class extends React.Component {
                 <div className={css.content} ref={r=>this.container=r}>
                     <video ref={r=>this.video=r} preload={true} autoPlay={true} loop={true} muted={true}/>
                     <canvas style={{display: ''}} ref={r=>this.canvas=r} />
-                    <img ref={r=>this.img=r} src={data}/>
+                    {/*<img ref={r=>this.img=r} src={data}/>*/}
                     <canvas style={{display: 'none'}} ref={r=>this.data_canvas=r} />
                 </div>
             </div>

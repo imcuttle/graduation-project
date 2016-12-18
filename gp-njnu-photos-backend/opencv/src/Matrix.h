@@ -133,6 +133,7 @@ public:
    // Added begin
   JSFUNC(CircleLBP)
   JSFUNC(RectLBP)
+  JSFUNC(ToThreeChannels)
   JSFUNC(PCA)
   /*
    static Handle<Value> Val(const Arguments& info);

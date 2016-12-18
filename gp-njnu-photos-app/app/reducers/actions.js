@@ -10,7 +10,8 @@ const uShowToast = require('../common/utils').showToast
 
 
 const umap = {
-    stuInfo: '/api/njnu/info'
+    stuInfo: '/api/njnu/info',
+    predict_base64: '/api/up/predict/base64'
 }
 const toastError = data => {
     if(data.code!==200) {
@@ -19,6 +20,16 @@ const toastError = data => {
     }
     return false
 }
+
+export const fetchStuPredict = (cls, data) =>
+    (dispatch, getState)=>
+        fetch(umap.predict_base64, {
+            method: 'POST',
+            headers: {'content-type': 'application/json;charset=utf-8'},
+            body: JSON.stringify({cls, data})
+        })
+        .then(res=>res.json())
+        .then(data=> !toastError(data) && dispatch(showToast(JSON.stringify(data.result))))
 
 export const fetchStuInfo = (id, pwd) => 
     (dispatch, getState)=>

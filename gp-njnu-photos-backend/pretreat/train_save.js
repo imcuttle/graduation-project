@@ -75,25 +75,61 @@ const memDATA = {}
 each(files_obj, (o, year, i)=> {
     memDATA[year] = memDATA[year] || {}
     each(o, (arr, classno, i) => {
-        memDATA[year][classno] = train_save(year, classno, bFocus)
+        if(year == 2013 && classno == 191301)
+            memDATA[year][classno] = train_save(year, classno, bFocus)
     })
 })
 
-moudule.exports = {
+var out = {
+    pretreat: (im, cb) => {
+        var img_gray = im.clone();
+        img_gray.toThree();
+        img_gray.convertGrayscale();
+        img_gray.detectObject(
+            path.resolve(__dirname, '../data/lbpcascade_frontalface.xml'), {scale: 1.95},
+            (err, faces) => {
+                if(err) {
+                    cb && cb(err); return;
+                }
+                var face = faces[0]
+
+                if(face){
+                    if(face.width !== 91 || face.height !== 91) {
+                        img_gray = img_gray.crop(face.x, face.y, face.width, face.height);
+                        img_gray.resize(91, 91);
+                    } else{
+                        img_gray = img_gray.crop(face.x, face.y, face.width, face.height);
+                    }
+                    cb && cb(null, img_gray)
+                } else {
+                    img_gray.resize(91, 91)
+                    cb && cb(null, img_gray)
+                }
+
+            }
+        )
+    },
     predict: (classno, buffer) =>
         new Promise((resolve, reject) => {
-            var year = '20'+classno.substr(2, 2)
+            var year = '20'+(''+classno).substr(2, 2)
             if(memDATA[year] && memDATA[year][classno]) {
                 cv.readImage(buffer, (err, mat) => {
                     if(err) reject(err);
-                    memDATA[year][classno].predict(mat, (err, label)=>{
-                        if(err) reject(err);
-                        resolve(label)
-                    })
+                    else {
+                        out.pretreat(mat, (err, treated) => {
+                            if(err) reject(err);
+                            else {
+                                // treated.save(Date.now()+'.jpg')
+                                memDATA[year][classno].predict(treated, (obj)=>{
+                                    resolve(obj)
+                                })
+                            }
+                        })
+                    }
                 })
             } else {
                 console.error('Not Found, year: %s, classno: %s', year, classno)
-                reject(new Error('Not Found, year: %s, classno: %s', year, classno));
+                reject(new Error('Not Found, classno: '+ classno));
             }
         }),
     isTrained(idno) {
@@ -105,3 +141,5 @@ moudule.exports = {
         return false
     }
 }
+
+module.exports = out

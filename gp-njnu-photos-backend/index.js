@@ -21,7 +21,7 @@ app.use(logger('dev'));
 
 app.use((req, res, next) => {
     let ent;
-    if(req.method==='post') {
+    if(req.method==='POST') {
         ent = req.body
     } else {
         ent = req.query
