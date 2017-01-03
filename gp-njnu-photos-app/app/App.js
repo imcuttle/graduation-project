@@ -38,7 +38,8 @@ class App extends React.Component {
         const {title, path} = active;    const titlePath = {
             '学生签到': '/',
             '关于': '/about',
-            '语音录入': '/audio-import'
+            '语音录入': '/audio-import',
+            '人脸录入': '/face-import'
         }
         const dataMap = (text)=> {
             return {
@@ -48,7 +49,7 @@ class App extends React.Component {
         }
         
         return {
-            leftItems: [dataMap('学生签到'), dataMap('语音录入')],
+            leftItems: [dataMap('学生签到'), dataMap('人脸录入'), dataMap('语音录入')],
             rightItems: [ dataMap('关于'), {text: '管理员入口', type: 'btn'}]
         }
     }

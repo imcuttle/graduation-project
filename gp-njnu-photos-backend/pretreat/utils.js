@@ -14,5 +14,11 @@ module.exports = {
     },
     dest_path: path.resolve(__dirname, '../data/images'),
     mkdir: (path) => !fs.existsSync(path) && fs.mkdir(path),
-    touch: (path) => !fs.existsSync(path) && fs.closeSync(fs.openSync(path, 'w'))
+    touch: (path) => !fs.existsSync(path) && fs.closeSync(fs.openSync(path, 'w')),
+    decoName: (name) => {
+        return {
+            year: '20' + name.substr(2, 2),
+            class: name.substr(0, 6)
+        }
+    }
 }

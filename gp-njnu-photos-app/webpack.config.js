@@ -53,22 +53,18 @@ var config = {
                     /(node_modules|bower_components)/,
                 ],
                 test:/\.jsx?$/
-            },
-            {
+            }, {
                 test: /^(.(?!\.global))*\.less$/,  //http://www.cnblogs.com/bvbook/archive/2010/11/03/1867775.html
                 loader: 'style-loader!css-loader?modules' +
                 '!postcss!less-loader'
-            },
-            {
+            }, {
                 test: /\.global\.less$/,
                 loader: 'style-loader!css-loader' +
                 '!postcss!less-loader'
-            },
-            {
+            }, {
                 test: /\.css$/,
                 loader: 'style-loader!css-loader?modules'
-            },
-            {
+            }, {
                 test: /\.(png|jpg|jpeg)$/,
                 loader: 'url-loader?limit=8192&name=res/[name].[ext]?[hash]'
             },

@@ -13,6 +13,7 @@ import appReducers from './reducers/appReducers'
 import App from './App'
 import StuSignPage from './pages/StuSignPage'
 import AudioImportPage from './pages/AudioImportPage'
+import FaceImportPage from './pages/FaceImportPage'
 
 
 function configureStore(rootReducer, initialState) {
@@ -50,6 +51,7 @@ render((
                 <IndexRoute component={StuSignPage}/>
                 <Route path="about" />
                 <Route path="audio-import" component={AudioImportPage}/>
+                <Route path="face-import" component={FaceImportPage}/>
                 <Route path="*" onEnter={(loc, replace) => replace('/')} />
             </Route>
         </Router>

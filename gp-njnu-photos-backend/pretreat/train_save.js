@@ -8,6 +8,9 @@ const img_path = require('./utils').dest_path
 const face_path = path.resolve(img_path, '..', 'face-recognizer')
 const mkdir = require('./utils').mkdir
 const fs = require('fs')
+
+const md5Hex = require('md5-hex');
+
 mkdir(face_path)
 
 const getJpgFiles = (n) => fs.readdirSync(n).filter(x=>x.endsWith('jpg')).map(x=>path.join(n, x))
@@ -75,10 +78,20 @@ const memDATA = {}
 each(files_obj, (o, year, i)=> {
     memDATA[year] = memDATA[year] || {}
     each(o, (arr, classno, i) => {
+        // dev mode
         if(year == 2013 && classno == 191301)
             memDATA[year][classno] = train_save(year, classno, bFocus)
     })
 })
+
+save._updated = false;
+function save () {
+    fs.writeFileSync(face_path+'.json', JSON.stringify(files_obj, null, 4))
+}
+
+const readImageThunk = (buf) => {
+    return cv.readImage.bind(cv, buf)
+}
 
 var out = {
     pretreat: (im, cb) => {
@@ -109,14 +122,14 @@ var out = {
             }
         )
     },
-    predict: (classno, buffer) =>
-        new Promise((resolve, reject) => {
+    predict(classno, buffer) {
+        return new Promise((resolve, reject) => {
             var year = '20'+(''+classno).substr(2, 2)
             if(memDATA[year] && memDATA[year][classno]) {
-                cv.readImage(buffer, (err, mat) => {
+                readImageThunk(buffer)((err, mat) => {
                     if(err) reject(err);
                     else {
-                        out.pretreat(mat, (err, treated) => {
+                        this.pretreat(mat, (err, treated) => {
                             if(err) reject(err);
                             else {
                                 // treated.save(Date.now()+'.jpg')
@@ -131,7 +144,8 @@ var out = {
                 console.error('Not Found, year: %s, classno: %s', year, classno)
                 reject(new Error('Not Found, classno: '+ classno));
             }
-        }),
+        })
+    },
     isTrained(idno) {
         var y = '20'+idno.substr(2, 2)
         var cls = idno.substr(0, 6)
@@ -139,7 +153,65 @@ var out = {
             return files_obj[y][cls].findIndex(x=>path.basename(x).replace(/\..*$/, '')==idno)>=0
         }
         return false
+    },
+    addFace(stuno, buffer) {
+        return new Promise((resolve, reject) => {
+            readImageThunk(buffer)((err, mat) => {
+                if(err) reject(err);
+                else {
+                    this.pretreat(mat, (err, im) => {
+                        if(err) reject(err);
+                        else {
+                            let md5 = md5Hex(buffer);
+                            let obj = utils.decoName(stuno);
+                            let filepath = path.join(dest_path, obj.year, obj.classno, `${stuno}.${md5}.jpg`);
+                            im.saveAsync(filepath, err => {
+                                if(err) reject(err);
+                                else {
+                                    save._updated = true;
+                                    files_obj[obj.year][obj.classno].push(filepath);
+                                    // todo: mysql. insert
+                                    resolve(md5);
+                                }
+                            })
+                        }
+                    })
+                }
+            })    
+        })
+    },
+    delFace(stuno, md5) {
+        return new Promise((resolve, reject) => {
+            let obj = utils.decoName(stuno);
+            let filepath = path.join(dest_path, obj.year, obj.classno, `${stuno}.${md5}.jpg`);
+            // todo: mysql. delete where md5
+            if(fs.existsSync(filepath)) {
+                fs.unlink(filepath, err=> {
+                    if(err) reject(err);
+                    else {
+                        save._updated = true;
+                        let i = files_obj[obj.year][obj.classno].indexOf(filepath);
+                        if(i>=0) {
+                            files_obj[obj.year][obj.classno].splice(i, 1)
+                        }
+                        resolve();
+                    }
+                });
+            } else {
+                reject(new Error(filepath + 'Not Found.'));
+            }
+        })
     }
 }
+
+process.on('SIGINT', () => {
+    process.exit(1)
+})
+
+process.on('exit', () => {
+    if(save._updated) {
+        save()
+    }
+})
 
 module.exports = out

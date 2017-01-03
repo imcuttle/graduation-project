@@ -31,11 +31,11 @@ export const fetchStuPredict = (cls, data) =>
         .then(res=>res.json())
         .then(data=> !toastError(data) && dispatch(showToast(JSON.stringify(data.result))))
 
-export const fetchStuInfo = (id, pwd) => 
+export const fetchStuInfo = (id, pwd, callback) => 
     (dispatch, getState)=>
     fetch(umap.stuInfo+'?'+urlStringify({id, pwd}))
     .then(res=>res.json())
-    .then(data=> !toastError(data) && dispatch(setAudioStuInfo(data.result)))
+    .then(data=> !toastError(data) && callback && callback(data.result))
 
 
 
@@ -55,9 +55,15 @@ export const setAudioId = (id) => _type("SET_AUDIO_ID", {id});
 export const setAudioPwd = (pwd) => _type("SET_AUDIO_PWD", {pwd});
 export const setAudioImporting = (importing) => _type("SET_AUDIO_IMPORTING", {importing});
 export const setAudioFileData = (data) => _type("SET_AUDIO_FILE_DATA", {data});
-
 export const setAudioStuInfo = (info) => _type("SET_AUDIO_STUINFO", {...info});
 
+export const setFaceInSrc = (src) => _type("SWITCH_FACE_IN_SRC", {src});
+export const setFaceInCameraData = (data) => _type("SET_FACE_IN_CAMERA_DATA", {data});
+export const setFaceInId = (id) => _type("SET_FACE_IN_ID", {id});
+export const setFaceInPwd = (pwd) => _type("SET_FACE_IN_PWD", {pwd});
+export const setFaceInImporting = (importing) => _type("SET_FACE_IN_IMPORTING", {importing});
+export const setFaceInFileData = (data) => _type("SET_FACE_IN_FILE_DATA", {data});
+export const setFaceInStuInfo = (info) => _type("SET_FACE_IN_STUINFO", {...info});
 
 
 export const hideToast = () => _type("HIDE_TOAST");

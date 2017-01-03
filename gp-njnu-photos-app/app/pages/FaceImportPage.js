@@ -18,24 +18,24 @@ export default class extends React.Component {
     }
     getTabsProps() {
         const {actions, state} = this.props
-        const {upface, audioImport} = state
-        const {activeSrc} = audioImport
+        const {faceImport} = state
+        const {activeSrc} = faceImport
         return [
-            {text: '话筒导入', active: activeSrc==='audio', onClick: activeSrc!=='audio'?()=>actions.setAudioSrc('audio'):null},
-            {text: '文件导入', active: activeSrc==='file', onClick: activeSrc!=='file'?()=>actions.setAudioSrc('file'):null},
+            {text: '摄像头', active: activeSrc==='camera', onClick: activeSrc!=='camera'?()=>actions.setFaceInSrc('camera'):null},
+            {text: '文件导入', active: activeSrc==='file', onClick: activeSrc!=='file'?()=>actions.setFaceInSrc('file'):null},
         ]        
     }
 
     inputBlur(e) {
         const {actions, state} = this.props
         const {id: eId, pwd: ePwd} = this
-        const {upface, audioImport} = state
-        const {activeSrc, pwd, id, importing, audio, file, stuInfo} = audioImport
+        const {upface, faceImport} = state
+        const {activeSrc, pwd, id, importing, camera, file, stuInfo} = faceImport
 
         setTimeout(()=>{ 
             const activeElement = document.activeElement // without timeout, = body
             if(!!id.trim() && !!pwd.trim() && activeElement!==eId && activeElement!==ePwd) {
-                actions.fetchStuInfo(id.trim(), pwd.trim(), actions.setAudioStuInfo)
+                actions.fetchStuInfo(id.trim(), pwd.trim(), actions.setFaceInStuInfo)
             }
         }, 100)
     }
@@ -50,8 +50,8 @@ export default class extends React.Component {
 
     render() {
         const {actions, state} = this.props
-        const {upface, audioImport} = state
-        const {activeSrc, pwd, id, importing, audio, file, stuInfo} = audioImport
+        const {upface, faceImport} = state
+        const {activeSrc, pwd, id, importing, camera, file, stuInfo} = faceImport
         // console.log(audioImport)
         return (
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
@@ -61,7 +61,7 @@ export default class extends React.Component {
                         <InputGroup ref={r=>{if(r) this.id=r.input}} showBtn={false} inputProps={{
                             placeholder: '学号', value: id,
                             onChange: e=>{
-                                actions.setAudioId(e.target.value)
+                                actions.setFaceInId(e.target.value)
                             },
                             onBlur: this.inputBlur
                         }}/>
@@ -70,7 +70,7 @@ export default class extends React.Component {
                         <InputGroup ref={r=>{if(r) this.pwd=r.input}} showBtn={false} inputProps={{
                             placeholder: '密码(教务系统)', value: pwd, type: 'password',
                             onChange: e=>{
-                                actions.setAudioPwd(e.target.value)
+                                actions.setFaceInPwd(e.target.value)
                             },
                             onBlur: this.inputBlur
                         }}/>
@@ -86,7 +86,7 @@ export default class extends React.Component {
 
                 <Tabs items={this.getTabsProps()}/>
                 <div style={{minHeight: 400, margin: '30px auto auto auto', textAlign: 'center'}}>
-                {activeSrc==='audio' && <InputGroup />}
+                {activeSrc==='camera' && <TakePhoto />}
 
                 {activeSrc==='file' && <InputGroup />}
                 </div>
