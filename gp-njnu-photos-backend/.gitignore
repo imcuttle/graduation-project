@@ -7,3 +7,4 @@ node_modules/
 data/images/
 data/face-recognizer/
 data/face-recognizer.json
+cache.json
