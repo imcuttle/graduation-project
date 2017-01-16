@@ -38,13 +38,13 @@ export default class extends React.Component {
         canvas.height = video.clientHeight
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
 
-        const data = canvas.toDataURL('image/png', 1.0)
+        const data = canvas.toDataURL('image/jpeg', 1.0)
         onPhotoCallback && onPhotoCallback(data)
 
     }
 
     render() {
-        const {text="拍照", onPhotoCallback, data} = this.props
+        const {text="拍照", onPhotoCallback, data, enable=true} = this.props
         return (
             <div className={css.main}>
                 <div className={css.content}>
@@ -52,7 +52,7 @@ export default class extends React.Component {
                     <img ref={r=>this.img=r} src={data}/>
                     <canvas style={{display: 'none'}} ref={r=>this.canvas=r} />
                 </div>
-                <div><span className={css.btn} onClick={this.clickBtn}>{text}</span></div>
+                <div><span className={css.btn} disabled={!enable} onClick={this.clickBtn}>{text}</span></div>
             </div>
         )
     }

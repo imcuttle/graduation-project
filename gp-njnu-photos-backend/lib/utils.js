@@ -19,5 +19,8 @@ module.exports = {
                 else resolve(add)
             })
         })
+    },
+    md5 (text) {
+        return require('crypto').createHash('md5').update(text).digest('hex');
     }
 }

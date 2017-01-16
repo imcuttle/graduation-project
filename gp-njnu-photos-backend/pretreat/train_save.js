@@ -9,7 +9,7 @@ const face_path = path.resolve(img_path, '..', 'face-recognizer')
 const mkdir = require('./utils').mkdir
 const fs = require('fs')
 
-const md5Hex = require('md5-hex');
+const md5Hex = require('../lib/utils').md5;
 
 mkdir(face_path)
 
@@ -27,6 +27,9 @@ if(fs.existsSync(face_path+'.json') && !bFocus) {
     var files_obj = dir_arr.reduce((p, n) => {
         let year = path.basename(path.dirname(n)),
             classno = path.basename(n)
+        if(classno.startsWith('.')) {
+            return p;
+        }
 
         p[year] = p[year] || {}
         p[year][classno] = getJpgFiles(n)
@@ -51,9 +54,10 @@ const checkSizeEqueal = obj => obj.forEach(x=>{
 const train_save = (year, classno, focus) => {
     let fr = cv.FaceRecognizer.createEigenFaceRecognizer()
     try {
+        // todo: mysql face_import table url train
         fr.trainSync(
             files_obj[year][classno].map(x=> [
-                parseInt(path.basename(x).replace(/\..*$/, '')),
+                parseInt('1' + path.basename(x).replace(/\..*$/, '')),
                 x
             ])
         )
@@ -78,8 +82,10 @@ const memDATA = {}
 each(files_obj, (o, year, i)=> {
     memDATA[year] = memDATA[year] || {}
     each(o, (arr, classno, i) => {
-        // dev mode
-        if(year == 2013 && classno == 191301)
+        if(process.env.NODE_ENV == 'dev') {
+            if (year == 2013 && classno == 191301)
+                memDATA[year][classno] = train_save(year, classno, bFocus)
+        } else
             memDATA[year][classno] = train_save(year, classno, bFocus)
     })
 })
@@ -94,33 +100,55 @@ const readImageThunk = (buf) => {
 }
 
 var out = {
-    pretreat: (im, cb) => {
+    pretreat: (im, cb, mock=false) => {
         var img_gray = im.clone();
         img_gray.toThree();
         img_gray.convertGrayscale();
         img_gray.detectObject(
+            // path.resolve(__dirname, '../data/haarcascade_frontalface_alt.xml'), {},
             path.resolve(__dirname, '../data/lbpcascade_frontalface.xml'), {scale: 1.95},
             (err, faces) => {
                 if(err) {
                     cb && cb(err); return;
                 }
                 var face = faces[0]
-
-                if(face){
-                    if(face.width !== 91 || face.height !== 91) {
-                        img_gray = img_gray.crop(face.x, face.y, face.width, face.height);
-                        img_gray.resize(91, 91);
-                    } else{
-                        img_gray = img_gray.crop(face.x, face.y, face.width, face.height);
+                if(face) {
+                    try {
+                        if(face.width !== 91 || face.height !== 91) {
+                            img_gray = img_gray.crop(face.x, face.y, face.width, face.height);
+                            img_gray.resize(91, 91);
+                        } else{
+                            img_gray = img_gray.crop(face.x, face.y, face.width, face.height);
+                        }
+                    } catch (ex) {
+                        cb && cb(ex);
+                        return;
                     }
                     cb && cb(null, img_gray)
                 } else {
-                    img_gray.resize(91, 91)
-                    cb && cb(null, img_gray)
+                    if (mock) {
+                        img_gray.resize(91, 91)
+                        cb && cb(null, img_gray)
+                    } else {
+                        cb && cb(new Error('Face Not Recognized'))
+                    }
                 }
 
             }
         )
+    },
+    faceRecImageBuffer: (buf) => {
+        return new Promise((ok, fail) => {
+            readImageThunk(buf)((err, im) => {
+                if (err) fail(err);
+                else {
+                    out.pretreat(im, (err, data) => {
+                        if (err) fail(err);
+                        else ok(data);
+                    })
+                }
+            })
+        })
     },
     predict(classno, buffer) {
         return new Promise((resolve, reject) => {
@@ -134,6 +162,7 @@ var out = {
                             else {
                                 // treated.save(Date.now()+'.jpg')
                                 memDATA[year][classno].predict(treated, (obj)=>{
+                                    obj.id = (obj.id+'').slice(1);
                                     resolve(obj)
                                 })
                             }
@@ -147,8 +176,8 @@ var out = {
         })
     },
     isTrained(idno) {
-        var y = '20'+idno.substr(2, 2)
-        var cls = idno.substr(0, 6)
+        var y = '20'+idno.substr(2, 2);
+        var cls = idno.substr(0, 6);
         if(files_obj[y] && files_obj[y][cls]) {
             return files_obj[y][cls].findIndex(x=>path.basename(x).replace(/\..*$/, '')==idno)>=0
         }

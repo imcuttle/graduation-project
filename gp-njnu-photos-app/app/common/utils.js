@@ -8,6 +8,8 @@ export const showToast = (text, tp) => {
     window.toast_timer && clearTimeout(window.toast_timer)
     
     window.toast_timer = setTimeout(actions.hideToast, 2000);
+
+    return true;
 }
 
 export const showModal = (content, onOk, onCancel=hideModal, title, size) => {
@@ -21,6 +23,8 @@ export const showModal = (content, onOk, onCancel=hideModal, title, size) => {
     }
     actions.showModal(content, _onOk, onCancel, title, size);
 }
+
+export const objIsEmpty = obj => Object.keys(obj).length === 0
 
 export const hideModal = () => {
     const actions = window.actions

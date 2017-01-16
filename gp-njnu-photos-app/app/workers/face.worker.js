@@ -15,7 +15,7 @@ var sendOne = function(req) {
 setInterval(function() {
     if (curValue) {
         sendOne(curValue);
-        delete curValue;
+        curValue = null;
     }
 }, TRACK_DELAY);
 

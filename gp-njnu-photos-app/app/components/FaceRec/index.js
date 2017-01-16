@@ -1,9 +1,9 @@
 import React from 'react'
 import {Map} from 'immutable'
 import css from './style.less'
+// require('../../workers/face.worker');
 
-
-var worker = new Worker('worker.js')
+var worker = new Worker('./workers/face.worker.js')
 
 const tracking = window.tracking
 

@@ -9,6 +9,7 @@ import Jumbotron from './components/Jumbotron'
 import Header from './components/Header'
 import Toast from './components/Toast'
 import Modal from './components/Modal'
+import Loading from './components/Loading'
 
 // global tracking
 import 'tracking'
@@ -35,7 +36,8 @@ class App extends React.Component {
         const {actions, state} = this.props
         const {router} = this.context
         const {active} = state
-        const {title, path} = active;    const titlePath = {
+        const {title, path} = active;    
+        const titlePath = {
             '学生签到': '/',
             '关于': '/about',
             '语音录入': '/audio-import',
@@ -44,7 +46,7 @@ class App extends React.Component {
         const dataMap = (text)=> {
             return {
                 text,
-                active: title===text, onClick: title===text?null:()=>{router.push(titlePath[text])} 
+                active: title===text, onClick: title===text?null:()=>{router.push(titlePath[text]);} 
             }
         }
         
@@ -58,9 +60,9 @@ class App extends React.Component {
         const {active} = state
         const {path} = active
         const {pathname} = location
-        
+        // debugger;
         if(pathname!==path) {
-            actions.pushRoute(pathname)
+            actions.pushRoute(pathname);
         }
     }
 
@@ -69,11 +71,12 @@ class App extends React.Component {
         const {actions, state} = this.props
         const {active, base} = state
         const {path, ...other} = active
-        const {toast, modal} = base
+        const {toast, modal, loading} = base
         const {text, show, type} = toast
         // const {size, content, title, show} = modal
         return (
             <div>
+                {loading && <Loading />}
                 <Toast {...toast}/>
                 <Modal {...modal} />
                 <Header {...this.getHeaderPorps()}/>
@@ -91,7 +94,6 @@ class App extends React.Component {
 }
 
 function MapStateToProps(state) {
-
     return {
         state
     }

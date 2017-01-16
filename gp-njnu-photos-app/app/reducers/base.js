@@ -1,5 +1,6 @@
+import {Map} from 'immutable'
 
-const initState={
+export const initState={
     toast: {
         text: '欢迎来到学生签到系统',
         show: false,
@@ -12,13 +13,15 @@ const initState={
     	show: false,
     	onCancel: null,
     	onOk: null
-    }
+    },
+    loading: false,
+    loadingText: ''
 }
 
 
 
 export default function (state=initState, action) {
-    let newState = {...state}
+    let newState = {...state};
     const {type, ...other} = action
     switch(type) {
         case 'SHOW_TOAST': 
@@ -29,6 +32,8 @@ export default function (state=initState, action) {
             return {...newState, modal: {...other, show: true} }
         case 'HIDE_MODAL': 
             return {...newState, modal: Object.assign({}, newState.modal, {show: false}) }
+        case 'SET_LOADING':
+            return {...newState, loading: action.loading, loadingText: action.loadingText}
         default:
             return newState;
     }

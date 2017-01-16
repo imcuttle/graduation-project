@@ -1,5 +1,5 @@
 
-const initState={
+export const initState={
     title: "学生签到",
     subtitle: "三种方式获取图像，判断是否为本校学生",
     path: '/',
@@ -8,6 +8,7 @@ const initState={
 
 
 const getNewRouteState = (path) => {
+    // debugger;
     switch(path) {
         case '/': 
             return initState;
@@ -25,6 +26,7 @@ const getNewRouteState = (path) => {
 
 export default function (state=initState, action) {
     let newState = {...state}
+
     switch(action.type) {
         case 'PUSH_ROUTE': 
             return {...newState, ...getNewRouteState(action.path)}

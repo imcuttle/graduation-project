@@ -11,7 +11,10 @@ const uShowToast = require('../common/utils').showToast
 
 const umap = {
     stuInfo: '/api/njnu/info',
-    predict_base64: '/api/up/predict/base64'
+    predict_base64: '/api/up/predict/base64',
+    face_import: '/api/up/face-import/base64',
+    face_import_get: '/api/get/face-import/',
+    face_import_delete: '/api/do/face-import/delete'
 }
 const toastError = data => {
     if(data.code!==200) {
@@ -29,15 +32,59 @@ export const fetchStuPredict = (cls, data) =>
             body: JSON.stringify({cls, data})
         })
         .then(res=>res.json())
-        .then(data=> !toastError(data) && dispatch(showToast(JSON.stringify(data.result))))
+        .then(data=> !toastError(data) && uShowToast(JSON.stringify(data.result)))
 
-export const fetchStuInfo = (id, pwd, callback) => 
+export const fetchStuInfo = (id, pwd) => 
     (dispatch, getState)=>
-    fetch(umap.stuInfo+'?'+urlStringify({id, pwd}))
-    .then(res=>res.json())
-    .then(data=> !toastError(data) && callback && callback(data.result))
+        fetch(umap.stuInfo+'?'+urlStringify({id, pwd}))
+        .then(res=>res.json())
+        .then(data=> !toastError(data) 
+            ? dispatch(setFaceInStuInfo(data.result)) 
+            : dispatch(clearFaceInStuInfo()) )
 
 
+export const fetchFaceImportList = (stuno, pwd) => 
+    (dispatch) => 
+        fetch(umap.face_import_get+stuno+'?'+urlStringify({pwd}))
+        .then(r => r.json())
+        .then(json => !toastError(json) 
+            ? dispatch(setFaceInFaces(json.result))
+            : dispatch(setFaceInFaces([])) )
+
+export const fetchFaceImport = (data, stuno, stupwd) => 
+    (dispatch, getState) => {
+        dispatch(setFaceInImporting(true));
+        dispatch(showLoading('上传样本中...'));
+        fetch(umap.face_import, {
+            method: 'POST',
+            headers: {'content-type': 'application/json;charset=utf-8'},
+            body: JSON.stringify({data, stupwd, stuno})
+        })
+        .then(res => res.json())
+        .then(json=> {
+            dispatch(setFaceInImporting(false));
+            dispatch(hideLoading());
+            !toastError(json) && dispatch(setFaceInCameraData(data)) 
+            && dispatch(appendFaceInFace({
+                face_url: json.result.url,
+                hash: json.result.hash
+            }))
+        })
+    }
+
+export const fetchFaceImportDelete = (hash, stuno, pwd) => 
+    (dispatch, getState) => {
+        fetch(umap.face_import_delete, {
+            method: 'POST',
+            headers: {'content-type': 'application/json;charset=utf-8'},
+            body: JSON.stringify({hash, pwd, stuno})
+        })
+        .then(res => res.json())
+        .then(json=> !toastError(json) 
+            && uShowToast(json.result, 'success')
+            && dispatch(delFaceInFace(hash))
+        )
+    }
 
 export const pushRoute = (path) => _type("PUSH_ROUTE", {path});
 
@@ -63,11 +110,16 @@ export const setFaceInId = (id) => _type("SET_FACE_IN_ID", {id});
 export const setFaceInPwd = (pwd) => _type("SET_FACE_IN_PWD", {pwd});
 export const setFaceInImporting = (importing) => _type("SET_FACE_IN_IMPORTING", {importing});
 export const setFaceInFileData = (data) => _type("SET_FACE_IN_FILE_DATA", {data});
+export const clearFaceInStuInfo = () => _type('CLEAR_FACE_IN_STUINFO', {});
 export const setFaceInStuInfo = (info) => _type("SET_FACE_IN_STUINFO", {...info});
+export const setFaceInFaces = (faces) => _type("SET_FACE_IN_FACES", {faces});
+export const appendFaceInFace = (face) => _type("APP_FACE_IN_FACE", {face});
+export const delFaceInFace = (hash) => _type("DEL_FACE_IN_FACE", {hash});
 
 
 export const hideToast = () => _type("HIDE_TOAST");
 export const showToast = (text, tp="error") => _type("SHOW_TOAST", {tp, text});
-
+export const showLoading = (loadingText='') => _type('SET_LOADING', {loading: true, loadingText});
+export const hideLoading = () => _type('SET_LOADING', {loading: false});
 export const showModal = (content, onOk, onCancel, title="", size="sm") => _type("SHOW_MODAL", {onOk, onCancel, content, title, size});
 export const hideModal = () => _type("HIDE_MODAL");

@@ -1,7 +1,7 @@
 import {Map, List} from 'immutable'
 const db = require('../common/storage')
 
-const initState={
+export const initState={
     activeSrc: 'camera',
     id: '',
     pwd: '',
@@ -14,7 +14,8 @@ const initState={
     },
     stuInfo: {
         
-    }
+    },
+    faces: []
 }
 
 const updateState = (state, key, subKey, newVal) => {
@@ -23,6 +24,13 @@ const updateState = (state, key, subKey, newVal) => {
         return newState.set(key, Object.assign({}, newState.get(key), newVal)).toObject()
     return newState.set(key, Map(newState.get(key)).set(subKey, newVal).toObject()).toObject()
 }
+
+const rmList = (list, keyname, keyval) => {
+    let newList = List(list);
+    let i = newList.findIndex(x=>x[keyname]===keyval)    
+    return i>=0 ? newList.remove(i).toArray() : newList.toArray()
+}
+
 
 export default function (state=initState, action) {
     let newState = Map(state)
@@ -42,6 +50,14 @@ export default function (state=initState, action) {
             return updateState(state, 'file', 'data', action.data)
         case 'SET_FACE_IN_STUINFO': 
             return updateState(state, 'stuInfo', '*', other)
+        case 'CLEAR_FACE_IN_STUINFO': 
+            return newState.set('stuInfo', {}).toObject()
+        case 'SET_FACE_IN_FACES':
+            return newState.set('faces', action.faces).toObject()
+        case 'APP_FACE_IN_FACE':
+            return newState.set('faces', newState.get('faces').concat(action.face)).toObject()
+        case 'DEL_FACE_IN_FACE':
+            return newState.set('faces', rmList(state.faces, 'hash', action.hash)).toObject()
         default:
             return newState.toObject();
     }

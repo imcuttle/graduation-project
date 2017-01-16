@@ -27,9 +27,6 @@ while IFS=$'\r\n' read var; do
     arr+=($var)
 done < ../../data/student-ids-$year.txt
 
-
-echo ${arr[-1]}
-
 assign_file() {
     Name=${1##*/}
     Classno=${Name:0:6}
@@ -41,14 +38,22 @@ assign_file() {
 
 down() {
     URL=$1
-    echo wget -q -N $URL
-    wget -q -N $URL
+    Name=$2
+    data=`curl --fail --silent $URL` 
+    # "$data" 不能少  因为data中可能包含[]
+    if [ ! -z "$data" ]; then
+        curl --fail --silent $URL > $Name
+        # echo $data>$Name
+        echo "SUCCESS! $URL"
+    fi
+    # echo wget -q -N $URL
+    # wget -q -N $URL
 }
 
 for id in ${arr[@]}; do
     if [ ! -z $id ]; then
         Name=${id//$\s/}.jpg
-        down "$base""$year"/$Name
+        down "$base""$year"/$Name $Name
     fi
 done
 

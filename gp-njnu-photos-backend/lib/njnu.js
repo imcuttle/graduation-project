@@ -28,7 +28,7 @@ var FormData = require('form-data');
 setInterval(() => {
     saveCache()
     clearCache()
-}, 1000*60*60*24*7)
+}, 1000*60*60*24*7);
 
 process.on('exit', () => {
     saveCache()

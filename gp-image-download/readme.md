@@ -46,6 +46,9 @@ node实现 获取学生学号，在文件`data/students.json`, `data/student-ids
 
 bash实现 下载脚本（windows需要在git bash环境下）, 读取`data/student-ids-year.txt` 获得学号，wget工具下载
 
+**2017年01月11日更新**
+去除对`wget`的依赖，直接使用`curl`进行图像数据下载. 
+
 
 ## 参考
 - http://blog.chaiziyi.com.cn/2016/05/23/%E5%88%A9%E7%94%A8Python%E7%88%AC%E5%8F%96%E5%AD%A6%E6%A0%A1%E7%BD%91%E7%AB%99%E4%B8%8A%E7%9A%84%E8%AF%81%E4%BB%B6%E7%85%A7%EF%BC%88%E4%B8%89%EF%BC%89/  获取学生信息
@@ -53,4 +56,6 @@ bash实现 下载脚本（windows需要在git bash环境下）, 读取`data/stud
 - windows环境使用wget  http://gnuwin32.sourceforge.net/packages/wget.htm         
     wget 加入环境变量
 - linux下若不存在`wget`, 可以使用`brew install wget`, 需要已经安装`brew`.
+
+
 

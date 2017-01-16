@@ -22,8 +22,8 @@ export default class extends React.Component {
 
         return [
             {text: '摄像头', active: activeSrc==='camera', onClick: activeSrc!=='camera'?()=>actions.switchUpFaceSrc('camera'):null},
-            {text: '上传图片', active: activeSrc==='file', onClick: activeSrc!=='file'?()=>actions.switchUpFaceSrc('file'):null},
-            {text: '网络图片', active: activeSrc==='network', onClick: activeSrc!=='network'?()=>actions.switchUpFaceSrc('network'):null}
+            // {text: '上传图片', active: activeSrc==='file', onClick: activeSrc!=='file'?()=>actions.switchUpFaceSrc('file'):null},
+            // {text: '网络图片', active: activeSrc==='network', onClick: activeSrc!=='network'?()=>actions.switchUpFaceSrc('network'):null}
         ]
         
     }
@@ -39,7 +39,7 @@ export default class extends React.Component {
         console.log(state)
         return (
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
-                <Tabs items={this.getTabsProps()} />
+                {/*<Tabs items={this.getTabsProps()} />*/}
                 <div style={{ minHeight: 400, overflowX: 'hidden'}}>
                     <div className="animated fadeInLeft" style={{display: activeSrc!=='camera'?'none':''}}>
                         <FaceRec onDataCallback={data=>{isStart && actions.fetchStuPredict(searchText, data)}} data={data}/>

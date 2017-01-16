@@ -1,7 +1,7 @@
 import {Map, List} from 'immutable'
 const db = require('../common/storage')
 
-const initState={
+export const initState={
     activeSrc: 'audio',
     id: '',
     pwd: '',

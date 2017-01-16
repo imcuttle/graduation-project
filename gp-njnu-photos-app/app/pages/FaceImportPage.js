@@ -4,6 +4,7 @@ import Tabs from '../components/TabNav'
 import InputGroup from '../components/InputGroup'
 import TakePhoto from '../components/TakePhoto'
 import Information from '../components/Information'
+import PhotosFall from '../components/PhotosFall'
 
 const db = require('../common/storage')
 const utils = require('../common/utils')
@@ -35,7 +36,8 @@ export default class extends React.Component {
         setTimeout(()=>{ 
             const activeElement = document.activeElement // without timeout, = body
             if(!!id.trim() && !!pwd.trim() && activeElement!==eId && activeElement!==ePwd) {
-                actions.fetchStuInfo(id.trim(), pwd.trim(), actions.setFaceInStuInfo)
+                actions.fetchStuInfo(id.trim(), pwd.trim());
+                actions.fetchFaceImportList(id.trim(), pwd.trim());
             }
         }, 100)
     }
@@ -51,7 +53,7 @@ export default class extends React.Component {
     render() {
         const {actions, state} = this.props
         const {upface, faceImport} = state
-        const {activeSrc, pwd, id, importing, camera, file, stuInfo} = faceImport
+        const {activeSrc, pwd, id, importing, camera, file, stuInfo, faces} = faceImport
         // console.log(audioImport)
         return (
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
@@ -83,12 +85,23 @@ export default class extends React.Component {
                 <div className="animated fadeIn" style={{width: '53%', margin: '10px auto 10px', display: Object.getOwnPropertyNames(stuInfo).length?'':'none'}}>
                     <Information {...this.getInformationProps(stuInfo)}/>
                 </div>
+                <PhotosFall photos={faces.map(f => {
+                    return {
+                        url: f.face_url,
+                        key: f.hash,
+                        onClose: e => {
+                            actions.fetchFaceImportDelete(f.hash, id, pwd);
+                        }
+                    }
+                })} />
 
-                <Tabs items={this.getTabsProps()}/>
+                {/* <Tabs items={this.getTabsProps()}/> */}
                 <div style={{minHeight: 400, margin: '30px auto auto auto', textAlign: 'center'}}>
-                {activeSrc==='camera' && <TakePhoto />}
+                {activeSrc==='camera' && <TakePhoto onPhotoCallback={data => {
+                    actions.fetchFaceImport(data, id, pwd)
+                }} data={camera.data} enable={!importing && !utils.objIsEmpty(stuInfo)} />}
 
-                {activeSrc==='file' && <InputGroup />}
+                {/*activeSrc==='file' && <InputGroup />*/}
                 </div>
                 <hr/>
                 
@@ -96,3 +109,5 @@ export default class extends React.Component {
         )
     }
 }
+
+

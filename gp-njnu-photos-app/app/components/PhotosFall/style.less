@@ -1,0 +1,28 @@
+.main {
+    display: flex;
+    flex-flow: wrap;
+    padding: 10px 26px;
+
+    .photo {
+        flex-basis: 33%;
+        max-width: 33%;
+        padding: 10px;
+        position: relative;
+        box-sizing: border-box;
+
+        img {
+            border-radius: 4px;
+            box-shadow: 0 3px 6px hsla(0,0%,4%,.1), 0 3px 6px hsla(0,0%,4%,.2);
+            max-width: 100%;
+        }
+        .close {
+            font-weight: bolder;
+            cursor: pointer;
+            user-select: none;
+            position: absolute;
+            color: #000;
+            top: 10px;
+            right: 14px;
+        }
+    }
+}

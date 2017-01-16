@@ -5,10 +5,14 @@ var path = require('path');
 var webpack = require('webpack');
 var node_module_dir = path.resolve(__dirname, 'node_module');
 var minimize = process.argv.indexOf('--mini') !== -1;
-
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var WebpackMd5Hash = require('webpack-md5-hash');
 
 var config = {
     devServer: {
+        inline: true,
+        hot: true,
+        historyApiFallback: true,
         proxy: {
             '/api': {
                 target: 'http://localhost:8778/',
@@ -16,18 +20,23 @@ var config = {
             }
         }
     },
+    devtool: 'source-map',
     entry: {
         app: [
             'babel-polyfill',
             path.resolve(__dirname, 'app/main.js'),
             // 'webpack/hot/only-dev-server'
         ],
+        libs: [
+            'react', 'redux', 'classname', 'history', 'react-redux', 'tracking', 'react-dom',
+            'immutable', 'isomorphic-fetch', 'react-router-redux', 'react-router'
+        ] 
         // client: "webpack-dev-server/client?http://localhost:8080/",
         // dev: "webpack/hot/only-dev-server"
     },
     output:{
         path: path.resolve(__dirname, 'build'),
-        filename: '[name].main.min.js',
+        filename: '[name].main.min.js?v=[chunkhash]',
         publicPath: '/',
         // hotUpdateChunkFilename: 'hot/hot-update.js',
         // hotUpdateMainFilename: 'hot/hot-update.json'
@@ -35,15 +44,23 @@ var config = {
     plugins: [
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),  //fix Maximum call stack
-        //new webpack.optimize.CommonsChunkPlugin('react', 'react.js')
+        new webpack.optimize.CommonsChunkPlugin('libs', 'libs.min.js?v='+(minimize?"[chunkhash]":"[hash]")),
+        new WebpackMd5Hash(),
+        new HtmlWebpackPlugin({
+            title: '学生签到系统',
+            filename: 'index.html',
+            key: Date.now(),
+            // minify: true,
+            template: 'app/index.tpl.html'
+        })
     ],
     module: {
         loaders: [
-            { test: /\.worker\.js$/, loader: 'file-loader?name=worker/[name].[ext]' },
-            { test: /^tracking\.js$/, loader: 'file-loader?name=worker/[name].[ext]' },
+            { test: /\.worker\.js$/, loader: 'file-loader?name=workers/[name].[ext]' },
+            { test: /^tracking\.js$/, loader: 'file-loader?name=workers/[name].[ext]' },
             {
                 loaders: [
-                    "react-hot/webpack", //[HMR] The following modules couldn't be hot updated: (They would need a full reload!)
+                    "react-hot-loader/webpack", //[HMR] The following modules couldn't be hot updated: (They would need a full reload!)
                     "babel?presets[]=react,presets[]=es2015,presets[]=stage-0"
                 ], 
                 include:[
@@ -59,11 +76,11 @@ var config = {
                 '!postcss!less-loader'
             }, {
                 test: /\.global\.less$/,
-                loader: 'style-loader!css-loader' +
+                loader: 'style-loader!css-loader?sourceMap' +
                 '!postcss!less-loader'
             }, {
                 test: /\.css$/,
-                loader: 'style-loader!css-loader?modules'
+                loader: 'style-loader!css-loader?modules&sourceMap'
             }, {
                 test: /\.(png|jpg|jpeg)$/,
                 loader: 'url-loader?limit=8192&name=res/[name].[ext]?[hash]'
@@ -87,6 +104,8 @@ if(minimize) {
         //允许错误不打断程序
         new webpack.NoErrorsPlugin()
     )
+} else {
+    // config.entry.app.unshift('webpack-hot-middleware/client?reload=true')
 }
 
 module.exports = config

@@ -4,10 +4,12 @@
   "description": "",
   "main": "provider.js",
   "scripts": {
-    "gface": "node pretreat/gray_face.js",
-    "tforce": "node pretreat/train_save.js -f",
-    "tsmart": "node pretreat/train_save.js",
+    "grayface": "node pretreat/gray_face.js",
+    "train-force": "node pretreat/train_save.js -f",
+    "train-smart": "node pretreat/train_save.js",
     "savestus": "node pretreat/save_stus.js",
+    "dev": "cross-env NODE_ENV=dev node .",
+    "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -18,9 +20,11 @@
     "csv": "^1.1.0",
     "express": "^4.14.0",
     "form-data": "^2.1.2",
-    "md5-hex": "^1.3.0",
     "morgan": "^1.7.0",
     "mysql": "^2.12.0"
   },
-  "gypfile": true
+  "gypfile": true,
+  "devDependencies": {
+    "cross-env": "^3.1.4"
+  }
 }

@@ -1,7 +1,7 @@
 import {Map, List} from 'immutable'
 const db = require('../common/storage')
 
-const initState={
+export const initState={
     activeSrc: 'camera',
     searchText: db.get('search-text') || '',
     searching: false,

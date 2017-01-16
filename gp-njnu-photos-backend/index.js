@@ -19,6 +19,8 @@ app.use(bodyParser.raw({limit:'5mb'}));
 app.use(bodyParser.urlencoded({ extended: true, limit:'5mb'}));
 app.use(logger('dev'));
 
+process.on('uncaughtException', console.error)
+
 app.use((req, res, next) => {
     let ent;
     if(req.method==='POST') {
@@ -35,6 +37,8 @@ app.all('/api', (req, res) => {
 })
 
 app.use('/api/up', require('./routes/up'))
+app.use('/api/get', require('./routes/get'))
+app.use('/api/do', require('./routes/do'))
 app.use('/api/njnu', require('./routes/njnu'))
 
 app.listen(process.env.PORT, () => console.log("Server Run On http://localhost:%s", process.env.PORT))
