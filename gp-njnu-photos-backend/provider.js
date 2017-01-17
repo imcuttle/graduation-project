@@ -5,7 +5,7 @@ var fs = require('fs')
 
 const children = fs.readdirSync(__dirname).filter(n=>n!='node_modules' && !n.startsWith('.'));
 
-[__dirname].concat(children).forEach(dir => fs.watch(dir, watchHandle))
+[__dirname].concat([]).forEach(dir => fs.watch(dir, watchHandle))
 
 function watchHandle (type, filename) {
     if(filename.startsWith('.') || !filename.endsWith(".js")) {
