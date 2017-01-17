@@ -49,7 +49,7 @@ up.post('/face-import/base64', (req, res) => {
                             )
                         : obj(500, '已经到达样本上限'))
                      : obj(500, '请输入正确的学号密码')
-            ).catch(err=> obj(502, err.message))
+            ).catch(err=> obj(502, err.stack))
             .then(o => res.json(o));
     }
 })

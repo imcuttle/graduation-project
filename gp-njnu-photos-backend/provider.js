@@ -3,9 +3,11 @@ var cp = require('child_process')
 var p = require('path')
 var fs = require('fs')
 
-const children = fs.readdirSync(__dirname).filter(n=>n!='node_modules' && !n.startsWith('.'));
+const isDir = (filepath) => fs.statSync(filepath).isDirectory()
 
-[__dirname].concat([]).forEach(dir => fs.watch(dir, watchHandle))
+const children = fs.readdirSync(__dirname).filter(n=>n!='node_modules' && !n.startsWith('.') && isDir(p.join(__dirname, n)));
+
+[__dirname].concat(children).forEach(dir => fs.watch(dir, watchHandle))
 
 function watchHandle (type, filename) {
     if(filename.startsWith('.') || !filename.endsWith(".js")) {

@@ -11,7 +11,7 @@ const face_path = path.resolve(img_path, '..', 'face-recognizer')
 const mkdir = require('./utils').mkdir
 const fs = require('fs')
 
-const md5Hex = require('../lib/utils').md5;
+const md5Hex = require('../lib/utils').md5Hex;
 
 mkdir(face_path)
 

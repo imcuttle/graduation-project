@@ -5,6 +5,7 @@ var connection = require('./base');
 var newPromise = require('./base').newPromise;
 var getTableNameFromFileName = require('./base').getTableNameFromFileName;
 var table = getTableNameFromFileName(__filename);
+var smmsDel = require('../lib/smms').del;
 var sFilter = connection.likeStrFilter;
 
 /*
@@ -56,7 +57,12 @@ var out = {
             connection.query('delete from ?? where hash=? and stuid=?', [table, hash, stuno],
                 (err, rlt) => {
                     if (err) fail(err);
-                    else ok(rlt.affectedRows>0);
+                    else {
+                        if(rlt.affectedRows>0) {
+                            smmsDel(hash);
+                        }
+                        ok(rlt.affectedRows>0);
+                    }
                 }
             )
         })
@@ -67,7 +73,12 @@ var out = {
             connection.query('delete from ?? where hash=?', [table, hash],
                 (err, rlt) => {
                     if (err) fail(err);
-                    else ok(rlt.affectedRows>0);
+                    else {
+                        if(rlt.affectedRows>0) {
+                            smmsDel(hash);
+                        }
+                        ok(rlt.affectedRows>0);
+                    }
                 }
             )
         })

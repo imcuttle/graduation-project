@@ -4,7 +4,7 @@
 // https://sm.ms/api/upload
 var FormData = require('form-data');
 var https = require('https');
-var md5 = require('./utils').md5;
+var md5 = require('./utils').md5Hex;
 var form = new FormData();
 
 module.exports = {
@@ -35,5 +35,8 @@ module.exports = {
 
             form.pipe(request);
         })
+    },
+    del(hash) {
+        https.get('https://sm.ms/api/delete/'+hash)
     }
 }
