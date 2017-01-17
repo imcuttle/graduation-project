@@ -27,6 +27,11 @@ class App extends React.Component {
         router: React.PropTypes.object.isRequired
     }
     
+    componentWillMount() {
+        const {actions, state} = this.props
+        actions.checkAdminLogined();
+    }
+
     componentDidMount() {
         const {actions, state} = this.props
         window.actions = actions;
@@ -35,24 +40,36 @@ class App extends React.Component {
     getHeaderPorps() {
         const {actions, state} = this.props
         const {router} = this.context
-        const {active} = state
+        const {active, admin} = state;
+        const {isLogined, username} = admin;
         const {title, path} = active;    
         const titlePath = {
             '学生签到': '/',
             '关于': '/about',
             '语音录入': '/audio-import',
-            '人脸录入': '/face-import'
+            '人脸录入': '/face-import',
+            '管理员入口': '/admin/login'
         }
-        const dataMap = (text)=> {
+        titlePath[username] = '/admin';
+        const dataMap = (text, type, disabled=false, click)=> {
             return {
                 text,
-                active: title===text, onClick: title===text?null:()=>{router.push(titlePath[text]);} 
+                type,
+                active: title===text, 
+                onClick: (title===text||disabled)?null
+                    : ( typeof click === 'function' ? click : ()=>router.push(titlePath[text]) ) 
             }
         }
+        let rightItems = [ dataMap('关于') ];
+        rightItems = rightItems.concat(
+            !isLogined 
+            ? dataMap('管理员入口', 'btn')
+            : [dataMap(username, null), dataMap('退出', null, false, e=>actions.adminLogout())]
+        )
         
         return {
             leftItems: [dataMap('学生签到'), dataMap('人脸录入'), dataMap('语音录入')],
-            rightItems: [ dataMap('关于'), {text: '管理员入口', type: 'btn'}]
+            rightItems
         }
     }
     componentWillReceiveProps(nextProps) {

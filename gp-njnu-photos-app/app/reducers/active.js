@@ -18,6 +18,10 @@ const getNewRouteState = (path) => {
         	return {title: '语音录入', subtitle: '本系统还提供语音识别，提高识别正确率', path, bg: "http://dingyue.nosdn.127.net/46Ns54pGkSRgsD5MnbZPq4Eq8sE1UYTUF1iAEOdhwBQ5i1467960737268compressflag.jpg"}
         case '/face-import':
             return {title: '人脸录入', subtitle: '为了提高识别率，提供了最新的人脸录入功能', path, bg: "http://www.ezhuoteng.com/Public/upload/20150730/14382434051352.jpg"}
+        case '/admin':
+            return {title: '管理员界面', subtitle: '', path, bg: "http://www.ezhuoteng.com/Public/upload/20150730/14382434051352.jpg"}
+        case '/admin/login':
+            return {title: '管理员登录', subtitle: '', path, bg: "http://www.ezhuoteng.com/Public/upload/20150730/14382434051352.jpg"}
         default: 
             return {title: '', subtitle: '', path}
     }

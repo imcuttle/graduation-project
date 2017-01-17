@@ -1,6 +1,6 @@
 
 const express = require('express')
-const get = express()
+const doServer = express()
 const p = require('path')
 
 const utils = require('../lib/utils')
@@ -11,7 +11,7 @@ const faceImportDB = require('../database/face-import')
 const obj = utils.obj
 
 
-get.post('/face-import/delete', (req, res) => {
+doServer.post('/face-import/delete', (req, res) => {
     const ent = req.ent;
     const pwd = ent.pwd, stuno = ent.stuno, hash = ent.hash;
     if(!pwd || !stuno || !hash) {
@@ -27,7 +27,20 @@ get.post('/face-import/delete', (req, res) => {
         .then(x => res.json(x));
 })
 
+doServer.post('/admin/login', (req, res) => {
+    const ent = req.ent;
+    const pwd = ent.pwd, user = ent.user;
+    if(!pwd || !user) {
+        res.json(obj(400, '参数不全'));
+        return;
+    }
+    if(pwd.trim() === 'moyuyc' && user.trim() === 'moyuyc') {
+        res.json(obj(200, '登录成功'));
+    } else {
+        res.json(obj(500, '帐号或密码不正确'));
+    }
+})
 
 
 
-module.exports = get
+module.exports = doServer

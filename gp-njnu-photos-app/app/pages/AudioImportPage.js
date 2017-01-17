@@ -16,6 +16,7 @@ export default class extends React.Component {
         this.getTabsProps = this.getTabsProps.bind(this)
         this.inputBlur = this.inputBlur.bind(this)
     }
+    
     getTabsProps() {
         const {actions, state} = this.props
         const {upface, audioImport} = state

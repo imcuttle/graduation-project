@@ -14,6 +14,8 @@ import App from './App'
 import StuSignPage from './pages/StuSignPage'
 import AudioImportPage from './pages/AudioImportPage'
 import FaceImportPage from './pages/FaceImportPage'
+import AdminPage from './pages/AdminPage'
+import AdminLoginPage from './pages/AdminLoginPage'
 
 
 function configureStore(rootReducer, initialState) {
@@ -51,6 +53,8 @@ render((
             <Route path="/" component={App}>
                 <IndexRoute component={StuSignPage}/>
                 <Route path="about" />
+                <Route path="admin" component={AdminPage} />
+                <Route path="admin/login" component={AdminLoginPage} />
                 <Route path="audio-import" component={AudioImportPage}/>
                 <Route path="face-import" component={FaceImportPage}/>
                 <Route path="*" onEnter={(loc, replace) => replace('/')} />

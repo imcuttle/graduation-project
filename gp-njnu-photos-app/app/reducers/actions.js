@@ -116,7 +116,45 @@ export const setFaceInFaces = (faces) => _type("SET_FACE_IN_FACES", {faces});
 export const appendFaceInFace = (face) => _type("APP_FACE_IN_FACE", {face});
 export const delFaceInFace = (hash) => _type("DEL_FACE_IN_FACE", {hash});
 
+export const setAdminPwd = password => _type('SET_ADMIN_PWD', {password});
+export const setAdminUser = username => _type('SET_ADMIN_USER', {username});
+export const fetchAdminLogin = (user, pwd) => 
+    dispatch => {
+        dispatch(showLoading('管理员登录中...'));
+        fetch('/api/do/admin/login', {
+            method: 'POST',
+            headers: {'content-type': 'application/json;charset=utf-8'},
+            body: JSON.stringify({pwd, user})
+        }).then(r => r.json())
+        .then(json=> dispatch(hideLoading()) && !toastError(json) && dispatch(adminLogined()) && uShowToast(json.result, 'success'))
+    }
 
+export const checkAdminLogined = () => 
+    (dispatch, getState) => {
+        const state = getState();
+        const pwd = state.admin.password, user = state.admin.username;
+        fetch('/api/do/admin/login', {
+            method: 'POST',
+            headers: {'content-type': 'application/json;charset=utf-8'},
+            body: JSON.stringify({pwd, user})
+        }).then(r => r.json())
+        .then(json=> {
+            if(json.code === 200) {
+                dispatch(adminLogined())
+            } else {
+                dispatch(adminNotLogined())
+            }
+        })
+    }
+
+export const adminLogout = () =>
+    dispatch =>
+        dispatch(setAdminPwd(''))
+        && dispatch(adminNotLogined())
+
+
+export const adminLogined = () => _type('SET_ADMIN_ISLOGIN', {isLogined: true});
+export const adminNotLogined = () => _type('SET_ADMIN_ISLOGIN', {isLogined: false});
 export const hideToast = () => _type("HIDE_TOAST");
 export const showToast = (text, tp="error") => _type("SHOW_TOAST", {tp, text});
 export const showLoading = (loadingText='') => _type('SET_LOADING', {loading: true, loadingText});

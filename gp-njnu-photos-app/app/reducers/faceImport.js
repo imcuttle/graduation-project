@@ -3,7 +3,7 @@ const db = require('../common/storage')
 
 export const initState={
     activeSrc: 'camera',
-    id: '',
+    id: db.get('faceimport_id') || '',
     pwd: '',
     importing: false,
     camera: {
@@ -39,6 +39,7 @@ export default function (state=initState, action) {
         case 'SWITCH_FACE_IN_SRC':
             return newState.set('activeSrc', action.src).toObject()
         case 'SET_FACE_IN_ID':
+            db.set('faceimport_id', action.id)
             return newState.set('id', action.id).toObject()
         case 'SET_FACE_IN_PWD':
             return newState.set('pwd', action.pwd).toObject()
