@@ -7,6 +7,7 @@ cv.readImage('./files/mona.png', function(err, im) {
   if (err) throw err;
   if (im.width() < 1 || im.height() < 1) throw new Error('Image has no size');
 
+
   im.detectObject('../data/haarcascade_frontalface_alt2.xml', {}, function(err, faces) {
     if (err) throw err;
 

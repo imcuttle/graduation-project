@@ -7,6 +7,7 @@ const fs = require('fs')
 
 // const img_src_path = '../../gp-image-download/images/2013/191301'
 const img_dest_path = require('./utils').dest_path
+const getFaceDetectArgs = require('./utils').getFaceDetectArgs
 const dirs_walk = require('./utils').dirs_walk
 const mkdir = require('./utils').mkdir
 const touch = require('./utils').touch
@@ -76,10 +77,7 @@ if(process.argv.length>2) {
 
 
 function action(p) {
-    doClassFace(p,
-        path.resolve(__dirname, '../data/lbpcascade_frontalface.xml'),
-        {scale: 1.95}, null, true, true
-    )
+    doClassFace.apply(null, [p].concat(getFaceDetectArgs()).concat([null, true, true]))
 }
 
 

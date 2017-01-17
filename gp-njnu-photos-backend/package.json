@@ -5,8 +5,8 @@
   "main": "provider.js",
   "scripts": {
     "grayface": "node pretreat/gray_face.js",
-    "train-force": "node pretreat/train_save.js -f",
-    "train-smart": "node pretreat/train_save.js",
+    "train:force": "node pretreat/train_save.js -f",
+    "train:smart": "node pretreat/train_save.js",
     "savestus": "node pretreat/save_stus.js",
     "dev": "cross-env NODE_ENV=dev node .",
     "start": "node .",

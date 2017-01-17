@@ -102,6 +102,9 @@ export default class extends React.Component {
     doRectData(rect) {
         const {onDataCallback} = this.props
         const {data_canvas, video, img} = this
+        if(!data_canvas) {
+            return;
+        }
         const ctx = data_canvas.getContext('2d')
         // console.log(rect)
         data_canvas.width = rect.width

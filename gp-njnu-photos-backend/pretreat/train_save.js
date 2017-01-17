@@ -4,6 +4,8 @@
 const cv = require('../opencv')
 const path = require('path')
 const dirs_walk = require('./utils').dirs_walk
+const utils = require('./utils');
+const getFaceDetectArgs = require('./utils').getFaceDetectArgs
 const img_path = require('./utils').dest_path
 const face_path = path.resolve(img_path, '..', 'face-recognizer')
 const mkdir = require('./utils').mkdir
@@ -17,6 +19,14 @@ const getJpgFiles = (n) => fs.readdirSync(n).filter(x=>x.endsWith('jpg')).map(x=
 
 const bFocus = process.argv.indexOf('-f')!==-1
 
+const readImagePromise = (buf) => {
+    return new Promise((resolve, reject)=> {
+        cv.readImage(buf, (err, mat) => {
+            if(err) reject(err);
+            else resolve(mat);
+        })
+    })
+}
 
 if(fs.existsSync(face_path+'.json') && !bFocus) {
     var files_obj = require(face_path+'.json');
@@ -55,20 +65,41 @@ const train_save = (year, classno, focus) => {
     let fr = cv.FaceRecognizer.createEigenFaceRecognizer()
     try {
         // todo: mysql face_import table url train
-        fr.trainSync(
-            files_obj[year][classno].map(x=> [
-                parseInt('1' + path.basename(x).replace(/\..*$/, '')),
-                x
-            ])
-        )
-        let fpath = path.join(face_path, `${year}-${classno}.yaml`);
-        if(focus || !fs.existsSync(fpath)) {
-            fr.saveSync(fpath);
-            console.log('Saved Train Data %s', fpath)
-        } else {
-            fr.loadSync(fpath);
-            console.log('Read Train Data %s', fpath)
-        }
+
+        var select = require('../database/face-import').select;
+
+        files_obj[year][classno] && files_obj[year][classno].reduce((p, n)=> {
+            var id = path.basename(n).replace(/\..*$/, '');
+            var no = 0;
+            var label = parseInt(++no + id);
+            return p.then(arr=>{arr.push([label, n]); return arr})
+                .then(arr=>{
+                    return select(id).then(list=>list.map(l=>utils.getURLData(l.face_url)
+                        .then(buf=>readImagePromise(buf))
+                    ))
+                    .then(x=>Promise.all(x))
+                    .then(bufs => {
+                        bufs.forEach(buf => {
+                            label = parseInt(++no + id);
+                            arr.push([label, buf]);
+                        })
+                        return arr;
+                    })
+                })
+        }, Promise.resolve([])).catch(console.error)
+        .then(data=> {
+            // console.log('data', data)
+            fr.trainSync(data);
+            let fpath = path.join(face_path, `${year}-${classno}.yaml`);
+            if(focus || !fs.existsSync(fpath)) {
+                fr.saveSync(fpath);
+                console.log('Saved Train Data %s', fpath)
+            } else {
+                fr.loadSync(fpath);
+                console.log('Read Train Data %s', fpath)
+            }
+        })
+
     } catch (ex) {
         console.error('year: %s, class: %s\n', year, classno, ex);
     }
@@ -104,9 +135,8 @@ var out = {
         var img_gray = im.clone();
         img_gray.toThree();
         img_gray.convertGrayscale();
-        img_gray.detectObject(
-            // path.resolve(__dirname, '../data/haarcascade_frontalface_alt.xml'), {},
-            path.resolve(__dirname, '../data/lbpcascade_frontalface.xml'), {scale: 1.95},
+        var args = getFaceDetectArgs();
+        img_gray.detectObject(args[0], args[1],
             (err, faces) => {
                 if(err) {
                     cb && cb(err); return;
@@ -142,9 +172,13 @@ var out = {
             readImageThunk(buf)((err, im) => {
                 if (err) fail(err);
                 else {
-                    out.pretreat(im, (err, data) => {
+                    out.pretreat(im, (err, matrix) => {
                         if (err) fail(err);
-                        else ok(data);
+                        else
+                            matrix.toBuffer((err, buf) => {
+                                if(err) fail(err);
+                                else ok(buf);
+                            })
                     })
                 }
             })

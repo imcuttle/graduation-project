@@ -77,9 +77,9 @@ export default class extends React.Component {
                             onBlur: this.inputBlur
                         }}/>
                     </div>
-                    <div style={{display: 'inline-block', boxSizing: 'border-box', padding: 12}}>
+                    {/*<div style={{display: 'inline-block', boxSizing: 'border-box', padding: 12}}>
                         <InputGroup showIpt={false} btnText="录入" btnProps={{}}/>
-                    </div>
+                    </div>*/}
                 </div>
 
                 <div className="animated fadeIn" style={{width: '53%', margin: '10px auto 10px', display: Object.getOwnPropertyNames(stuInfo).length?'':'none'}}>
@@ -90,7 +90,9 @@ export default class extends React.Component {
                         url: f.face_url,
                         key: f.hash,
                         onClose: e => {
-                            actions.fetchFaceImportDelete(f.hash, id, pwd);
+                            utils.showModal('是否确定删除该样本？', 
+                                () => actions.fetchFaceImportDelete(f.hash, id, pwd)
+                            )
                         }
                     }
                 })} />
