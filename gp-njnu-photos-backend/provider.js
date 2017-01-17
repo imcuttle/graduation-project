@@ -3,7 +3,7 @@ var cp = require('child_process')
 var p = require('path')
 var fs = require('fs')
 
-const children = fs.readdirSync(__dirname).filter(n=>n!='node_modules');
+const children = fs.readdirSync(__dirname).filter(n=>n!='node_modules' && !n.startsWith('.'));
 
 [__dirname].concat(children).forEach(dir => fs.watch(dir, watchHandle))
 
