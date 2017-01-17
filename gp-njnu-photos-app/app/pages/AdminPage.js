@@ -2,6 +2,8 @@ import React from 'react'
 import {render} from 'react-dom'
 import Tabs from '../components/TabNav'
 import InputGroup from '../components/InputGroup'
+import TabNav from '../components/TabNav'
+import PhotosFall from '../components/PhotosFall'
 
 const db = require('../common/storage')
 const utils = require('../common/utils')
@@ -13,6 +15,7 @@ export default class extends React.Component {
         super(props);
         this.getTabsProps=this.getTabsProps.bind(this)
         this.checkLogined=this.checkLogined.bind(this)
+        this.InputBlur = this.InputBlur.bind(this)
     }
     static contextTypes={
         router: React.PropTypes.object.isRequired
@@ -34,29 +37,42 @@ export default class extends React.Component {
     }
     getTabsProps() {
         const {actions, state} = this.props
-        const {upface} = state
-        const {activeSrc} = upface
+        const {admin} = state
+        const {src} = admin
 
         return [
-            {text: '摄像头', active: activeSrc==='camera', onClick: activeSrc!=='camera'?()=>actions.switchUpFaceSrc('camera'):null},
+            {text: '样本查看', active: src==='faceImport', onClick: src!=='faceImport'?()=>actions.setAdminSrc('faceImport'):null},
             // {text: '上传图片', active: activeSrc==='file', onClick: activeSrc!=='file'?()=>actions.switchUpFaceSrc('file'):null},
             // {text: '网络图片', active: activeSrc==='network', onClick: activeSrc!=='network'?()=>actions.switchUpFaceSrc('network'):null}
         ]
         
     }
+    InputBlur() {
+        const {actions, state} = this.props
+        const {admin} = state
+        const {src, faceImport} = admin;
+        const {id: faceInId, photos: faceInPhotos} = faceImport;
+        actions.fetchAdminFaceImportList(faceInId);
+    }
 
     render() {
         const {actions, state} = this.props
-        const {upface} = state
-        const {activeSrc, searchText, searching, camera, file, network, signId, isStart} = upface
-        const {data} = camera
-        const {data: fData} = file
-        const {url} = network
+        const {admin} = state
+        const {src, faceImport} = admin;
+        const {id: faceInId, photos: faceInPhotos} = faceImport;
 
         return (
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
-                {/*<Tabs items={this.getTabsProps()} />*/}
-                
+                {<Tabs items={this.getTabsProps()} />}
+                <div style={{width: '40%', maxWidth: 500, margin: '12px auto'}}>
+                    <InputGroup showBtn={false} 
+                        inputProps={{
+                            placeholder: '输入学号', defaultValue: faceInId, onBlur: this.InputBlur,
+                            onChange: e => actions.setAdminFaceInId(e.target.value)
+                        }}
+                    />
+                </div>
+                <PhotosFall photos={faceInPhotos}/>
             </div>
         )
     }

@@ -1,4 +1,4 @@
-module.exports = {
+var out = {
     obj(code, result) {
         return {code, result}
     },
@@ -20,7 +20,22 @@ module.exports = {
             })
         })
     },
-    md5 (text) {
+    md5Hex (text) {
         return require('crypto').createHash('md5').update(text).digest('hex');
+    },
+    adminCheckMiddleware(req, res, next) {
+        const ent = req.ent;
+        const data = ent.auth;
+        if(!data) {
+            res.json(out.obj(400, '参数不全'));
+            return;
+        }
+        if(seqes.indexOf(data)<0) {
+            res.json(out.obj(500, '帐号或密码不正确'));
+            return;
+        }
+        next();
     }
 }
+
+module.exports = out;

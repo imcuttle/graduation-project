@@ -27,18 +27,21 @@ doServer.post('/face-import/delete', (req, res) => {
         .then(x => res.json(x));
 })
 
+var seqes = global.seqes;
+doServer.use(utils.adminCheckMiddleware)
+
 doServer.post('/admin/login', (req, res) => {
     const ent = req.ent;
-    const pwd = ent.pwd, user = ent.user;
-    if(!pwd || !user) {
-        res.json(obj(400, '参数不全'));
-        return;
-    }
-    if(pwd.trim() === 'moyuyc' && user.trim() === 'moyuyc') {
-        res.json(obj(200, '登录成功'));
-    } else {
-        res.json(obj(500, '帐号或密码不正确'));
-    }
+    const data = ent.data;
+    res.json(obj(200, '登录成功'));
+})
+
+doServer.post('/admin/del-face/:hash', (req, res) => {
+    const hash = req.params.hash;
+    faceImportDB.deleteByHash(hash)
+        .then(flag => flag ? obj(200, '删除成功') : obj(500, '删除失败'))
+        .catch(err => obj(502, err.message))
+        .then(x => res.json(x));
 })
 
 

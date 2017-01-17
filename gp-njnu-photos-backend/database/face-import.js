@@ -60,6 +60,17 @@ var out = {
                 }
             )
         })
+    },
+
+    deleteByHash(hash) {
+        return newPromise((ok, fail) => {
+            connection.query('delete from ?? where hash=?', [table, hash],
+                (err, rlt) => {
+                    if (err) fail(err);
+                    else ok(rlt.affectedRows>0);
+                }
+            )
+        })
     }
 }
 

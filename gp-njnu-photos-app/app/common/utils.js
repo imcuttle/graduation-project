@@ -32,6 +32,7 @@ export const hideModal = () => {
     actions.hideModal();
 }
 
+export const md5Hex = (text) => require('crypto').createHash('md5').update(text, 'utf-8').digest('hex');
 
 export const urlStringify = json => Object.getOwnPropertyNames(json).map(k=>k+'='+(!!json[k]?json[k]:'')).join('&')
 

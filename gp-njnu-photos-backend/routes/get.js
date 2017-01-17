@@ -29,6 +29,14 @@ get.get('/face-import/:stuno', (req, res) => {
 })
 
 
+get.use(utils.adminCheckMiddleware);
+
+get.post('/face-import/admin/:stuno', (req, res) => {
+    const stuno = req.params.stuno;
+    faceImportDB.select(stuno).then(x => obj(200, x))
+    .catch(err => obj(502, err.message))
+    .then(x => res.json(x));
+})
 
 
 module.exports = get

@@ -36,5 +36,9 @@ module.exports = {
                 res.on('error', err => reject(err))
             })
         })
+    },
+    md5Hex (text) {
+        return require('crypto').createHash('md5').update(text, 'utf-8').digest('hex')
     }
+
 }

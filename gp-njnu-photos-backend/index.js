@@ -4,6 +4,8 @@ const bodyParser = require('body-parser')
 const url = require('url')
 const path = require('path')
 
+const utils = require('./lib/utils')
+
 process.env.PORT = process.env.PORT || 8778;
 
 process.on('uncaughtException', function (err) {
@@ -30,7 +32,9 @@ app.use((req, res, next) => {
     }
     req.ent = ent;
     next()
-})
+});
+
+global.seqes = [utils.md5Hex(JSON.stringify({user: 'moyuyc', pwd: 'moyuyc'})), utils.md5Hex(JSON.stringify({pwd: 'moyuyc', user: 'moyuyc'}))]
 
 app.all('/api', (req, res) => {
     res.end('By Moyu.');

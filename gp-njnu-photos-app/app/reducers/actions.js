@@ -7,6 +7,8 @@ const _type = (type, obj) => {
 
 const urlStringify = require('../common/utils').urlStringify
 const uShowToast = require('../common/utils').showToast
+const uShowModal = require('../common/utils').showModal
+const md5Hex = require('../common/utils').md5Hex
 
 
 const umap = {
@@ -118,13 +120,17 @@ export const delFaceInFace = (hash) => _type("DEL_FACE_IN_FACE", {hash});
 
 export const setAdminPwd = password => _type('SET_ADMIN_PWD', {password});
 export const setAdminUser = username => _type('SET_ADMIN_USER', {username});
-export const fetchAdminLogin = (user, pwd) => 
+export const fetchAdminLogin = (user='', pwd='') => 
     dispatch => {
+        if(!pwd.trim() || !user.trim()) {
+            uShowToast('用户名与密码不能空');
+            return;
+        }
         dispatch(showLoading('管理员登录中...'));
         fetch('/api/do/admin/login', {
             method: 'POST',
             headers: {'content-type': 'application/json;charset=utf-8'},
-            body: JSON.stringify({pwd, user})
+            body: JSON.stringify({auth: md5Hex(JSON.stringify({pwd, user}))})
         }).then(r => r.json())
         .then(json=> dispatch(hideLoading()) && !toastError(json) && dispatch(adminLogined()) && uShowToast(json.result, 'success'))
     }
@@ -136,7 +142,7 @@ export const checkAdminLogined = () =>
         fetch('/api/do/admin/login', {
             method: 'POST',
             headers: {'content-type': 'application/json;charset=utf-8'},
-            body: JSON.stringify({pwd, user})
+            body: JSON.stringify({auth: md5Hex(JSON.stringify({pwd, user}))})
         }).then(r => r.json())
         .then(json=> {
             if(json.code === 200) {
@@ -147,6 +153,47 @@ export const checkAdminLogined = () =>
         })
     }
 
+export const fetchAdminFaceImportList = (stuno='') => 
+    (dispatch, getState) => {
+        stuno = stuno.trim();
+        if (!stuno) {
+            return;
+        }
+        const state = getState();
+        const pwd = state.admin.password, user = state.admin.username;
+        fetch('/api/get/face-import/admin/'+stuno.trim(), {
+            method: 'POST',
+            headers: {'content-type': 'application/json;charset=utf-8'},
+            body: JSON.stringify({auth: md5Hex(JSON.stringify({pwd, user}))})
+        }).then(r => r.json())
+        .then(json=> !toastError(json) && dispatch(setAdminFaceInPhotos(json.result.map(x=> {
+            return {
+                key: x.hash,
+                url: x.face_url,
+                onClose: ()=>{uShowModal('确定删除该样本吗？', () => {
+                    dispatch(fetchDelAdminFaceInPhoto(x.hash))
+                    dispatch(delAdminFaceInPhoto(x.hash))
+                })}
+            }
+        }))))
+    }
+
+export const fetchDelAdminFaceInPhoto = (hash='') => 
+    (dispatch, getState) => {
+        hash = hash.trim();
+        if(!hash) {
+            return;
+        }
+        const state = getState();
+        const pwd = state.admin.password, user = state.admin.username;
+        fetch('/api/do/admin/del-face/'+hash, {
+            method: 'POST',
+            headers: {'content-type': 'application/json;charset=utf-8'},
+            body: JSON.stringify({auth: md5Hex(JSON.stringify({pwd, user}))})
+        }).then(r => r.json())
+        .then(json => !toastError(json) && uShowToast(json.result))
+    }
+
 export const adminLogout = () =>
     dispatch =>
         dispatch(setAdminPwd(''))
@@ -155,6 +202,11 @@ export const adminLogout = () =>
 
 export const adminLogined = () => _type('SET_ADMIN_ISLOGIN', {isLogined: true});
 export const adminNotLogined = () => _type('SET_ADMIN_ISLOGIN', {isLogined: false});
+export const setAdminSrc = (src) => _type('SET_ADMIN_SRC', {src});
+export const setAdminFaceInPhotos = (photos) => _type('SET_ADMIN_FACEIN_PHOTOS', {photos});
+export const setAdminFaceInId = (id) => _type('SET_ADMIN_FACEIN_ID', {id})
+export const delAdminFaceInPhoto = (key) => _type('DEL_ADMIN_FACEIN_PHOTO', {key})
+
 export const hideToast = () => _type("HIDE_TOAST");
 export const showToast = (text, tp="error") => _type("SHOW_TOAST", {tp, text});
 export const showLoading = (loadingText='') => _type('SET_LOADING', {loading: true, loadingText});
