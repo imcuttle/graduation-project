@@ -18,6 +18,12 @@ mkdir(face_path)
 const getJpgFiles = (n) => fs.readdirSync(n).filter(x=>x.endsWith('jpg')).map(x=>path.join(n, x))
 
 const bFocus = process.argv.indexOf('-f')!==-1
+const iArgs = process.argv.indexOf('--args')
+let gClassno = null, gYear = null;
+if(iArgs>=0) {
+    gClassno = process.argv[iArgs+2];
+    gYear = process.argv[iArgs+1];
+}
 
 const readImagePromise = (buf) => {
     return new Promise((resolve, reject)=> {
@@ -61,63 +67,100 @@ const checkSizeEqueal = obj => obj.forEach(x=>{
 
 // checkSizeEqueal(files_obj['2013']['191301']);
 
-const train_save = (year, classno, focus) => {
-    let fr = cv.FaceRecognizer.createEigenFaceRecognizer()
-    try {
-        // todo: mysql face_import table url train
+var facesNumObj = {}
+var facesNumObjPath = path.resolve(face_path, 'facesNumObj.json')
 
-        var select = require('../database/face-import').select;
+const train_save = (year, classno, focus, idno) => {
+    let fr = cv.FaceRecognizer.createEigenFaceRecognizer();
+    let fpath = path.join(face_path, `${year}-${classno}.yaml`);
 
-        files_obj[year][classno] && files_obj[year][classno].reduce((p, n)=> {
-            var id = path.basename(n).replace(/\..*$/, '');
-            var no = 0;
-            var label = parseInt(++no + id);
-            return p.then(arr=>{arr.push([label, n]); return arr})
-                .then(arr=>{
-                    return select(id).then(list=>list.map(l=>utils.getURLData(l.face_url)
-                        .then(buf=>readImagePromise(buf))
-                    ))
-                    .then(x=>Promise.all(x))
-                    .then(bufs => {
-                        bufs.forEach(buf => {
-                            label = parseInt(++no + id);
-                            arr.push([label, buf]);
-                        })
-                        return arr;
+    var select = require('../database/face-import').select;
+    var promise = null;
+    facesNumObj[year] = facesNumObj[year] || {}
+    facesNumObj[year][classno] = facesNumObj[year][classno] || {}
+    var idNumMap = facesNumObj[year][classno]
+
+    if( (focus || !fs.existsSync(fpath)) ) {
+        if (files_obj[year][classno]) {
+            promise = files_obj[year][classno].reduce((p, n)=> {
+                var id = path.basename(n).replace(/\..*$/, '');
+                var no = 0;
+                var label = parseInt(++no + id);
+                idNumMap[id] = 1;
+                return p.then(arr=>{arr.push([label, n]); return arr})
+                    .then(arr=>{
+                        return select(id).then(list=>list.map(l=>utils.getURLData(l.face_url)
+                            .then(buf=>readImagePromise(buf))
+                        ))
+                            .then(x=>Promise.all(x))
+                            .then(bufs => {
+                                bufs.forEach(buf => {
+                                    label = parseInt(++no + id);
+                                    arr.push([label, buf]);
+                                })
+                                idNumMap[id]+=bufs.length;
+                                return arr;
+                            })
                     })
+            }, Promise.resolve([]))
+        } else if(idno) {
+            promise = select(idno)
+                .then(list=>list.map(l=>utils.getURLData(l.face_url).then(buf=>readImagePromise(buf))))
+                .then(x=>Promise.all(x))
+                .then(bufs => {
+                    var no = 0;
+                    var arr = bufs.map(buf => {
+                        var label = parseInt(++no + idno);
+                        return [label, buf];
+                    });
+                    idNumMap[idno] = bufs.length;
+                    return arr;
                 })
-        }, Promise.resolve([])).catch(console.error)
-        .then(data=> {
-            // console.log('data', data)
-            fr.trainSync(data);
-            let fpath = path.join(face_path, `${year}-${classno}.yaml`);
-            if(focus || !fs.existsSync(fpath)) {
-                fr.saveSync(fpath);
-                console.log('Saved Train Data %s', fpath)
-            } else {
-                fr.loadSync(fpath);
-                console.log('Read Train Data %s', fpath)
-            }
-        })
-
-    } catch (ex) {
-        console.error('year: %s, class: %s\n', year, classno, ex);
+        }
+    } else {
+        promise = Promise.resolve(null);
     }
-    return fr;
+
+    return promise.then(data => {
+        if(data) {
+            fr.trainSync(data);
+            fr.saveSync(fpath);
+            fs.writeFileSync(facesNumObjPath, JSON.stringify(facesNumObj));
+            console.log('Saved Train Data %s', fpath)
+        } else {
+            fr.loadSync(fpath);
+            if (fs.existsSync(facesNumObjPath)) {
+                facesNumObj = JSON.parse(fs.readFileSync(facesNumObjPath));
+            }
+            console.log('Read Train Data %s', fpath)
+        }
+
+        return fr;
+    })
 }
 
 const each = (obj, fn) => Object.keys(obj).forEach((x, i)=>fn && fn(obj[x], x, i))
 
-const memDATA = {}
+const memDATA = {};
 
 each(files_obj, (o, year, i)=> {
     memDATA[year] = memDATA[year] || {}
     each(o, (arr, classno, i) => {
         if(process.env.NODE_ENV == 'dev') {
             if (year == 2013 && classno == 191301)
-                memDATA[year][classno] = train_save(year, classno, bFocus)
-        } else
-            memDATA[year][classno] = train_save(year, classno, bFocus)
+                train_save(year, classno, bFocus).then(fr => memDATA[year][classno] = fr)
+        } else {
+            if (gYear) {
+                if(gYear == year) {
+                    if(gClassno) {
+                        if (gClassno == classno)
+                            train_save(year, classno, bFocus).then(fr => memDATA[year][classno] = fr)
+                    } else
+                        train_save(year, classno, bFocus).then(fr => memDATA[year][classno] = fr)
+                }
+            } else
+                train_save(year, classno, bFocus).then(fr => memDATA[year][classno] = fr)
+        }
     })
 })
 
@@ -132,7 +175,7 @@ const readImageThunk = (buf) => {
 
 var out = {
     pretreat: (im, cb, mock=false) => {
-        var img_gray = im.clone();
+        var img_gray = im.copy();
         img_gray.toThree();
         img_gray.convertGrayscale();
         var args = getFaceDetectArgs();
@@ -160,7 +203,7 @@ var out = {
                         img_gray.resize(91, 91)
                         cb && cb(null, img_gray)
                     } else {
-                        cb && cb(new Error('Face Not Recognized'))
+                        cb && cb(new Error('未识别到人脸'))
                     }
                 }
 
@@ -186,7 +229,7 @@ var out = {
     },
     predict(classno, buffer) {
         return new Promise((resolve, reject) => {
-            var year = '20'+(''+classno).substr(2, 2)
+            var year = '20'+(''+classno).substr(2, 2);
             if(memDATA[year] && memDATA[year][classno]) {
                 readImageThunk(buffer)((err, mat) => {
                     if(err) reject(err);
@@ -194,10 +237,22 @@ var out = {
                         this.pretreat(mat, (err, treated) => {
                             if(err) reject(err);
                             else {
-                                // treated.save(Date.now()+'.jpg')
                                 memDATA[year][classno].predict(treated, (obj)=>{
                                     obj.id = (obj.id+'').slice(1);
-                                    resolve(obj)
+                                    // http://stackoverflow.com/questions/13652778/what-is-confidence-in-opencvs-facerecognizer
+                                    var nTrainFaces = facesNumObj[year][classno][obj.id];
+                                    // var total = 0;
+                                    // each(facesNumObj[year][classno], (obj, key ,i) => {
+                                    //     total += obj;
+                                    // })
+                                    // obj.distance = obj.confidence;
+                                    // obj.confidence = 100 * (1 - Math.sqrt( obj.confidence / (total * total) ) / 255) + '%';
+                                    if(obj.confidence<2700) {
+                                        resolve(obj.id);
+                                    } else {
+                                        reject(new Error('对不起，我们认为你不是本班学生，你可以进行人脸录入, confidence='+obj.confidence+', label='+obj.id));
+                                    }
+                                    
                                 })
                             }
                         })
@@ -209,6 +264,14 @@ var out = {
             }
         })
     },
+
+    reTrain (idno) {
+        var year = '20'+idno.substr(2, 2);
+        var cls = idno.substr(0, 6);
+        memDATA[year] = memDATA[year] || {}
+        train_save(year, cls, true, idno).then(fr => memDATA[year][cls] = fr)
+    },
+
     isTrained(idno) {
         var y = '20'+idno.substr(2, 2);
         var cls = idno.substr(0, 6);

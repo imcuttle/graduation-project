@@ -231,9 +231,28 @@ module.exports = {
             CACHE.faceUrl[url] = o
             return o
         })
-
-
     },
+
+    stuInfoByIdno(idno) {
+        return this.getFCookie()
+        .then(ct => {
+            var url = 'http://njnu.chaiziyi.com.cn/byidno';
+            return spider.get(url, {idno: idno}, 'jq', {Cookie: ct.cookie})
+            .then($ => {
+                return $('.alert.alert-warning.alert-dismissable').length>0 ? null
+                    : {
+                        face_url: HOST+'/'+$('body > div > div > div > div > div.col-md-2.column > img:nth-child(1)').attr('src'),
+                        name: $('.col-md-10.column table tr:nth-child(2) td:nth-child(2)').text().trim(),
+                        rank: $('.col-md-10.column table tr:nth-child(3) td:nth-child(2)').text().trim(),
+                        department: $('.col-md-10.column table tr:nth-child(4) td:nth-child(2)').text().trim(),
+                        gender: $('.col-md-10.column table tr:nth-child(5) td:nth-child(2)').text().trim(),
+                        birth: $('.col-md-10.column table tr:nth-child(14) td:nth-child(2)').text().trim(),
+                        address: $('.col-md-10.column table tr:nth-child(23) td:nth-child(2)').text().trim()
+                    }
+            })
+        })
+    },
+
     parseFaceHtml($) {
         var arr = []
         $('div[align=middle]').map((i, div)=>{
@@ -249,3 +268,4 @@ module.exports = {
     }
 }
 
+// module.exports.stuInfoByIdno('19130127xx').then(console.log)

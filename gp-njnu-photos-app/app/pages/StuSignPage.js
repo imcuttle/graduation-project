@@ -22,7 +22,7 @@ export default class extends React.Component {
 
         return [
             {text: '摄像头', active: activeSrc==='camera', onClick: activeSrc!=='camera'?()=>actions.switchUpFaceSrc('camera'):null},
-            // {text: '上传图片', active: activeSrc==='file', onClick: activeSrc!=='file'?()=>actions.switchUpFaceSrc('file'):null},
+            {text: '上传图片', active: activeSrc==='file', onClick: activeSrc!=='file'?()=>actions.switchUpFaceSrc('file'):null},
             // {text: '网络图片', active: activeSrc==='network', onClick: activeSrc!=='network'?()=>actions.switchUpFaceSrc('network'):null}
         ]
         
@@ -39,18 +39,19 @@ export default class extends React.Component {
         console.log(state)
         return (
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
-                {/*<Tabs items={this.getTabsProps()} />*/}
-                <div style={{ minHeight: 400, overflowX: 'hidden'}}>
-                    <div className="animated fadeInLeft" style={{display: activeSrc!=='camera'?'none':''}}>
+                {<Tabs items={this.getTabsProps()} />}
+                <div style={{ minHeight: 520, overflowX: 'hidden'}}>
+                    {activeSrc==='camera' && <div className="animated fadeInLeft">
                         <FaceRec onDataCallback={data=>{isStart && actions.fetchStuPredict(searchText, data)}} data={data}/>
-                    </div>
+                    </div>}
                     {activeSrc==='file' && <div className="animated fadeInDown" style={{width: 500,  textAlign: 'center', margin: '30px auto auto'}}>
                         <InputGroup ref={r=>this.file=r} btnText="上传图片" 
                             btnProps={{
-                                disabled: searching,
+                                disabled: !isStart || !fData,
                                 onClick: ()=>{
-                                    const {input, btn} = this.file
-                                    input.click()
+                                    // const {input, btn} = this.file
+                                    // input.click()
+                                    isStart && actions.fetchStuPredict(searchText, fData)
                                 }
                             }}
                             inputProps={{
@@ -58,6 +59,7 @@ export default class extends React.Component {
                                 onChange: e=>{
                                     const {input, btn} = this.file
                                     const file = input.files[0]
+                                    if(!file) return;
                                     const size = file.size
                                     if(size>1024*1024*2) {
                                         utils.showToast("文件大小不能大于2M")
@@ -71,7 +73,7 @@ export default class extends React.Component {
                                     }
                                 }
                             }}/>
-                        <img style={{maxWidth: '100%'}} src={fData} />
+                        <img style={{marginTop: 15, maxWidth: '100%'}} src={fData} />
                     </div>}
                     {activeSrc==='network' && <div className="animated fadeInRight" style={{width: 500, textAlign: 'center', margin: '30px auto auto'}}>
                         <InputGroup showBtn={false} btnText="网络图片" 
@@ -114,7 +116,7 @@ export default class extends React.Component {
                                 placeholder: '输入班级号或者课程号（如191301）'
                             }} />
                     </div>
-                    <InputGroup showIpt={false} btnText="签到" btnProps={{
+                    <InputGroup showIpt={false} showBtn={false} btnText="签到" btnProps={{
                         disabled: !(isStart && !searching),
                         onClick: ()=>{
                             if(searchText.trim()!=='') db.set('search-text', searchText);

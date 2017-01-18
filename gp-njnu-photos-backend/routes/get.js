@@ -31,11 +31,19 @@ get.get('/face-import/:stuno', (req, res) => {
 
 get.use(utils.adminCheckMiddleware);
 
-get.post('/face-import/admin/:stuno', (req, res) => {
+get.get('/face-import/admin/:stuno', (req, res) => {
     const stuno = req.params.stuno;
     faceImportDB.select(stuno).then(x => obj(200, x))
     .catch(err => obj(502, err.message))
     .then(x => res.json(x));
+})
+
+get.get('/stu-info/admin/:stuno', (req, res) => {
+    const stuno = req.params.stuno;
+    njnuApi.stuInfoByIdno(stuno)
+        .then(info => info?obj(200, info): obj(400, '学号不存在'))
+        .catch(err => obj(502, err.stack))
+        .then(x => res.json(x))
 })
 
 

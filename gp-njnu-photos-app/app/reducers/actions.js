@@ -34,7 +34,7 @@ export const fetchStuPredict = (cls, data) =>
             body: JSON.stringify({cls, data})
         })
         .then(res=>res.json())
-        .then(data=> !toastError(data) && uShowToast(JSON.stringify(data.result)))
+        .then(data=> !toastError(data) && uShowToast('我们认为你是'+data.result+'号学生', 'success'))
 
 export const fetchStuInfo = (id, pwd) => 
     (dispatch, getState)=>
@@ -88,6 +88,19 @@ export const fetchFaceImportDelete = (hash, stuno, pwd) =>
         )
     }
 
+export const feachDelFaceInAllFaces = (stuno, pwd) => 
+    (dispatch, getState) => 
+        fetch(umap.face_import_delete, {
+            method: 'POST',
+            headers: {'content-type': 'application/json;charset=utf-8'},
+            body: JSON.stringify({hash: '*', pwd, stuno})
+        })
+        .then(res => res.json())
+        .then(json=> !toastError(json) 
+            && uShowToast(json.result, 'success')
+            && dispatch(setFaceInFaces([]))
+        )
+
 export const pushRoute = (path) => _type("PUSH_ROUTE", {path});
 
 export const switchUpFaceSrc = (src) => _type("SWITCH_UPFACE_SRC", {src});
@@ -129,8 +142,10 @@ export const fetchAdminLogin = (user='', pwd='') =>
         dispatch(showLoading('管理员登录中...'));
         fetch('/api/do/admin/login', {
             method: 'POST',
-            headers: {'content-type': 'application/json;charset=utf-8'},
-            body: JSON.stringify({auth: md5Hex(JSON.stringify({pwd, user}))})
+            headers: {
+                'content-type': 'application/json;charset=utf-8',
+                'auth': md5Hex(JSON.stringify({pwd, user}))
+            }            
         }).then(r => r.json())
         .then(json=> dispatch(hideLoading()) && !toastError(json) && dispatch(adminLogined()) && uShowToast(json.result, 'success'))
     }
@@ -141,8 +156,10 @@ export const checkAdminLogined = () =>
         const pwd = state.admin.password, user = state.admin.username;
         fetch('/api/do/admin/login', {
             method: 'POST',
-            headers: {'content-type': 'application/json;charset=utf-8'},
-            body: JSON.stringify({auth: md5Hex(JSON.stringify({pwd, user}))})
+            headers: {
+                'content-type': 'application/json;charset=utf-8',
+                'auth': md5Hex(JSON.stringify({pwd, user}))
+            }
         }).then(r => r.json())
         .then(json=> {
             if(json.code === 200) {
@@ -162,20 +179,31 @@ export const fetchAdminFaceImportList = (stuno='') =>
         const state = getState();
         const pwd = state.admin.password, user = state.admin.username;
         fetch('/api/get/face-import/admin/'+stuno.trim(), {
-            method: 'POST',
-            headers: {'content-type': 'application/json;charset=utf-8'},
-            body: JSON.stringify({auth: md5Hex(JSON.stringify({pwd, user}))})
+            headers: {'auth': md5Hex(JSON.stringify({pwd, user}))}
         }).then(r => r.json())
-        .then(json=> !toastError(json) && dispatch(setAdminFaceInPhotos(json.result.map(x=> {
-            return {
-                key: x.hash,
-                url: x.face_url,
-                onClose: ()=>{uShowModal('确定删除该样本吗？', () => {
-                    dispatch(fetchDelAdminFaceInPhoto(x.hash))
-                    dispatch(delAdminFaceInPhoto(x.hash))
-                })}
+        .then(json=> {
+            if(!toastError(json)) {
+                if(json.result.length === 0) {
+                    uShowToast('未发现样品图片');
+                } else {
+                    dispatch(
+                        setAdminFaceInPhotos(
+                            json.result.map(x=> {
+                                return {
+                                    key: x.hash,
+                                    url: x.face_url,
+                                    onClose: ()=>{uShowModal('确定删除该样本吗？', () => {
+                                        dispatch(fetchDelAdminFaceInPhoto(x.hash))
+                                        dispatch(delAdminFaceInPhoto(x.hash))
+                                    })}
+                                }
+                            }
+                        ))
+                    )
+                }
+                
             }
-        }))))
+        })
     }
 
 export const fetchDelAdminFaceInPhoto = (hash='') => 
@@ -188,8 +216,10 @@ export const fetchDelAdminFaceInPhoto = (hash='') =>
         const pwd = state.admin.password, user = state.admin.username;
         fetch('/api/do/admin/del-face/'+hash, {
             method: 'POST',
-            headers: {'content-type': 'application/json;charset=utf-8'},
-            body: JSON.stringify({auth: md5Hex(JSON.stringify({pwd, user}))})
+            headers: {
+                'content-type': 'application/json;charset=utf-8',
+                'auth': md5Hex(JSON.stringify({pwd, user}))
+            }
         }).then(r => r.json())
         .then(json => !toastError(json) && uShowToast(json.result))
     }
@@ -199,13 +229,38 @@ export const adminLogout = () =>
         dispatch(setAdminPwd(''))
         && dispatch(adminNotLogined())
 
+export const fetchAdminStuInfo = (stuno='') => 
+    (dispatch, getState) => {
+        stuno = stuno.trim();
+        if(!stuno) {
+            return;
+        }
+        const state = getState();
+        const pwd = state.admin.password, user = state.admin.username;
+        fetch('/api/get/stu-info/admin/'+stuno, {headers: {'auth': md5Hex(JSON.stringify({pwd, user}))}})
+        .then(r => r.json())
+        .then(json => 
+            !toastError(json) 
+            && dispatch(setAdminStuInfo({
+                img: json.result.face_url,
+                keys: ['姓名', '学号', '级别', '学院', '性别', '生日', '在校地址'],
+                vals: [
+                    json.result.name, stuno, json.result.rank, json.result.department,
+                    json.result.gender, json.result.birth, json.result.address
+                ],
+            }))
+        )
+    }
+
 
 export const adminLogined = () => _type('SET_ADMIN_ISLOGIN', {isLogined: true});
 export const adminNotLogined = () => _type('SET_ADMIN_ISLOGIN', {isLogined: false});
 export const setAdminSrc = (src) => _type('SET_ADMIN_SRC', {src});
 export const setAdminFaceInPhotos = (photos) => _type('SET_ADMIN_FACEIN_PHOTOS', {photos});
-export const setAdminFaceInId = (id) => _type('SET_ADMIN_FACEIN_ID', {id})
-export const delAdminFaceInPhoto = (key) => _type('DEL_ADMIN_FACEIN_PHOTO', {key})
+export const setAdminFaceInId = (id) => _type('SET_ADMIN_FACEIN_ID', {id});
+export const delAdminFaceInPhoto = (key) => _type('DEL_ADMIN_FACEIN_PHOTO', {key});
+export const setAdminStuInfo = (info) => _type('SET_ADMIN_STUINFO', {info});
+export const setAdminStuInfoId = (id) => _type('SET_ADMIN_STUINFO_ID', {id});
 
 export const hideToast = () => _type("HIDE_TOAST");
 export const showToast = (text, tp="error") => _type("SHOW_TOAST", {tp, text});

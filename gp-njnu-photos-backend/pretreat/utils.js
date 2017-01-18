@@ -23,7 +23,13 @@ module.exports = {
     },
     getFaceDetectArgs () {
         // path.resolve(__dirname, '../data/lbpcascade_frontalface.xml'), {scale: 1.95},
-        return [path.resolve(__dirname, '../data/lbpcascade_frontalface.xml'), {}]
+        // haarcascade_frontalface_alt
+        return [path.resolve(__dirname, '../data/lbpcascade_frontalface.xml'), {}];
+        //[path.resolve(__dirname, '../data/haarcascade_frontalface_alt.xml'), {}];
+        //[path.resolve(__dirname, '../data/lbpcascade_frontalface.xml'), {}]
+    },
+    getPreTreatFaceDetectArgs () {
+        return [path.resolve(__dirname, '../data/lbpcascade_frontalface.xml'), {scale: 1.95}]
     },
     getURLData (url) {
         return new Promise((resovle, reject)=>{

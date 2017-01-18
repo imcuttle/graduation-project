@@ -4,6 +4,7 @@ import Tabs from '../components/TabNav'
 import InputGroup from '../components/InputGroup'
 import TabNav from '../components/TabNav'
 import PhotosFall from '../components/PhotosFall'
+import Information from '../components/Information'
 
 const db = require('../common/storage')
 const utils = require('../common/utils')
@@ -42,7 +43,7 @@ export default class extends React.Component {
 
         return [
             {text: '样本查看', active: src==='faceImport', onClick: src!=='faceImport'?()=>actions.setAdminSrc('faceImport'):null},
-            // {text: '上传图片', active: activeSrc==='file', onClick: activeSrc!=='file'?()=>actions.switchUpFaceSrc('file'):null},
+            {text: '学生信息', active: src==='stuInfo', onClick: src!=='stuInfo'?()=>actions.setAdminSrc('stuInfo'):null},
             // {text: '网络图片', active: activeSrc==='network', onClick: activeSrc!=='network'?()=>actions.switchUpFaceSrc('network'):null}
         ]
         
@@ -58,21 +59,46 @@ export default class extends React.Component {
     render() {
         const {actions, state} = this.props
         const {admin} = state
-        const {src, faceImport} = admin;
+        const {src, faceImport, stuInfo} = admin;
         const {id: faceInId, photos: faceInPhotos} = faceImport;
+        const {id: stuInfoId, ...info} = stuInfo;
 
         return (
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
                 {<Tabs items={this.getTabsProps()} />}
-                <div style={{width: '40%', maxWidth: 500, margin: '12px auto'}}>
-                    <InputGroup showBtn={false} 
-                        inputProps={{
-                            placeholder: '输入学号', defaultValue: faceInId, onBlur: this.InputBlur,
-                            onChange: e => actions.setAdminFaceInId(e.target.value)
-                        }}
-                    />
+                <div style={{width: '60%', maxWidth: 800, margin: '12px auto'}}>
+                    {src === 'faceImport' &&
+                        <div>
+                        <div style={{width: '40%', maxWidth: 500, margin: '12px auto'}}>
+                            <InputGroup showBtn={false} 
+                                inputProps={{
+                                    placeholder: '输入学号', defaultValue: faceInId, 
+                                    onBlur: this.InputBlur,
+                                    onKeyPress: e => e.charCode === 13 && this.InputBlur(e),
+                                    onChange: e => actions.setAdminFaceInId(e.target.value)
+                                }}
+                            />
+                        </div>
+                        <PhotosFall photos={faceInPhotos}/>
+                        </div>
+                    }
+                    {src === 'stuInfo' &&
+                        <div>
+                        <div style={{width: '40%', maxWidth: 500, margin: '12px auto'}}>
+                            <InputGroup showBtn={false}
+                                inputProps={{
+                                    placeholder: '学生学号', defaultValue: stuInfoId,
+                                    onBlur: e=>actions.fetchAdminStuInfo(stuInfoId),
+                                    onKeyPress: e => e.charCode === 13 && actions.fetchAdminStuInfo(stuInfoId),
+                                    onChange: e => actions.setAdminStuInfoId(e.target.value)
+                                }}
+                            />
+                        </div>
+                        <Information {...info}/>
+                        </div>
+                    }
                 </div>
-                <PhotosFall photos={faceInPhotos}/>
+                
             </div>
         )
     }

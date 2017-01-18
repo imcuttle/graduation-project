@@ -1,7 +1,7 @@
 .main {
     
     font-size: 16px;
-    
+    display: flex;
     padding: 10px 18px;
     border: 1px solid transparent;
     * {
@@ -15,6 +15,11 @@
             border-radius: 6px;
             // box-shadow: 1px 1px 2px 2px #ccc;
             max-width: 100%;
+        }
+        &:after {
+            display: table;
+            content: ' ';
+            clear: both;
         }
     }
     .info {
@@ -30,6 +35,11 @@
             padding: 6px;
             line-height: 25px;
             border-bottom: 1px solid #ddd;
+            &:after {
+                display: table;
+                content: ' ';
+                clear: both;
+            }
         }
         .left {
             // display: table-cell;

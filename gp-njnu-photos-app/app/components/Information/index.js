@@ -3,7 +3,7 @@ import {Map} from 'immutable'
 import css from './style.less'
 
 
-export default ({img="", keys=["姓名", "性别"], vals=["moyu", "Nan"]}) =>
+export default ({img="", keys=[], vals=[]}) =>
     <div className={css.main}>
         {!!img && <div className={css.img} ><img src={img} /></div>}
         <ul className={css.info+' '+(!img?css.noimg:'')}>

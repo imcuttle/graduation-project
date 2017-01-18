@@ -10,6 +10,9 @@ export const initState={
     faceImport: {
         id: '',
         photos: []
+    },
+    stuInfo: {
+
     }
 }
 
@@ -49,6 +52,10 @@ export default function (state=initState, action) {
         case 'DEL_ADMIN_FACEIN_PHOTO':
             newState.faceImport.photos = rmList(newState.faceImport.photos, 'key', action.key)
             return newState;
+        case 'SET_ADMIN_STUINFO':
+            return {...newState, stuInfo: {...newState.stuInfo, ...action.info}}
+        case 'SET_ADMIN_STUINFO_ID':
+            return updateState(state, 'stuInfo', 'id', action.id);
         default:
             return newState;
     }

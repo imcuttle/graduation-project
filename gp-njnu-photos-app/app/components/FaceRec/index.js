@@ -106,11 +106,21 @@ export default class extends React.Component {
             return;
         }
         const ctx = data_canvas.getContext('2d')
-        // console.log(rect)
-        data_canvas.width = rect.width
-        data_canvas.height = rect.height
-        console.log('Rect', rect)
-        ctx.drawImage(video, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height)
+        var bound = 200;
+        var x = rect.x-bound;
+        var y = rect.y-bound;
+        var w = rect.width+bound;
+        var h = rect.height+bound;
+        x = x>=0?x:0;
+        y = y>=0?y:0;
+        w = (w>video.clientWidth?video.clientWidth:w);
+        h = (h>video.clientHeight?video.clientHeight:h);
+
+        data_canvas.width = w;
+        data_canvas.height = h;
+        console.log('Rect', x, y, w, h);
+        ctx.drawImage(video, x, y, w, h, 0, 0, w, h)
+        // ctx.drawImage(video, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height)
 
         // img.width = video.clientWidth;
         // img.height = video.clientHeight

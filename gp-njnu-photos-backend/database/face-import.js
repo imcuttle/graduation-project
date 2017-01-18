@@ -41,6 +41,18 @@ var out = {
         })
     },
 
+    selectByHash(hash) {
+        return newPromise((ok, fail) => {
+            connection.query('select * from ?? where hash=?', [table, hash], (err, rlt) => {
+                if (err) {
+                    fail(err);
+                } else {
+                    ok(rlt.length==0?rlt[0]:rlt);
+                }
+            })
+        })
+    },
+
     insert(stuid, hash, face_url) {
         return newPromise((ok, fail) => {
             connection.query('insert into ?? values(?, NOW(), ?, ?)', [table, stuid, hash, face_url],
@@ -54,7 +66,10 @@ var out = {
 
     delete(hash, stuno) {
         return newPromise((ok, fail) => {
-            connection.query('delete from ?? where hash=? and stuid=?', [table, hash, stuno],
+            var sql = hash==='*'?'delete from ?? where stuid=?':'delete from ?? where hash=? and stuid=?'
+            var arr = hash==='*'?[table, stuno]:[table, hash, stuno]
+
+            connection.query(sql, arr,
                 (err, rlt) => {
                     if (err) fail(err);
                     else {

@@ -80,9 +80,10 @@
 	2. 死嚼PCA理论[1](http://blog.csdn.net/itplus/article/details/11451327), [2](http://blog.csdn.net/liulina603/article/details/7912950)
 
 - 2016年12月18日
-    1. http://www.freeformatter.com/xml-to-json-converter.html(需VPN)
+    1. [人脸检测模式匹配数据xml2json](http://www.freeformatter.com/xml-to-json-converter.html)(需VPN)
     2. 发现人脸识别效果不佳，分析原因， 第一，样本每个人只有一张 ，第二，几年下来，人的变化比较大。
     3. 新增样本输入模块，学生自主输入删除样本。（需要重新训练，存储）
+    4. 采用opencv Eigenfaces 人脸识别算法
 - 2017年1月11日
 	`image-download`去除对`wget`依赖，改用`curl`指令下载
 
@@ -96,3 +97,10 @@
 - 2017年1月17日
 	1. 改善训练样本方法，加上了smms外链的图片训练(一大串Promise)
 	2. 完成前后端分离的管理员登录状态控制(本地存储+md5编码)，完成管理员样本查看功能。
+- 2017年1月18日
+	1. 完成每次启动服务器需要读取数据库，得到smms图片数据，进行训练。
+	2. 完成删除/添加人脸样本，重新训练逻辑(异步，不保证实时性)。
+	3. 对于学生证照，`lbpcascade_frontalface, scale=1.95左右`人脸检测效果较好
+	4. [distance convert to precentage](http://stackoverflow.com/questions/13652778/what-is-confidence-in-opencvs-facerecognizer)
+	5. confidence<?, 认为是正确
+	6. 整体大致已经完成，阈值的确定尚未完成

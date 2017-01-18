@@ -1,0 +1,29 @@
+.btn {
+    user-select: none;
+    box-sizing: border-box;
+    transition: all .3s ease 0s;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    color: #fff;
+    padding: 7px 13px;
+    border: 1px solid #379edf;
+    &:hover {
+        color: #fff;
+        border: 1px solid #4aabe8;
+        background-color: #4aabe8;
+    }
+    &.default {
+        background-color: #379edf;
+    }
+    &.error {
+        border-color: #b94442;
+        background-color: #a94442;
+    }
+}
+.btn[disabled] {
+    pointer-events: none;
+    cursor: default;
+    border: 1px solid #bbb;
+    background-color: #ccc;
+}

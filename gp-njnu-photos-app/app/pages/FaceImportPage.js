@@ -5,6 +5,7 @@ import InputGroup from '../components/InputGroup'
 import TakePhoto from '../components/TakePhoto'
 import Information from '../components/Information'
 import PhotosFall from '../components/PhotosFall'
+import Button from '../components/Button'
 
 const db = require('../common/storage')
 const utils = require('../common/utils')
@@ -27,7 +28,7 @@ export default class extends React.Component {
         ]        
     }
 
-    inputBlur(e) {
+    inputBlur(e, force=false) {
         const {actions, state} = this.props
         const {id: eId, pwd: ePwd} = this
         const {upface, faceImport} = state
@@ -35,7 +36,7 @@ export default class extends React.Component {
 
         setTimeout(()=>{ 
             const activeElement = document.activeElement // without timeout, = body
-            if(!!id.trim() && !!pwd.trim() && activeElement!==eId && activeElement!==ePwd) {
+            if(force || !!id.trim() && !!pwd.trim() && activeElement!==eId && activeElement!==ePwd) {
                 actions.fetchStuInfo(id.trim(), pwd.trim());
                 actions.fetchFaceImportList(id.trim(), pwd.trim());
             }
@@ -65,7 +66,8 @@ export default class extends React.Component {
                             onChange: e=>{
                                 actions.setFaceInId(e.target.value)
                             },
-                            onBlur: this.inputBlur
+                            onBlur: this.inputBlur,
+                            onKeyPress: e => e.keyCode === 13 && this.inputBlur(e, true)
                         }}/>
                     </div>
                     <div style={{display: 'inline-block', width: '31%', padding: 12, boxSizing: 'border-box'}}>
@@ -74,7 +76,8 @@ export default class extends React.Component {
                             onChange: e=>{
                                 actions.setFaceInPwd(e.target.value)
                             },
-                            onBlur: this.inputBlur
+                            onBlur: this.inputBlur,
+                            onKeyPress: e => e.keyCode === 13 && this.inputBlur(e, true)
                         }}/>
                     </div>
                     {/*<div style={{display: 'inline-block', boxSizing: 'border-box', padding: 12}}>
@@ -96,7 +99,16 @@ export default class extends React.Component {
                         }
                     }
                 })} />
-
+                {
+                    faces && faces.length>0 && 
+                    <div style={{textAlign: 'center'}}>
+                        <Button type="error" onClick={e => 
+                            utils.showModal('是否确定删除全部样本？', 
+                                () => actions.feachDelFaceInAllFaces(id.trim(), pwd.trim())
+                            )
+                        } text="清空人脸"/>
+                    </div>
+                }
                 {/* <Tabs items={this.getTabsProps()}/> */}
                 <div style={{minHeight: 400, margin: '30px auto auto auto', textAlign: 'center'}}>
                 {activeSrc==='camera' && <TakePhoto onPhotoCallback={data => {

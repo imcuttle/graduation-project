@@ -25,7 +25,7 @@ var out = {
     },
     adminCheckMiddleware(req, res, next) {
         const ent = req.ent;
-        const data = ent.auth;
+        const data = ent.auth || req.header('auth');
         if(!data) {
             res.json(out.obj(400, '参数不全'));
             return;

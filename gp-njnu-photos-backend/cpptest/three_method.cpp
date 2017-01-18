@@ -40,6 +40,7 @@ int main(int argc, char** argv)
 		sprintf(path, "/Users/moyu/my-code/mixCode/Graduation-Project/gp-njnu-photos-backend/data/images/2013/191301/%d.jpg",i+19130101);
 		Mat m = imread(path, CV_LOAD_IMAGE_GRAYSCALE);
 		if(m.data!=NULL) {
+		    printf("image size-1: %d\n", m.size()-1);
 			images.push_back(m);
 			printf("%d width: %d, height: %d\n", i+19130101, m.cols, m.rows);
 			labels.push_back(i+19130101);
@@ -163,7 +164,7 @@ int main(int argc, char** argv)
             if(labels2[i] == predictedLabel) {
                 rate++;
             }
-//            printf("%d predict as %d, confidence: %f.\n", labels2[i], predictedLabel, confidence);
+            printf("%d predict as %d, confidence: %f .\n", labels2[i], predictedLabel, confidence);
 		}
 
 		t_end = clock();

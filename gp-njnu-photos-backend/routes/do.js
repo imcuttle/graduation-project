@@ -20,7 +20,14 @@ doServer.post('/face-import/delete', (req, res) => {
     }
     njnuApi.checkStudent(stuno, pwd.trim())
         .then(checked =>
-            checked ? faceImportDB.delete(hash, stuno).then(x => x ? obj(200, '删除成功'): obj(500, '删除失败'))
+            checked ? faceImportDB.delete(hash, stuno).then(x => {
+                    if (x) {
+                        train.reTrain(stuno.trim());
+                        return obj(200, '删除成功');
+                    } else {
+                        return obj(500, '删除失败');
+                    }
+                })
                 : obj(500, '密码错误')
         )
         .catch(err => obj(502, err.message))
@@ -38,10 +45,14 @@ doServer.post('/admin/login', (req, res) => {
 
 doServer.post('/admin/del-face/:hash', (req, res) => {
     const hash = req.params.hash;
-    faceImportDB.deleteByHash(hash)
-        .then(flag => flag ? obj(200, '删除成功') : obj(500, '删除失败'))
-        .catch(err => obj(502, err.message))
-        .then(x => res.json(x));
+    faceImportDB.selectByHash(hash)
+        .then(data => data && train.reTrain(data.stuid))
+        .then(()=> {
+            faceImportDB.deleteByHash(hash)
+            .then(flag => flag ? obj(200, '删除成功') : obj(500, '删除失败'))
+            .catch(err => obj(502, err.message))
+            .then(x => res.json(x))
+        })
 })
 
 

@@ -7,7 +7,7 @@ const fs = require('fs')
 
 // const img_src_path = '../../gp-image-download/images/2013/191301'
 const img_dest_path = require('./utils').dest_path
-const getFaceDetectArgs = require('./utils').getFaceDetectArgs
+const getPreTreatFaceDetectArgs = require('./utils').getPreTreatFaceDetectArgs
 const dirs_walk = require('./utils').dirs_walk
 const mkdir = require('./utils').mkdir
 const touch = require('./utils').touch
@@ -77,12 +77,15 @@ if(process.argv.length>2) {
 
 
 function action(p) {
-    doClassFace.apply(null, [p].concat(getFaceDetectArgs()).concat([null, true, true]))
+    doClassFace.apply(null, [p].concat(getPreTreatFaceDetectArgs()).concat([null, true, true]))
 }
 
 
 
 function doClassFace (img_src_path, classifier, options, fn, save, log) {
+    if (path.basename(img_src_path).startsWith('.')) {
+        return;
+    }
     const files = fs.readdirSync(img_src_path)
     mkdir(img_dest_path)
     log && console.log(`Detect Face and Gray: ${img_src_path} => ${img_dest_path}`);
