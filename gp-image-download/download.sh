@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 base="http://223.2.10.123/jwgl/photos/rx"
 year="2013"
@@ -40,6 +40,7 @@ down() {
     URL=$1
     Name=$2
     data=`curl --fail --silent $URL` 
+    echo "$1 $data"
     # "$data" 不能少  因为data中可能包含[]
     if [ ! -z "$data" ]; then
         curl --fail --silent $URL > $Name
