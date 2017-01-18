@@ -40,7 +40,7 @@ down() {
     URL=$1
     Name=$2
     data=`curl --fail --silent $URL` 
-    echo "$1 $data"
+    # echo "$1"
     # "$data" 不能少  因为data中可能包含[]
     if [ ! -z "$data" ]; then
         curl --fail --silent $URL > $Name
