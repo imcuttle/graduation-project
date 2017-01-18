@@ -45,7 +45,7 @@ if [[ $REPLY =~ ^[yY]$ ]]; then
         USER=$REPLY
     fi
 
-    echo -n Password(110114): 
+    echo -n "Password(110114): "
     read -s REPLY
     if [[ $REPLY =~ ^[\s]*$ ]]; then
         PWD=110114
