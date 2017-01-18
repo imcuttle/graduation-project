@@ -41,6 +41,7 @@ app.all('/api', (req, res) => {
 })
 
 app.use('/api/up', require('./routes/up'))
+app.use('/api/ctrl', require('./routes/control'))
 app.use('/api/get', require('./routes/get'))
 app.use('/api/do', require('./routes/do'))
 app.use('/api/njnu', require('./routes/njnu'))
