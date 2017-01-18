@@ -55,7 +55,22 @@ app.use((req, res, next) => {
 
 global.seqes = [utils.md5Hex(JSON.stringify({user: 'moyuyc', pwd: 'moyuyc'})), utils.md5Hex(JSON.stringify({pwd: 'moyuyc', user: 'moyuyc'}))]
 
-app.use('/', express.static(path.resolve(__dirname, '..', 'gp-njnu-photos-app', 'build')))
+const fePath = path.resolve(__dirname, '..', 'gp-njnu-photos-app', 'build')
+
+app.all('*', (req, res, next) => {
+    var baseUrl = require('url').parse(req.originalUrl).pathname;
+    console.log(baseUrl)
+    if(baseUrl === '/' || baseUrl === '/face-import'
+         || baseUrl === '/admin' || baseUrl === '/admin/login' || baseUrl === '/about') {
+        res.sendFile(fePath+'/index.html');
+    } else {
+        if(require('fs').existsSync(fePath+baseUrl)) {
+            res.sendFile(fePath+baseUrl);
+        } else 
+            next();
+        // res.status(404).json({code: 404, result: 'Not Found'})
+    }
+})
 
 app.all('/api', (req, res) => {
     res.end('By Moyu.');

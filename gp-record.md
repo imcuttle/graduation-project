@@ -107,3 +107,4 @@
 	7. [iterm2, 快捷键设置(useful!)](https://coderwall.com/p/h6yfda/use-and-to-jump-forwards-backwards-words-in-iterm-2-on-os-x)
 - 2017年1月19日
 	1. Server读取app代码时，node_module回环加载，出现错误，修改成只使用最外层node_modules
+	2. react Server端渲染，require() 样式文件的解决方法？(ignore, only无效)

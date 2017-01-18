@@ -19,7 +19,7 @@ export const initState = {
     audioImport: require('./audioImport').initState,
     faceImport: require('./faceImport').initState,
     admin: require('./admin').initState,
-    about: require('./admin').initState
+    about: require('./about').initState
 }
 export default combineReducers({
     routing: routerReducer,
