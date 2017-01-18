@@ -20,7 +20,12 @@ command_exists_exit npm
 command_exists_exit node
 command_exists_exit mysql
 
-git clone https://github.com/moyuyc/graduation-project.git face-njnu
+
+if [ -d face-njnu ]; then
+    (cd face-njnu && git pull)
+else
+    git clone https://github.com/moyuyc/graduation-project.git face-njnu
+fi
 
 read -p "which year do you want to download? (2013) [2013/n] " REPLY
 if [[ $REPLY =~ ^[\s]*$ ]]; then
