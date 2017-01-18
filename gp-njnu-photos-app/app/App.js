@@ -68,7 +68,7 @@ class App extends React.Component {
         )
         
         return {
-            leftItems: [dataMap('学生签到'), dataMap('人脸录入'), dataMap('语音录入')],
+            leftItems: [dataMap('学生签到'), dataMap('人脸录入')/*, dataMap('语音录入')*/],
             rightItems
         }
     }
@@ -96,7 +96,7 @@ class App extends React.Component {
                 {loading && <Loading />}
                 <Toast {...toast}/>
                 <Modal {...modal} />
-                <Header {...this.getHeaderPorps()}/>
+                <Header logo="南师大刷脸签到系统" {...this.getHeaderPorps()}/>
                 <div className="animated lightSpeedIn"><Jumbotron {...other}/></div>
                 {
                     React.Children.map(children, (child, i) =>

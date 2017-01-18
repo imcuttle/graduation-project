@@ -15,6 +15,7 @@ import StuSignPage from './pages/StuSignPage'
 import AudioImportPage from './pages/AudioImportPage'
 import FaceImportPage from './pages/FaceImportPage'
 import AdminPage from './pages/AdminPage'
+import AboutPage from './pages/AboutPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 
 
@@ -52,7 +53,7 @@ render((
         <Router history={history}>
             <Route path="/" component={App}>
                 <IndexRoute component={StuSignPage}/>
-                <Route path="about" />
+                <Route path="about" component={AboutPage} />
                 <Route path="admin" component={AdminPage} />
                 <Route path="admin/login" component={AdminLoginPage} />
                 <Route path="audio-import" component={AudioImportPage}/>

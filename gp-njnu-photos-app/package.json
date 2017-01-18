@@ -50,8 +50,10 @@
   "license": "ISC",
   "dependencies": {
     "form-data": "^2.1.2",
+    "highlight.js": "^9.9.0",
     "html-webpack-plugin": "^2.26.0",
     "less": "^2.7.2",
+    "marked": "^0.3.6",
     "webpack-hot-middleware": "^2.15.0",
     "webpack-md5-hash": "0.0.5"
   }

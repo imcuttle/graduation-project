@@ -20,7 +20,6 @@ var config = {
             }
         }
     },
-    devtool: 'source-map',
     entry: {
         app: [
             'babel-polyfill',
@@ -28,8 +27,9 @@ var config = {
             // 'webpack/hot/only-dev-server'
         ],
         libs: [
-            'react', 'redux', 'classname', 'history', 'react-redux', 'tracking', 'react-dom',
-            'immutable', 'isomorphic-fetch', 'react-router-redux', 'react-router'
+            'react', 'redux', 'classname', 'history', 'react-redux', 'react-dom',
+            'immutable', 'isomorphic-fetch', 'react-router-redux', 'react-router',
+            'tracking', 'tracking/build/data/face'
         ] 
         // client: "webpack-dev-server/client?http://localhost:8080/",
         // dev: "webpack/hot/only-dev-server"
@@ -43,7 +43,6 @@ var config = {
     },
     plugins: [
         new webpack.optimize.OccurrenceOrderPlugin(),
-        new webpack.HotModuleReplacementPlugin(),  //fix Maximum call stack
         new webpack.optimize.CommonsChunkPlugin('libs', 'libs.min.js?v='+(minimize?"[chunkhash]":"[hash]")),
         new WebpackMd5Hash(),
         new HtmlWebpackPlugin({
@@ -69,7 +68,7 @@ var config = {
                 exclude:[
                     /(node_modules|bower_components)/,
                 ],
-                test:/\.jsx?$/
+                test:/^(.(?!\.worker))*\.jsx?$/
             }, {
                 test: /^(.(?!\.global))*\.less$/,  //http://www.cnblogs.com/bvbook/archive/2010/11/03/1867775.html
                 loader: 'style-loader!css-loader?modules' +
@@ -105,7 +104,10 @@ if(minimize) {
         new webpack.NoErrorsPlugin()
     )
 } else {
-    // config.entry.app.unshift('webpack-hot-middleware/client?reload=true')
+    config.devtool = 'source-map';
+    config.plugins.push (
+        new webpack.HotModuleReplacementPlugin()  //fix Maximum call stack
+    )
 }
 
 module.exports = config

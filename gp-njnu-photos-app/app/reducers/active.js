@@ -19,9 +19,9 @@ const getNewRouteState = (path) => {
         case '/face-import':
             return {title: '人脸录入', subtitle: '为了提高识别率，提供了最新的人脸录入功能', path, bg: "http://www.ezhuoteng.com/Public/upload/20150730/14382434051352.jpg"}
         case '/admin':
-            return {title: '管理员界面', subtitle: '', path, bg: "http://www.ezhuoteng.com/Public/upload/20150730/14382434051352.jpg"}
+            return {title: '管理员界面', subtitle: '', path, bg: "http://imglf.nosdn.127.net/img/eE1wemFoSlNUWUVTWFpFaGFBY0xURFE2WThzSytheWMwdmdFY2VXNkVjZz0.jpg?imageView&thumbnail=800x0&quality=96&stripmeta=0&type=jpg%7Cwatermark&type=2&text=wqkgWS4gVGFvIC8gcG0tcGhvdG9ncmFwaHktbG9uZG9uLmxvZnRlci5jb20=&font=bXN5aA==&gravity=southwest&dissolve=30&fontsize=240&dx=8&dy=10&stripmeta=0"}
         case '/admin/login':
-            return {title: '管理员登录', subtitle: '', path, bg: "http://www.ezhuoteng.com/Public/upload/20150730/14382434051352.jpg"}
+            return {title: '管理员登录', subtitle: '', path, bg: "http://imglf0.nosdn.127.net/img/SGJtbm5ReUxoLytKVlhlTWVWM2VhaG91cFJsYmVVdGZCcE9abThuUUJLckx4UHpySW9ZdVhBPT0.jpg?imageView&thumbnail=1000x0&quality=96&stripmeta=0&type=jpg"}
         default: 
             return {title: '', subtitle: '', path}
     }

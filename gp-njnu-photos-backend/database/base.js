@@ -11,19 +11,28 @@ var config = {
     // waitForConnections: false
 };
 
-
-var database = mysql.createPool(config);
+var instant = process.env.NODE_STATUS!='run';
+var database = !instant && mysql.createPool(config);
 
 module.exports = {
+    _createPool(config) {
+        return mysql.createPool(config);
+    },
     query: function() {
         var argArr = Array.from(arguments);
         var cb = argArr.splice(-1)[0];
+        var self = this;
+        if(!database) {
+            database = self._createPool(config);
+        }
 
         database.getConnection(function(err, dbConnection) {
-            if (err) { /* do something */ return }
+            if (err) { cb.call(null, err); return }
             dbConnection.query.apply(dbConnection, argArr.concat(function() {
+                // dbConnection.end();
                 dbConnection.release(); // return to the pool
                 cb.apply(null, Array.from(arguments));
+                instant && self._closeDatabase();
             }));
         })
     },
@@ -36,5 +45,11 @@ module.exports = {
     },
     getTableNameFromFileName (filename) {
         return path.basename(filename).replace(/\..*$/, '').replace(/-/g, '_')
+    },
+    _closeDatabase () {
+        database && database.end();
+        database = null;
     }
 };
+
+

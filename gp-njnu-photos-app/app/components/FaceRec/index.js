@@ -1,7 +1,7 @@
 import React from 'react'
 import {Map} from 'immutable'
 import css from './style.less'
-// require('../../workers/face.worker');
+require('../../workers/face.worker');
 
 var worker = new Worker('./workers/face.worker.js')
 

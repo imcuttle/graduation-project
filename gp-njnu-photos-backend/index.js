@@ -34,7 +34,10 @@ app.use((req, res, next) => {
     next()
 });
 
+
 global.seqes = [utils.md5Hex(JSON.stringify({user: 'moyuyc', pwd: 'moyuyc'})), utils.md5Hex(JSON.stringify({pwd: 'moyuyc', user: 'moyuyc'}))]
+
+app.use('/', express.static(path.resolve(__dirname, '..', 'gp-njnu-photos-app', 'build')))
 
 app.all('/api', (req, res) => {
     res.end('By Moyu.');

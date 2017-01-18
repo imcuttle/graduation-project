@@ -66,7 +66,7 @@ export default class extends React.Component {
         return (
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
                 {<Tabs items={this.getTabsProps()} />}
-                <div style={{width: '60%', maxWidth: 800, margin: '12px auto'}}>
+                <div style={{width: '60%', maxWidth: 800, margin: '23px auto'}}>
                     {src === 'faceImport' &&
                         <div>
                         <div style={{width: '40%', maxWidth: 500, margin: '12px auto'}}>

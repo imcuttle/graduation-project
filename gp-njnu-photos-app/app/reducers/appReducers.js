@@ -8,6 +8,7 @@ import base from './base'
 import audioImport from './audioImport'
 import faceImport from './faceImport'
 import admin from './admin'
+import about from './about'
 
 
 
@@ -17,11 +18,13 @@ export const initState = {
     upface: require('./upFace').initState,
     audioImport: require('./audioImport').initState,
     faceImport: require('./faceImport').initState,
-    admin: require('./admin').initState
+    admin: require('./admin').initState,
+    about: require('./admin').initState
 }
 export default combineReducers({
     routing: routerReducer,
     active,
+    about,
     upface,
     base,
     audioImport,

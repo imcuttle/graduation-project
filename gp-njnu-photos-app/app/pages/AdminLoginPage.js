@@ -66,7 +66,7 @@ export default class extends React.Component {
 
         return (
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
-                <div style={{width: '55%', maxWidth: 520, margin: 'auto'}}>
+                <div style={{width: '55%', maxWidth: 520, margin: '23px auto'}}>
                     <InputGroup showBtn={false} inputProps={{placeholder: '管理员帐号', defaultValue: username, onKeyPress: this.keyPressInput, onChange: e=>actions.setAdminUser(e.target.value)}}/>
                     <InputGroup showBtn={false} inputProps={{placeholder: '管理员密码', defaultValue: password, onKeyPress: this.keyPressInput, onChange: e=>actions.setAdminPwd(e.target.value), type: 'password'}}/>
                     <InputGroup showIpt={false} btnProps={{style: {float: 'right'}, onClick: this.clickLoginBtn}} btnText="登录"/>
