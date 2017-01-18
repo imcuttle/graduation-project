@@ -104,3 +104,6 @@
 	4. [distance convert to precentage](http://stackoverflow.com/questions/13652778/what-is-confidence-in-opencvs-facerecognizer)
 	5. confidence<?, 认为是正确
 	6. 整体大致已经完成，阈值的确定尚未完成
+	7. [iterm2, 快捷键设置(useful!)](https://coderwall.com/p/h6yfda/use-and-to-jump-forwards-backwards-words-in-iterm-2-on-os-x)
+- 2017年1月19日
+	1. Server读取app代码时，node_module回环加载，出现错误，修改成只使用最外层node_modules

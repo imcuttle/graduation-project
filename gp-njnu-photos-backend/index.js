@@ -3,8 +3,27 @@ const logger = require('morgan')
 const bodyParser = require('body-parser')
 const url = require('url')
 const path = require('path')
+// require.extensions['.less'] = () => {return {}};
+// console.log(process.NODE_ENV)
 
-const utils = require('./lib/utils')
+/*require("babel-core/register")({
+    presets: [[require('babel-preset-es2015').buildPreset, {loose: true}], 'stage-0', 'react'],
+    // ignore: /components\/index\.less$/,
+    // ignore: function (name) {
+    //     name = name.trim();
+    //     console.log(name, name.indexOf('node_modules')>=0 || name.endsWith('less'));
+    //     return name.indexOf('node_modules')>=0 || name.endsWith('less') || 
+    // },
+    extensions: [".es6", ".es", ".jsx", ".js", ".less"],
+
+
+    only: /(gp-njnu-photos-app\/app\/components\/.*?\/.*.jsx?)|(gp-njnu-photos-app\/app\/router)|(gp-njnu-photos-app\/app\/App)|(react-server)/
+})*/
+
+
+// var reactServer = require('./routes/react-server')
+
+const utils = require('./lib/utils');
 
 process.env.PORT = process.env.PORT || 8778;
 
@@ -12,10 +31,9 @@ process.on('uncaughtException', function (err) {
     console.error(err);
     console.error(err.stack);
 });
-
 const app = express()
 
-app.use('/', express.static(__dirname + '/publish'))
+// app.use('/', reactServer)
 app.use(bodyParser.json({limit:'5mb'}));
 app.use(bodyParser.raw({limit:'5mb'}));
 app.use(bodyParser.urlencoded({ extended: true, limit:'5mb'}));

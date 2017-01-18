@@ -23,9 +23,6 @@ class App extends React.Component {
         this.getHeaderPorps = this.getHeaderPorps.bind(this)
     }
 
-    static contextTypes={
-        router: React.PropTypes.object.isRequired
-    }
     
     componentWillMount() {
         const {actions, state} = this.props
@@ -108,6 +105,10 @@ class App extends React.Component {
             </div>
         )
     }
+}
+
+App.contextTypes={
+    router: React.PropTypes.object.isRequired
 }
 
 function MapStateToProps(state) {
