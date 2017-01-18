@@ -117,7 +117,7 @@ NAN_METHOD(FaceRecognizerWrap::CreateEigen) {
   info.GetReturnValue().Set( n );
 }
 
-NAN_METHOD(Face RecognizerWrap::CreateFisher) {
+NAN_METHOD(FaceRecognizerWrap::CreateFisher) {
   Nan::HandleScope scope;
 
   int components = 0;
