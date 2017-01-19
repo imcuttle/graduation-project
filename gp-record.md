@@ -116,3 +116,10 @@
 		1. http://stackoverflow.com/questions/12335848/opencv-program-compile-error-libopencv-core-so-2-4-cannot-open-shared-object-f
 		2. unix平台的快速安装脚本=> `start.sh`
 	5. [nativefier](https://github.com/jiahaog/nativefier) => 站点打包成App解决方案, `ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/`
+	6. app:packager scripts
+	```
+	"app:mac64": "set ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/ && nativefier -a x64 -p mac --name \"南师大刷脸签到\" \"https://face.moyuyc.xyz/\" -i logos/logo.icns --disable-dev-tools --disable-context-menu",
+	"app:mac32": "set ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/ && nativefier -a ia32 -p mac --name \"南师大刷脸签到\" \"https://face.moyuyc.xyz/\" -i logos/logo.icns --disable-dev-tools --disable-context-menu",
+    "app:win32": "set ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/ && nativefier -p win32 -a x64 --name \"南师大刷脸签到\" \"https://face.moyuyc.xyz/\" -i logos/logo.png --disable-dev-tools --disable-context-menu",
+    "app:win64": "set ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/ && nativefier -p win32 -a ia32 --name \"南师大刷脸签到\" \"https://face.moyuyc.xyz/\" -i logos/logo.png --disable-dev-tools --disable-context-menu"
+	```

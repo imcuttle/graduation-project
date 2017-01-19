@@ -1,9 +1,10 @@
 const spider = require('./spider')
+const path = require('path')
 const URL = "http://njnu.chaiziyi.com.cn/getscores";
 const FURL = "http://njnu.chaiziyi.com.cn/face"
 const HOST = "http://njnu.chaiziyi.com.cn"
 const LOGINURL ="http://njnu.chaiziyi.com.cn/login"
-const CACHEPATH = './cache.json'
+const CACHEPATH = path.resolve(__dirname, '..', 'data', 'cache.json')
 
 var fs = require('fs')
 var crypto = require('crypto');
