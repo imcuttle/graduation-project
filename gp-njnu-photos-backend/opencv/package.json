@@ -11,7 +11,6 @@
     "buffers": "^0.1.1",
     "istanbul": "0.4.5",
     "nan": "^2.0.9",
-    "node-pre-gyp": "^0.6.30",
     "bindings": "~1.2.1",
     "nan": "^2.0.0"
   },
@@ -28,7 +27,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node-gyp build",
-    "install": "node-pre-gyp install --fallback-to-build"
+    "install": "node-gyp rebuild"
   },
   "author": "",
   "license": "ISC",
