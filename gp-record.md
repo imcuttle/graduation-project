@@ -115,3 +115,4 @@
 	4. mac迁移到ubuntu一系列的问题
 		1. http://stackoverflow.com/questions/12335848/opencv-program-compile-error-libopencv-core-so-2-4-cannot-open-shared-object-f
 		2. unix平台的快速安装脚本=> `start.sh`
+	5. [nativefier](https://github.com/jiahaog/nativefier) => 站点打包成App解决方案, `ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/`
