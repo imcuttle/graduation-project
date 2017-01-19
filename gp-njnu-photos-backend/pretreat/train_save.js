@@ -123,16 +123,16 @@ const train_save = (year, classno, focus, idno) => {
 
     return promise.then(data => {
         if(data) {
+            console.log('Save Train Data %s', fpath)
             fr.trainSync(data);
             fr.saveSync(fpath);
             fs.writeFileSync(facesNumObjPath, JSON.stringify(facesNumObj));
-            console.log('Saved Train Data %s', fpath)
         } else {
+            console.log('Read Train Data %s', fpath)
             fr.loadSync(fpath);
             if (fs.existsSync(facesNumObjPath)) {
                 facesNumObj = JSON.parse(fs.readFileSync(facesNumObjPath));
             }
-            console.log('Read Train Data %s', fpath)
         }
 
         return fr;
