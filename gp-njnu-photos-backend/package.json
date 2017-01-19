@@ -9,7 +9,7 @@
     "train:smart": "node pretreat/train_save.js",
     "savestus": "node pretreat/save_stus.js",
     "dev": "cross-env NODE_STATUS=run, NODE_ENV=dev node .",
-    "start": "cross-env NODE_STATUS=run node .",
+    "start": "cross-env NODE_STATUS=run node index.js",
     "retrain": "npm run grayface && npm run train:force",
     "retrain:dev": "npm run grayface 2013 191301 && node pretreat/train_save.js -f --args 2013 191301",
     "test": "echo \"Error: no test specified\" && exit 1"
