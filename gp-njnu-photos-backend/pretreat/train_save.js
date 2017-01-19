@@ -123,6 +123,9 @@ const train_save = (year, classno, focus, idno) => {
 
     return promise.then(data => {
         if(data) {
+            if (data.length === 0) {
+                return null;
+            }
             console.log('Save Train Data %s', fpath)
             fr.trainSync(data);
             fr.saveSync(fpath);
@@ -260,7 +263,7 @@ var out = {
                 })
             } else {
                 console.error('Not Found, year: %s, classno: %s', year, classno)
-                reject(new Error('Not Found, classno: '+ classno));
+                reject(new Error('没有找到班级：'+ classno));
             }
         })
     },
