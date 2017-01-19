@@ -11,3 +11,4 @@ git commit -m "$1"
 git push
 
 # curl 
+curl https://face.moyuyc.xyz/api/ctrl/pull

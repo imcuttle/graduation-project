@@ -26,15 +26,24 @@ const toastError = data => {
     return false
 }
 
+var stuPredictPending = false;
+
 export const fetchStuPredict = (cls, data) =>
-    (dispatch, getState)=>
+    (dispatch, getState) => {
+        if(stuPredictPending) {
+            return;
+        }
+        stuPredictPending = true;
         fetch(umap.predict_base64, {
             method: 'POST',
             headers: {'content-type': 'application/json;charset=utf-8'},
             body: JSON.stringify({cls, data})
         })
         .then(res=>res.json())
-        .then(data=> !toastError(data) && uShowToast('我们认为你是'+data.result+'号学生', 'success'))
+        .then(data=> stuPredictPending = false &&
+            !toastError(data) && uShowToast('我们认为你是'+data.result+'号学生', 'success')
+        )
+    }
 
 export const fetchStuInfo = (id, pwd) => 
     (dispatch, getState)=>

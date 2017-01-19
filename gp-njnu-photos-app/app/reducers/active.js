@@ -1,7 +1,7 @@
 
 export const initState={
     title: "学生签到",
-    subtitle: "三种方式获取图像，判断是否为本校学生",
+    subtitle: "人脸识别，判断是否为本校学生",
     path: '/',
     bg: "https://ooo.0o0.ooo/2017/01/18/587eea50913fd.jpg"
 }
