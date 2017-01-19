@@ -34,6 +34,7 @@ CREATE TABLE `face_import` (
 --
 -- Dumping data for table `face_import`
 --
+USE `face_import`;
 
 LOCK TABLES `face_import` WRITE;
 /*!40000 ALTER TABLE `face_import` DISABLE KEYS */;
