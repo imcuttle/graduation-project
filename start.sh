@@ -50,15 +50,7 @@ if [[ $REPLY =~ ^[yY]$ ]]; then
         USER=$REPLY
     fi
 
-    echo -n "Password(110114): "
-    read -s REPLY
-    if [[ $REPLY =~ ^[\s]*$ ]]; then
-        PWD=110114
-    else
-        PWD=$REPLY
-    fi
-
-    mysql -u $USER -p $PWD gp < face-njnu/gp.sql
+    mysql -u $USER -p gp < face-njnu/gp.sql
 fi
 
 read -p "Are you sure install opencv? [y/n]" REPLY
@@ -69,19 +61,21 @@ if [[ $REPLY =~ ^[yY]$ ]]; then
     fi
 
     if command_exists wget ; then
-        wget -O opencv.zip http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/2.4.11/opencv-2.4.11.zip
+        wget -O ~/opencv.zip https://github.com/opencv/opencv/archive/2.4.13.1.zip
+        # wget -O ~/opencv.zip http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/2.4.11/opencv-2.4.11.zip
+        # wget -O ~/opencv.zip https://sourceforge.net/projects/opencvlibrary/files/opencv-unix/3.1.0/opencv-3.1.0.zip
         unzip opencv.zip
-        mv ~/opencv-2.4.11 ~/opencv
-        wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.1.0.zip
-        unzip opencv_contrib.zip
+        mv ~/opencv-2.4.13.1 ~/opencv
+        # wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.1.0.zip
+        # unzip opencv_contrib.zip
     else
-        git clone https://github.com/Itseez/opencv_contrib.git ~/opencv_contrib
+        # git clone https://github.com/Itseez/opencv_contrib.git ~/opencv_contrib
         git clone https://github.com/opencv/opencv.git ~/opencv
         (cd ~/opencv && git checkout 2.4)
     fi
     (cd ~/opencv && rm -rf release && mkdir release \
-        && cd release && \
-        cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules .. \
+        && cd release && \ # ~/opencv_contrib/modules:
+        cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local .. \
         && make \
         && sudo make install)
 fi
@@ -90,9 +84,11 @@ if command_exists node-gyp ;
     npm install node-gyp -g --registry=https://registry.npm.taobao.org
 fi
 
-
-cd face-njnu/gp-njnu-photos-backend
-(cd opencv && node-gyp rebuild)
+cd face-njnu
+npm install --registry=https://registry.npm.taobao.org
+cd gp-njnu-photos-backend
+npm install --registry=https://registry.npm.taobao.org
+(cd opencv && npm run install )
 npm run retrain && npm run start
 
 

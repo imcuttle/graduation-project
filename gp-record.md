@@ -112,3 +112,4 @@
 		- [https://aotu.io/notes/2016/08/16/nginx-https/](值得细嚼)
 		- [https://www.zhihu.com/question/19578422](免费证书)
 		- http://serverfault.com/questions/67316/in-nginx-how-can-i-rewrite-all-http-requests-to-https-while-maintaining-sub-dom
+	4. http://linuxbrew.sh/

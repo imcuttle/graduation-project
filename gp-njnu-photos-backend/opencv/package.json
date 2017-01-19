@@ -8,14 +8,27 @@
     "test": "test"
   },
   "dependencies": {
+    "buffers": "^0.1.1",
+    "istanbul": "0.4.5",
+    "nan": "^2.0.9",
+    "node-pre-gyp": "^0.6.30",
     "bindings": "~1.2.1",
     "nan": "^2.0.0"
   },
   "private": true,
-  "devDependencies": {},
+  "devDependencies": {
+    "tape": "^3.0.0",
+    "aws-sdk": "~2.1.20",
+    "glob": "^5.0.3",
+    "request": "^2.44.0"
+  },
+  "bundledDependencies": [
+    "node-pre-gyp"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "node-gyp rebuild"
+    "build": "node-gyp build",
+    "install": "node-pre-gyp install --fallback-to-build"
   },
   "author": "",
   "license": "ISC",
