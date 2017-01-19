@@ -3,8 +3,6 @@ const logger = require('morgan')
 const bodyParser = require('body-parser')
 const url = require('url')
 const path = require('path')
-const https = require('https')
-const ssl = require('./lib/ssl')
 
 // require.extensions['.less'] = () => {return {}};
 // console.log(process.NODE_ENV)
@@ -27,6 +25,8 @@ const ssl = require('./lib/ssl')
 // var reactServer = require('./routes/react-server')
 
 const utils = require('./lib/utils');
+// const proto = require('http')
+// const ssl = require('./lib/ssl')
 
 process.env.PORT = process.env.PORT || 8778;
 
@@ -35,8 +35,7 @@ process.on('uncaughtException', function (err) {
     console.error(err.stack);
 });
 const app = express()
-var httpsServer = https.createServer(ssl, app)
-    .listen(process.env.PORT, () => console.log("Server Run On http://localhost:%s", process.env.PORT));
+app.listen(process.env.PORT, () => console.log("Server Run On http://localhost:%s", process.env.PORT));
 
 
 // app.use('/', reactServer)
