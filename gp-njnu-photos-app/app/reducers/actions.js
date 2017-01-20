@@ -169,13 +169,14 @@ export const fetchAdminLogin = (user='', pwd='') =>
         .then(json=> dispatch(hideLoading()) && !toastError(json) && dispatch(adminLogined()) && uShowToast(json.result, 'success'))
     }
 
-export const checkAdminLogined = () =>
+export const checkAdminLogined = (headers) =>
     (dispatch, getState) => {
         const state = getState();
         const pwd = state.admin.password, user = state.admin.username;
         return fetch('/api/do/admin/getname', {
             method: 'POST',
             headers: {
+                ...headers,
                 'content-type': 'application/json;charset=utf-8',
                 'auth': md5Hex(JSON.stringify({pwd, user}))
             }

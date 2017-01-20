@@ -126,3 +126,4 @@
 
 - 2017年1月20日
 	1. 同构渲染(优化seo+首屏渲染) http://www.aliued.com/?p=3077, https://github.com/halt-hammerzeit/webpack-isomorphic-tools
+	2. [远端发布 screen指令](https://github.com/chenzhiwei/linux/tree/master/screen)

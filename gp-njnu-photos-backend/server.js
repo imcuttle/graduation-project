@@ -22,8 +22,8 @@ const app = express();
 // app.use(cookieParser());
 // process.env.DEBUG = "express-session";
 app.use(session({
-    // resave: true,
-    // saveUninitialized: true,
+    resave: false,
+    saveUninitialized: true,
     cookie: { maxAge: 1000*60*60*24 },
     secret: 'face-njnu',
     // store: 'MemStore'
@@ -66,7 +66,7 @@ const fePath = path.resolve(__dirname, '..', 'gp-njnu-photos-app', 'build')
 //     }
 // })
 app.use((req, res, next) => {
-    console.log('session', req.session.id);
+    // console.log('session', req.session.id);
     next();
 })
 app.use('/', reactServer);
