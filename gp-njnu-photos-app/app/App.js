@@ -10,12 +10,14 @@ import Header from './components/Header'
 import Toast from './components/Toast'
 import Modal from './components/Modal'
 import Loading from './components/Loading'
-
-// global tracking
-import 'tracking'
-import 'tracking/build/data/face'
-
 const utils = require('./common/utils')
+
+// bowser tracking
+if (utils.isBowser) {
+    require('tracking')
+    require('tracking/build/data/face')
+}
+
 
 class App extends React.Component {
     constructor(props) {
@@ -25,12 +27,13 @@ class App extends React.Component {
 
     
     componentWillMount() {
-        const {actions, state} = this.props
+        const {actions, state, location} = this.props;
+        // actions.pushRoute(location.pathname);
         actions.checkAdminLogined();
     }
 
     componentDidMount() {
-        const {actions, state} = this.props
+        const {actions, state, location} = this.props
         window.actions = actions;
         setTimeout(utils.showToast.bind(null, '欢迎来到学生签到系统', 'success'), 120)
     }

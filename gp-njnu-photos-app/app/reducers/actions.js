@@ -1,3 +1,12 @@
+const realFetch = require('isomorphic-fetch')
+import {isBrowser, localIp} from '../common/utils'
+const fetch = isBrowser
+    ? (url, options={}) => realFetch(url, {...options, credentials: 'include'}).catch(err => console.error)
+    : (relaUrl, option) => {
+        var url = localIp + ( relaUrl.startsWith('/') ? relaUrl : ('/'+relaUrl) );
+        return realFetch(url, option);
+    }
+
 const _type = (type, obj) => {
     return Object.assign({}, {
         type: type,
@@ -9,7 +18,7 @@ const urlStringify = require('../common/utils').urlStringify
 const uShowToast = require('../common/utils').showToast
 const uShowModal = require('../common/utils').showModal
 const md5Hex = require('../common/utils').md5Hex
-
+// import fetch from 'iso'
 
 const umap = {
     stuInfo: '/api/njnu/info',
@@ -160,23 +169,28 @@ export const fetchAdminLogin = (user='', pwd='') =>
         .then(json=> dispatch(hideLoading()) && !toastError(json) && dispatch(adminLogined()) && uShowToast(json.result, 'success'))
     }
 
-export const checkAdminLogined = () => 
+export const checkAdminLogined = () =>
     (dispatch, getState) => {
         const state = getState();
         const pwd = state.admin.password, user = state.admin.username;
-        fetch('/api/do/admin/login', {
+        return fetch('/api/do/admin/getname', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json;charset=utf-8',
                 'auth': md5Hex(JSON.stringify({pwd, user}))
             }
-        }).then(r => r.json())
+        }).then(r => {
+            return r.json();
+        })
         .then(json=> {
             if(json.code === 200) {
+                dispatch(setAdminUser(json.result))
                 dispatch(adminLogined())
             } else {
                 dispatch(adminNotLogined())
             }
+        }).catch(e=>{
+            console.error(e);
         })
     }
 
@@ -235,9 +249,14 @@ export const fetchDelAdminFaceInPhoto = (hash='') =>
     }
 
 export const adminLogout = () =>
-    dispatch =>
-        dispatch(setAdminPwd(''))
-        && dispatch(adminNotLogined())
+    dispatch => 
+        dispatch(showLoading()) &&
+        fetch('/api/do/admin/logout', {method: 'POST'})
+        .then(r => r.json())
+        .then(json => 
+            uShowToast(json.result, 'success') && dispatch(setAdminPwd(''))
+            && dispatch(adminNotLogined()) && dispatch(hideLoading())
+        )
 
 export const fetchAdminStuInfo = (stuno='') => 
     (dispatch, getState) => {

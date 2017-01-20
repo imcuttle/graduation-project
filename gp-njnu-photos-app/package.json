@@ -16,6 +16,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    
+    "extract-text-webpack-plugin": "^1.0.1"
   }
 }

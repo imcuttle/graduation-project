@@ -7,6 +7,11 @@ var node_module_dir = path.resolve(__dirname, 'node_module');
 var minimize = process.argv.indexOf('--mini') !== -1;
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var WebpackMd5Hash = require('webpack-md5-hash');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+var Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
+
+
 
 var config = {
     devServer: {
@@ -44,6 +49,7 @@ var config = {
     plugins: [
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.optimize.CommonsChunkPlugin('libs', 'libs.min.js?v='+(minimize?"[chunkhash]":"[hash]")),
+        new ExtractTextPlugin("style.min.css?v=[contenthash]", {allChunks: true}),
         new WebpackMd5Hash(),
         new HtmlWebpackPlugin({
             title: '学生签到系统',
@@ -71,16 +77,17 @@ var config = {
                 test:/^(.(?!\.worker))*\.jsx?$/
             }, {
                 test: /^(.(?!\.global))*\.less$/,  //http://www.cnblogs.com/bvbook/archive/2010/11/03/1867775.html
-                loader: 'style-loader!css-loader?modules' +
-                '!postcss!less-loader'
+                loader: ExtractTextPlugin.extract(['css?modules', 'postcss', 'less'])
             }, {
                 test: /\.global\.less$/,
-                loader: 'style-loader!css-loader?sourceMap' +
-                '!postcss!less-loader'
-            }, {
+                loader: ExtractTextPlugin.extract(['css','postcss','less'])
+            }/*,{
                 test: /\.css$/,
-                loader: 'style-loader!css-loader?modules&sourceMap'
+                loader: ExtractTextPlugin.extract(['css-loader', 'postcss'])
             }, {
+                test: /\.less$/,
+                loader: ExtractTextPlugin.extract(['css-loader', 'postcss', 'less'])
+            }*/, {
                 test: /\.(png|jpg|jpeg)$/,
                 loader: 'url-loader?limit=8192&name=res/[name].[ext]?[hash]'
             },
@@ -103,6 +110,7 @@ if(minimize) {
         //允许错误不打断程序
         new webpack.NoErrorsPlugin()
     )
+    config.plugins.unshift(new Webpack_isomorphic_tools_plugin(require('../webpack-isomorphic-tools')));
 } else {
     config.devtool = 'source-map';
     config.plugins.push (

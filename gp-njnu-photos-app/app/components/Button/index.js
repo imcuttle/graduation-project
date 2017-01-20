@@ -2,7 +2,8 @@
 import React from 'react'
 import {Map} from 'immutable'
 
-import css from './style.less'
+import {isBrowser} from '../../common/utils'
+const css = isBrowser ? require('./style.less') : require('./style.less')
 
 
 export default class extends React.Component {

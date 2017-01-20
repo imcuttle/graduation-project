@@ -1,44 +1,48 @@
 import React from 'react'
 import {Map} from 'immutable'
-import css from './style.less'
-require('../../workers/face.worker');
-
-var worker = new Worker('./workers/face.worker.js')
-
-const tracking = window.tracking
-
-/**
- * Tracks the `Video` frames. This method is called for each video frame in
- * order to emit `track` event.
- * @param {Uint8ClampedArray} pixels The pixels data to track.
- * @param {number} width The pixels canvas width.
- * @param {number} height The pixels canvas height.
- *
- * override track method, Use WebWorker
- */
-tracking.ObjectTracker.prototype.track = function(pixels, width, height) {
-    var self = this;
-    var classifiers = this.getClassifiers();
-
-    if (!classifiers) {
-      throw new Error('Object classifier not specified, try `new tracking.ObjectTracker("face")`.');
-    }
+import {isBrowser} from '../../common/utils'
+const css = isBrowser ? require('./style.less') : require('./style.less')
 
 
-    var tosend = [pixels, width, height, self.getInitialScale(), self.getScaleFactor(), self.getStepSize(), self.getEdgesDensity()]
-    worker.postMessage(tosend)
+if (isBrowser) {
+    
+    require('../../workers/face.worker');
+    var worker = new Worker('/workers/face.worker.js')
+    const tracking = window.tracking
 
-    // var results = [];
+    /**
+     * Tracks the `Video` frames. This method is called for each video frame in
+     * order to emit `track` event.
+     * @param {Uint8ClampedArray} pixels The pixels data to track.
+     * @param {number} width The pixels canvas width.
+     * @param {number} height The pixels canvas height.
+     *
+     * override track method, Use WebWorker
+     */
+    tracking.ObjectTracker.prototype.track = function(pixels, width, height) {
+        var self = this;
+        var classifiers = this.getClassifiers();
 
-    // classifiers.forEach(function(classifier) {
-    //   results = results.concat(tracking.ViolaJones.detect(pixels, width, height, self.getInitialScale(), self.getScaleFactor(), self.getStepSize(), self.getEdgesDensity(), classifier));
-    // });
+        if (!classifiers) {
+          throw new Error('Object classifier not specified, try `new tracking.ObjectTracker("face")`.');
+        }
 
-    // this.emit('track', {
-    //   data: results
-    // });
-};
 
+        var tosend = [pixels, width, height, self.getInitialScale(), self.getScaleFactor(), self.getStepSize(), self.getEdgesDensity()]
+        worker.postMessage(tosend)
+
+        // var results = [];
+
+        // classifiers.forEach(function(classifier) {
+        //   results = results.concat(tracking.ViolaJones.detect(pixels, width, height, self.getInitialScale(), self.getScaleFactor(), self.getStepSize(), self.getEdgesDensity(), classifier));
+        // });
+
+        // this.emit('track', {
+        //   data: results
+        // });
+    };
+
+}
 
 
 export default class extends React.Component {

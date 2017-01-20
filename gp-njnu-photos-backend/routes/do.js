@@ -34,8 +34,21 @@ doServer.post('/face-import/delete', (req, res) => {
         .then(x => res.json(x));
 })
 
-var seqes = global.seqes;
+doServer.post('/admin/logout', (req, res) => {
+    const ent = req.ent;
+    // const data = ent.data;
+    req.session.isAdmin = false;
+    res.json(obj(200, '登出成功'));
+})
+
 doServer.use(utils.adminCheckMiddleware)
+
+doServer.post('/admin/getname', (req, res) => {
+    const ent = req.ent;
+    const data = ent.data;
+    res.json(obj(200, 'moyuyc'));
+})
+
 
 doServer.post('/admin/login', (req, res) => {
     const ent = req.ent;

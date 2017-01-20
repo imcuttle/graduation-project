@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch'
+export const localIp = (() => process.env.NODE_ENV == 'dev' ? ('http://localhost:'+process.env.PORT) : ('https://face.moyuyc.xyz'))()
 
 export const showToast = (text, tp) => {
     const actions = window.actions
@@ -11,6 +11,9 @@ export const showToast = (text, tp) => {
 
     return true;
 }
+
+export const isBrowser = (() => !(typeof process === 'object' && typeof process.versions === 'object' && typeof process.versions.node !== 'undefined'))();
+
 
 export const showModal = (content, onOk, onCancel=hideModal, title, size) => {
     const actions = window.actions

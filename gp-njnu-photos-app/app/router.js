@@ -16,8 +16,17 @@ import AdminPage from './pages/AdminPage'
 import AboutPage from './pages/AboutPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 
-export const configureStore = (rootReducer, initialState, middleware) => {
-    let store = createStore(rootReducer, initialState, middleware);
+import {isBrowser} from './common/utils'
+
+export const configureStore = (initialState, middleware) => {
+    let store = createStore(
+        appReducers, initialState,
+        applyMiddleware(
+            // reduxRouterMiddleware,
+            thunkMiddleware, // 允许我们 dispatch() 函数
+            // loggerMiddleware // 一个很便捷的 middleware，用来打印 action 日志
+        )
+    );
     /*
     if (module.hot) {
         // Enable Webpack hot module replacement for reducers
@@ -30,19 +39,13 @@ export const configureStore = (rootReducer, initialState, middleware) => {
     return store;
 }
 
-var _initState = window.__INIT_STATE__ || initState
+var _initState = isBrowser && window.__INITIAL_STATE__ || initState
 
 const store = configureStore(
-    appReducers, 
-    _initState,
-    applyMiddleware(
-        // reduxRouterMiddleware,
-        thunkMiddleware, // 允许我们 dispatch() 函数
-        // loggerMiddleware // 一个很便捷的 middleware，用来打印 action 日志
-    )
+    _initState
 )
 
-const history = syncHistoryWithStore(browserHistory, store)
+const history = browserHistory; 
 
 export default (
     <Provider store={store}>

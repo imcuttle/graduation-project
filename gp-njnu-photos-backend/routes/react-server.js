@@ -1,73 +1,71 @@
 const reactServer = require('express')();
 const path = require('path');
 const fs = require('fs');
+const url = require('url');
 
 import React from 'react';
 import {renderToString} from 'react-dom/server'
 import createMemoryHistory from 'history/createMemoryHistory'
 import reactRouter, {match, RouterContext} from 'react-router'
-// import {Provider} = from 'react-redux'
+import {Provider} from 'react-redux'
 
-
+import {pushRoute, adminLogined, checkAdminLogined} from '../../gp-njnu-photos-app/app/reducers/actions'
 import MyRouter, {configureStore} from '../../gp-njnu-photos-app/app/router'
-
+const fePath = path.resolve(__dirname, '..', '..', 'gp-njnu-photos-app', 'build');
+reactServer.use(handleRender)
 
 // This is fired every time the server side receives a request
 
-function handleRender(req, res) {
-    var history = createMemoryHistory()
-    var store = configureStore(undefined, history)
-
-    match({ routes: routes, location: req.url }, function(error, redirectLocation, renderProps) {
+function handleRender(req, res, next) {
+    // console.log(req.url, req.originalUrl);
+    match({ routes: MyRouter, location: req.url }, function(error, redirectLocation, renderProps) {
         if (error) {
-            res.status(500).send(error.stack)
+            res.status(500).send(error.stack);
         } else if (redirectLocation) {
-            res.redirect(302, redirectLocation.pathname + redirectLocation.search)
+            if(req.url.startsWith('/api') || fs.existsSync(path.join(fePath, url.parse(req.url).pathname)) ) {
+                next();
+            } else {
+                res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+            }
         } else if (renderProps) {
-            var initialState
-            var reactHtml
-            var Router = React.createElement(RouterContext, renderProps)
-            var RouterWrapper = React.createElement('div', {}, Router)
-            models.loadMustData(req.url)
-                .then(function(data) {
-                    console.log(req.url)
-                    var s = store.getState()
-                    s.routing.location.pathname = req.url
-
-                    store.dispatch(loadMustDataAction(data))
-                    initialState = store.getState()
-
-                    var Root = React.createElement(Provider, {store: store}, RouterWrapper)
-                    reactHtml = renderToString(Root)
-
-                    // 把渲染后的页面内容发送给客户端
-                    res.send(renderFullPage(GLOBAL.blog.title, reactHtml, initialState))
-                })
-                .catch(function(error) {
-                    if (error) {
-                        console.log('error stack:', error.stack)
-                        var title = 'error'
-                        reactHtml = 'error: this page has error, click this return to <a href="/">home page</a>'
-                        res.send(renderFullPage(title, reactHtml))
-                    }
-                })
-
-        }
-        else {
+            // var history = createMemoryHistory();
+            var store = configureStore();
+            // console.log(renderProps, store);
+            // we can invoke some async operation(eg. fetchAction or getDataFromDatabase)
+            // call store.dispatch(Action(data)) to update state.
+            store.dispatch(pushRoute(req.url))
+            //const data = await store.dispatch(checkAdminLogined( req.headers ))
+            const html = renderToString(
+                <Provider store={store}>
+                    <RouterContext {...renderProps} />
+                </Provider>
+            );
+            res.header('content-type', 'text/html; charset=utf-8')
+            res.send(renderFullPage('南师大刷脸签到系统', html, store.getState()))
+        } else {
             res.status(404).send('Not found')
         }
     })
 }
+const htmlPath = path.join(fePath, 'index.html');
+var html = fs.readFileSync(htmlPath).toString();
+fs.watch(htmlPath, () => {
+    console.log('html changed')
+    html = fs.readFileSync(htmlPath).toString();
+})
 
-const htmlPath = path.resolve(__dirname, '..', '..', 'gp-njnu-photos-app', 'build', 'index.html')
-const html = fs.readFileSync(htmlPath).toString();
 
-function renderFullPage(title, html, initialState) {
-    ///*INITIAL_STATE*/
+function renderFullPage(title, partHtml, initialState) {
     // <!--HTML-->
-    return html.replace(/\/\*\s*?INITIAL_STATE\s*?\*\//, `window.__INIT_SATATE="${JSON.stringify(initialState)}"`)
-        .replace(/<!--\s*?HTML\s*?-->/, html)
-        .replace(/<!--\s*?TITLE\s*?-->/, title)
+    var allHtml = html;
+    if(initialState) {
+        allHtml = allHtml.replace(/\/\*\s*?INITIAL_STATE\s*?\*\//, `window.__INITIAL_STATE__=${JSON.stringify(initialState)}`)
+    }
+    if(title) {
+        allHtml = allHtml.replace(/<title>[\s\S]*?<\/title>/, `<title>${title}</title>`);
+    }
+    return allHtml.replace(/<!--\s*?HTML\s*?-->/, partHtml);
+
 }
 
 module.exports = reactServer

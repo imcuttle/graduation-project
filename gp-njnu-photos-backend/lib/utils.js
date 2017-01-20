@@ -25,6 +25,10 @@ var out = {
     },
     adminCheckMiddleware(req, res, next) {
         const ent = req.ent;
+        if(req.session.isAdmin) {
+            next();
+            return;
+        }
         const data = ent.auth || req.header('auth');
         if(!data) {
             res.json(out.obj(400, '参数不全'));
@@ -34,6 +38,7 @@ var out = {
             res.json(out.obj(500, '帐号或密码不正确'));
             return;
         }
+        req.session.isAdmin = true;
         next();
     }
 }

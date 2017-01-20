@@ -36,7 +36,7 @@ export default class extends React.Component {
         const {data: fData} = file
         const {url} = network
 
-        console.log(state)
+        // console.log(state, process.env)
         return (
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
                 {<Tabs items={this.getTabsProps()} />}

@@ -123,3 +123,6 @@
     "app:win32": "set ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/ && nativefier -p win32 -a x64 --name \"南师大刷脸签到\" \"https://face.moyuyc.xyz/\" -i logos/logo.png --disable-dev-tools --disable-context-menu",
     "app:win64": "set ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/ && nativefier -p win32 -a ia32 --name \"南师大刷脸签到\" \"https://face.moyuyc.xyz/\" -i logos/logo.png --disable-dev-tools --disable-context-menu"
 	```
+
+- 2017年1月20日
+	1. 同构渲染(优化seo+首屏渲染) http://www.aliued.com/?p=3077, https://github.com/halt-hammerzeit/webpack-isomorphic-tools

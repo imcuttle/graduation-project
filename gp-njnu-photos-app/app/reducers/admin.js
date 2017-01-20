@@ -1,6 +1,5 @@
 import {Map, List} from 'immutable'
 const db = require('../common/storage')
-
 export const initState={
     
     username: db.sGet('admin_user') || '',
@@ -41,7 +40,7 @@ export default function (state=initState, action) {
             db.sSet('admin_pwd', action.password);
             return {...newState, password: action.password}
         case 'SET_ADMIN_ISLOGIN': 
-            db.sSet('admin_islogined', action.isLogined?'1':'0');
+            action.isLogined ? db.sSet('admin_islogined', '1') : db.sRemove('admin_islogined');
             return {...newState, isLogined: action.isLogined}
         case 'SET_ADMIN_SRC':
             return {...newState, src: action.src}
