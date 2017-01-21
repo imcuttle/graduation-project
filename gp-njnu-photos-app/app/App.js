@@ -48,13 +48,14 @@ class App extends React.Component {
             '关于': '/about',
             '语音录入': '/audio-import',
             '人脸录入': '/face-import',
-            '管理员入口': '/admin/login'
+            '管理员入口': '/admin/login',
+            [username]: '/admin'
         }
-        titlePath[username] = '/admin';
         const dataMap = (text, type, disabled=false, click)=> {
             return {
                 text,
                 type,
+                url: titlePath[text],
                 active: title===text, 
                 onClick: (title===text||disabled)?null
                     : ( typeof click === 'function' ? click : ()=>router.push(titlePath[text]) ) 
