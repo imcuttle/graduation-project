@@ -1,1 +1,2 @@
 User-agent: *
+Sitemap: https://face.moyuyc.xyz/sitemap.txt
