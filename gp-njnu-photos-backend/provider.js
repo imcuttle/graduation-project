@@ -31,4 +31,11 @@ process.on('SIGINT', () => {
 
 function runServer() {
     return cp.fork('./index.js', process.argv, {stdio: [0, 1, 2, 'ipc']})
+        .on('exit', code => {
+            console.log('serverProcess exit with code', code);
+            if (code !== 0) {
+                serverProcess.kill('SIGINT');
+                serverProcess = runServer();
+            }
+        })
 }
