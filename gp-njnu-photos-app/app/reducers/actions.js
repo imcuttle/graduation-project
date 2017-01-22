@@ -1,9 +1,11 @@
 const realFetch = require('isomorphic-fetch')
-import {isBrowser, localIp} from '../common/utils'
+import {isBrowser, localIp} from '../common/utils';
+import {marked, mdtextUrl} from './about'
+
 const fetch = isBrowser
-    ? (url, options={}) => realFetch(url, {...options, credentials: 'include'}).catch(err => console.error)
+    ? (url, options={}) => realFetch(url, {...options, credentials: 'same-origin'}).catch(err => console.error)
     : (relaUrl, option) => {
-        var url = localIp + ( relaUrl.startsWith('/') ? relaUrl : ('/'+relaUrl) );
+        var url = relaUrl.startsWith('http') ? relaUrl : ( localIp + ( relaUrl.startsWith('/') ? relaUrl : ('/'+relaUrl) ) );
         return realFetch(url, option);
     }
 
@@ -35,8 +37,26 @@ const toastError = data => {
     return false
 }
 
-var stuPredictPending = false;
+export const fetchRemoteMdText = () =>
+    (dispatch, getState) => {
+        const state = getState();
+        const {about} = state;
+        const {isRemote} = about
+        if (!isRemote) {
+            return fetch(mdtextUrl, {
+                mode: 'cors'
+            })
+            .then(r => {
+                if (r.status === 200) {
+                    return r.text();
+                }
+            })
+            .then(md => md && marked(md.replace(/---[\s\S]+---/, '')))
+            .then(html => html && dispatch(setAboutHTML(html)) && dispatch(setAboutIsRemote(true)))
+        }
+    }
 
+var stuPredictPending = false;
 export const fetchStuPredict = (cls, data) =>
     (dispatch, getState) => {
         if(stuPredictPending) {
@@ -149,6 +169,9 @@ export const setFaceInStuInfo = (info) => _type("SET_FACE_IN_STUINFO", {...info}
 export const setFaceInFaces = (faces) => _type("SET_FACE_IN_FACES", {faces});
 export const appendFaceInFace = (face) => _type("APP_FACE_IN_FACE", {face});
 export const delFaceInFace = (hash) => _type("DEL_FACE_IN_FACE", {hash});
+
+export const setAboutHTML = html => _type("SET_ABOUT_HTML", {html})
+export const setAboutIsRemote = isRemote => _type("SET_ABOUT_ISREMOTE", {isRemote})
 
 export const setAdminPwd = password => _type('SET_ADMIN_PWD', {password});
 export const setAdminUser = username => _type('SET_ADMIN_USER', {username});

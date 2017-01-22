@@ -18,6 +18,9 @@ export default class extends React.Component {
     static contextTypes={
         router: React.PropTypes.object.isRequired
     }
+    componentWillMount() {
+        const {actions, state} = this.props
+    }
 
     render() {
         const {actions, state} = this.props

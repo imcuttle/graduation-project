@@ -28,8 +28,24 @@ class App extends React.Component {
     
     componentWillMount() {
         const {actions, state, location} = this.props;
+        if (location.pathname.startsWith('/about')) {
+            actions.fetchRemoteMdText();
+        }
         // actions.pushRoute(location.pathname);
         actions.checkAdminLogined();
+    }
+    componentWillReceiveProps(nextProps) {
+        const {actions, state, location} = nextProps
+        const {active} = state
+        const {path} = active
+        const {pathname} = location
+        // debugger;
+        if(pathname!==path) {
+            actions.pushRoute(pathname);
+        }
+        if (pathname.startsWith('/about') && !this.props.location.pathname.startsWith('/about')) {
+            actions.fetchRemoteMdText();
+        }
     }
 
     componentDidMount() {
@@ -73,16 +89,7 @@ class App extends React.Component {
             rightItems
         }
     }
-    componentWillReceiveProps(nextProps) {
-        const {actions, state, location} = nextProps
-        const {active} = state
-        const {path} = active
-        const {pathname} = location
-        // debugger;
-        if(pathname!==path) {
-            actions.pushRoute(pathname);
-        }
-    }
+   
 
     render() {
         const {children} = this.props

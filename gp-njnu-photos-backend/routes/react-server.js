@@ -1,4 +1,5 @@
-const reactServer = require('express')();
+const express = require('express');
+const reactServer = express();
 const path = require('path');
 const fs = require('fs');
 const url = require('url');
@@ -9,13 +10,11 @@ import createMemoryHistory from 'history/createMemoryHistory'
 import reactRouter, {match, RouterContext} from 'react-router'
 import {Provider} from 'react-redux'
 
-import {pushRoute, adminLogined, checkAdminLogined} from '../../gp-njnu-photos-app/app/reducers/actions'
+import {pushRoute, adminLogined, checkAdminLogined, fetchRemoteMdText} from '../../gp-njnu-photos-app/app/reducers/actions'
 import MyRouter, {configureStore} from '../../gp-njnu-photos-app/app/router'
 const fePath = path.resolve(__dirname, '..', '..', 'gp-njnu-photos-app', 'build');
-reactServer.use(handleRender)
-
+reactServer.use(handleRender);
 // This is fired every time the server side receives a request
-
 function handleRender(req, res, next) {
     // console.log(req.url, req.originalUrl);
     match({ routes: MyRouter, location: req.url }, function(error, redirectLocation, renderProps) {
@@ -34,19 +33,32 @@ function handleRender(req, res, next) {
             // we can invoke some async operation(eg. fetchAction or getDataFromDatabase)
             // call store.dispatch(Action(data)) to update state.
             store.dispatch(pushRoute(req.url))
-            //const data = await store.dispatch(checkAdminLogined( req.headers ))
-            const html = renderToString(
-                <Provider store={store}>
-                    <RouterContext {...renderProps} />
-                </Provider>
-            );
-            res.header('content-type', 'text/html; charset=utf-8')
-            res.send(renderFullPage('南师大刷脸签到系统', html, store.getState()))
+            if(req.url === '/about') {
+                store.dispatch(fetchRemoteMdText())
+                .then(data => {
+                    res.renderStore(store, renderProps);
+                })
+            } else {
+                res.renderStore(store, renderProps);
+            }
+
         } else {
             res.status(404).send('Not found')
         }
     })
 }
+
+express.response.renderStore = function (store, renderProps) {
+    const html = renderToString(
+        <Provider store={store}>
+            <RouterContext {...renderProps} />
+        </Provider>
+    );
+    this.header('content-type', 'text/html; charset=utf-8')
+    this.send(renderFullPage('南师大刷脸签到系统', html, store.getState()))
+}
+
+
 const htmlPath = path.join(fePath, 'index.html');
 var html = fs.readFileSync(htmlPath).toString();
 fs.watch(htmlPath, () => {
