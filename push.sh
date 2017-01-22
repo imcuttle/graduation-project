@@ -10,5 +10,6 @@ git add .
 git commit -m "$msg"
 git push
 
-# curl 
-curl https://face.moyuyc.xyz/api/ctrl/pull
+if [ $? = 0 ]; then
+    curl https://face.moyuyc.xyz/api/ctrl/pull
+fi

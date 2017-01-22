@@ -51,7 +51,7 @@ export const fetchRemoteMdText = () =>
                     return r.text();
                 }
             })
-            .then(md => md && marked(md.replace(/---[\s\S]+---/, '')))
+            .then(md => md && marked(md.replace(/---[\s\S]+?---/, '')))
             .then(html => html && dispatch(setAboutHTML(html)) && dispatch(setAboutIsRemote(true)))
         }
     }
