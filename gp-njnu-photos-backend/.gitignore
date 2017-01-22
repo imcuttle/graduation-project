@@ -1,6 +1,6 @@
 .*
 !.babelrc
-cpptest/
+# cpptest/
 !cpptest/*.cpp
 !cpptest/*.sh
 data/images/
