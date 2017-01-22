@@ -65,14 +65,15 @@ class App extends React.Component {
             '语音录入': '/audio-import',
             '人脸录入': '/face-import',
             '管理员入口': '/admin/login',
-            [username]: '/admin'
+            [username]: '/admin',
+            '管理员界面': '/admin'
         }
-        const dataMap = (text, type, disabled=false, click)=> {
+        const dataMap = (text, type, disabled=false, click, active)=> {
             return {
                 text,
                 type,
                 url: titlePath[text],
-                active: title===text, 
+                active: title===text || !!active, 
                 onClick: (title===text||disabled)?null
                     : ( typeof click === 'function' ? click : ()=>router.push(titlePath[text]) ) 
             }
@@ -81,7 +82,9 @@ class App extends React.Component {
         rightItems = rightItems.concat(
             !isLogined 
             ? dataMap('管理员入口', 'btn')
-            : [dataMap(username, null), dataMap('退出', null, false, e=>actions.adminLogout())]
+            : [dataMap(username, null, null, null, titlePath[title] === '/admin' ), dataMap('退出', null, false, e=> {
+                utils.showModal('确认退出吗？', actions.adminLogout)
+            })]
         )
         
         return {
