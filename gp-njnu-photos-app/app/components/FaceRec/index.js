@@ -1,6 +1,6 @@
 import React from 'react'
 import {Map} from 'immutable'
-import {isBrowser} from '../../common/utils'
+import {isBrowser, showModal} from '../../common/utils'
 const css = isBrowser ? require('./style.less') : require('./style.less')
 
 
@@ -98,7 +98,11 @@ export default class extends React.Component {
     }
 
     componentDidMount() {
-        this.unmount = false
+        this.unmount = false;
+        if( (!navigator.getUserMedia && !navigator.webkitGetUserMedia && !navigator.mozGetUserMedia) ) {
+            showModal('请跟我念 “Chrome 大法好”，你的浏览器不能开摄像头！', ()=>{}, undefined, null, 'ms')
+            return;
+        }
         this.videoPlay()
         
     }

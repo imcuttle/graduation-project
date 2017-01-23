@@ -32,6 +32,7 @@ class App extends React.Component {
         if (location.pathname.startsWith('/about')) {
             actions.fetchRemoteMdText();
         }
+        window.actions = actions;
         // actions.pushRoute(location.pathname);
         actions.checkAdminLogined();
     }
@@ -39,8 +40,9 @@ class App extends React.Component {
         const {actions, state, location} = nextProps
         const {active} = state
         const {path} = active
-        const {pathname} = location
+        const {pathname} = location;
         // debugger;
+        
         if(pathname!==path) {
             actions.pushRoute(pathname);
         }
@@ -50,8 +52,8 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        const {actions, state, location} = this.props
-        window.actions = actions;
+        const {actions, state, location} = this.props;
+
         setTimeout(utils.showToast.bind(null, '欢迎来到学生签到系统', 'success'), 120)
     }
     getHeaderPorps() {

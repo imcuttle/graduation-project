@@ -25,8 +25,18 @@
         margin: auto;
         top: 50%;
         transform: translateY(-100%);
-        width: 400px;
-        position: relative;
+        &.sm {
+            width: 400px;    
+            margin-left: -200px;
+        }
+        &:not(.sm) {
+            width: 680px;
+            margin-left: -340px;
+        }
+        left: 50%;
+        position: absolute;
+
+
         .content {
             position: relative;
             background-color: #fff;            

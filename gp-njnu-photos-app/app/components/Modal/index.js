@@ -5,11 +5,11 @@ const css = isBrowser ? require('./style.less') : require('./style.less')
 
 //http://v3.bootcss.com/javascript/#modals
 
-export default ({title="modal", content="content", show=false, onCancel, onOk, size="sm"}) =>
+export default ({title="modal", content="content", show=false, onCancel, showCancel=true, onOk, size="sm"}) =>
     <div className={css.main} style={{display: !show?'none':'block'}}>
         <div className={css.backdrop}></div>
         
-        <div className={css.dialog+" animated fadeIn"} style={{animationDuration: '300ms', width: size==='sm'?400:680}}>
+        <div className={css.dialog+" animated fadeIn " + css[size]} style={{animationDuration: '300ms'}}>
             <div className={css.content}>
                 <div className={css.header}>
                     <span onClick={onCancel} className={css.close}>
@@ -19,7 +19,7 @@ export default ({title="modal", content="content", show=false, onCancel, onOk, s
                 </div>
                 <div className={css.body}>{content}</div>
                 <div className={css.footer}>
-                    <button className={css.default} onClick={onCancel}>取消</button>
+                    {showCancel && <button className={css.default} onClick={onCancel}>取消</button>}
                     <button className={css.primary} onClick={onOk}>确定</button>
                 </div>
             </div>

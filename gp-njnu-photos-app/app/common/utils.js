@@ -15,7 +15,7 @@ export const showToast = (text, tp) => {
 export const isBrowser = (() => !(typeof process === 'object' && typeof process.versions === 'object' && typeof process.versions.node !== 'undefined'))();
 
 
-export const showModal = (content, onOk, onCancel=hideModal, title, size) => {
+export const showModal = (content, onOk, onCancel, title, size) => {
     const actions = window.actions
     var _onOk=onOk
     if(_onOk) {
@@ -24,7 +24,7 @@ export const showModal = (content, onOk, onCancel=hideModal, title, size) => {
             hideModal()
         }
     }
-    actions.showModal(content, _onOk, onCancel, title, size);
+    actions.showModal(content, _onOk, () => {onCancel && onCancel(); hideModal();}, title, size);
 }
 
 export const objIsEmpty = obj => Object.keys(obj).length === 0
