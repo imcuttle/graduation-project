@@ -10,6 +10,7 @@
     "app:win32": "set ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/ && nativefier -c -p win32 -a x64 --insecure -n 古南师大刷脸签到 \"https://face.moyuyc.xyz/\" -i desktop/logos/logo.png --disable-dev-tools --disable-context-menu desktop",
     "app:win64": "set ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/ && nativefier -c -p win32 -a ia32 --insecure -n 古南师大刷脸签到 \"https://face.moyuyc.xyz/\" -i desktop/logos/logo.png --disable-dev-tools --disable-context-menu desktop",
     "start": "cd gp-njnu-photos-backend && npm run start",
+    "start:w": "cd gp-njnu-photos-backend && npm run start:w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
