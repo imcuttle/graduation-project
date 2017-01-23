@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux'
 import {Link} from 'react-router'
 import { connect } from 'react-redux'
 import {Map} from 'immutable'
+import DocumentTitle from 'react-document-title'
 
 import Jumbotron from './components/Jumbotron'
 import Header from './components/Header'
@@ -95,6 +96,7 @@ class App extends React.Component {
    
 
     render() {
+
         const {children} = this.props
         const {actions, state} = this.props
         const {active, base} = state
@@ -102,21 +104,25 @@ class App extends React.Component {
         const {toast, modal, loading} = base
         const {text, show, type} = toast
         // const {size, content, title, show} = modal
+        const mainTitle = "南京师范大学刷脸签到";
         return (
-            <div>
+            <DocumentTitle title={mainTitle}>
+                <div>
                 {loading && <Loading />}
                 <Toast {...toast}/>
                 <Modal {...modal} />
-                <Header logo="南师大刷脸签到系统" {...this.getHeaderPorps()}/>
+                <Header logo={mainTitle} {...this.getHeaderPorps()}/>
                 <div className="animated lightSpeedIn"><Jumbotron {...other}/></div>
                 {
                     React.Children.map(children, (child, i) =>
                         React.cloneElement(child, Object.assign({
                             key: i,
+                            title: mainTitle
                         }, {...this.props}))
                     )
                 }
-            </div>
+                </div>
+            </DocumentTitle>
         )
     }
 }

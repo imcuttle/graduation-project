@@ -9,6 +9,7 @@ import {renderToString} from 'react-dom/server'
 import createMemoryHistory from 'history/createMemoryHistory'
 import reactRouter, {match, RouterContext} from 'react-router'
 import {Provider} from 'react-redux'
+import DocumentTitle from 'react-document-title'
 
 import {pushRoute, adminLogined, checkAdminLogined, fetchRemoteMdText} from '../../gp-njnu-photos-app/app/reducers/actions'
 import MyRouter, {configureStore} from '../../gp-njnu-photos-app/app/router'
@@ -54,8 +55,9 @@ express.response.renderStore = function (store, renderProps) {
             <RouterContext {...renderProps} />
         </Provider>
     );
+    const title = DocumentTitle.rewind();
     this.header('content-type', 'text/html; charset=utf-8')
-    this.send(renderFullPage('南师大刷脸签到系统', html, store.getState()))
+    this.send(renderFullPage(title, html, store.getState()))
 }
 
 

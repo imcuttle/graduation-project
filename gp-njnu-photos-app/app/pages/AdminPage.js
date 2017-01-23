@@ -1,5 +1,7 @@
 import React from 'react'
 import {render} from 'react-dom'
+import DocumentTitle from 'react-document-title'
+
 import Tabs from '../components/TabNav'
 import InputGroup from '../components/InputGroup'
 import TabNav from '../components/TabNav'
@@ -57,13 +59,14 @@ export default class extends React.Component {
     }
 
     render() {
-        const {actions, state} = this.props
+        const {actions, state, title} = this.props
         const {admin} = state
         const {src, faceImport, stuInfo} = admin;
         const {id: faceInId, photos: faceInPhotos} = faceImport;
         const {id: stuInfoId, ...info} = stuInfo;
 
         return (
+            <DocumentTitle title={"管理员界面 - "+title}>
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
                 {<Tabs items={this.getTabsProps()} />}
                 <div style={{width: '60%', maxWidth: 800, margin: '23px auto'}}>
@@ -98,8 +101,8 @@ export default class extends React.Component {
                         </div>
                     }
                 </div>
-                
             </div>
+            </DocumentTitle>
         )
     }
 }

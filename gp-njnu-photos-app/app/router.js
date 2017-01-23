@@ -50,13 +50,13 @@ const history = browserHistory;
 export default (
     <Provider store={store}>
         <Router history={history}>
-            <Route path="/" component={App}>
-                <IndexRoute component={StuSignPage}/>
-                <Route path="about" component={AboutPage} />
-                <Route path="admin" component={AdminPage} />
-                <Route path="admin/login" component={AdminLoginPage} />
-                <Route path="audio-import" component={AudioImportPage}/>
-                <Route path="face-import" component={FaceImportPage}/>
+            <Route path="/" component={App} >
+                <IndexRoute component={StuSignPage} title="学生签到"/>
+                <Route path="about" component={AboutPage} title="关于该系统" />
+                <Route path="admin" component={AdminPage} title="管理员界面" />
+                <Route path="admin/login" component={AdminLoginPage} title="管理员登录" />
+                <Route path="audio-import" component={AudioImportPage}  />
+                <Route path="face-import" component={FaceImportPage} title="人脸录入" />
                 <Route path="*" onEnter={(loc, replace) => replace('/')} />
             </Route>
         </Router>

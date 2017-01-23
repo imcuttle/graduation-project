@@ -1,5 +1,7 @@
 import React from 'react'
 import {render} from 'react-dom'
+import DocumentTitle from 'react-document-title'
+
 import Tabs from '../components/TabNav'
 import InputGroup from '../components/InputGroup'
 import TakePhoto from '../components/TakePhoto'
@@ -50,13 +52,13 @@ export default class extends React.Component {
     }
 
     render() {
-        const {actions, state} = this.props
+        const {actions, state, title} = this.props
         const {upface, audioImport} = state
         const {activeSrc, pwd, id, importing, audio, file, stuInfo} = audioImport
         // console.log(audioImport)
         return (
+            <DocumentTitle title={" - "+title}>
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
-                
                 <div className="animated pulse" style={{ display: 'flex', marginTop: 20, justifyContent: 'center'}}>
                     <div style={{display: 'inline-block', width: '31%', padding: 12, boxSizing: 'border-box'}}>
                         <InputGroup ref={r=>{if(r) this.id=r.input}} showBtn={false} inputProps={{
@@ -92,8 +94,8 @@ export default class extends React.Component {
                 {activeSrc==='file' && <InputGroup />}
                 </div>
                 <hr/>
-                
             </div>
+            </DocumentTitle>
         )
     }
 }

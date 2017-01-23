@@ -1,5 +1,7 @@
 import React from 'react'
 import {render} from 'react-dom'
+import DocumentTitle from 'react-document-title'
+
 import Tabs from '../components/TabNav'
 import InputGroup from '../components/InputGroup'
 import TakePhoto from '../components/TakePhoto'
@@ -29,7 +31,7 @@ export default class extends React.Component {
     }
 
     render() {
-        const {actions, state} = this.props
+        const {actions, state, title} = this.props
         const {upface} = state
         const {activeSrc, searchText, searching, camera, file, network, signId, isStart} = upface
         const {data} = camera
@@ -38,6 +40,7 @@ export default class extends React.Component {
 
         // console.log(state, process.env)
         return (
+            <DocumentTitle title={"学生签到 - "+title}>
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
                 {<Tabs items={this.getTabsProps()} />}
                 <div style={{ minHeight: 520, overflowX: 'hidden'}}>
@@ -125,6 +128,7 @@ export default class extends React.Component {
                     }} />
                 </div>
             </div>
+            </DocumentTitle>
         )
     }
 }

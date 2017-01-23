@@ -2,6 +2,7 @@ import {Map} from 'immutable'
 // import fetch from 'isomorphic-fetch';
 
 var realMarked = require('marked');
+var highlight = require('highlight.js')
 var renderer = new realMarked.Renderer();
 export const mdtextUrl = "https://raw.githubusercontent.com/moyuyc/blogsource/master/source/_articles/njnu-stuents-faces-recognition.md";
 
@@ -29,7 +30,7 @@ renderer.listitem = function(text) {
 };
 realMarked.setOptions({
     highlight: function (code, lang, callback) {
-        require('highlight.js').highlightAuto(code).value
+        highlight.highlightAuto(code).value
     },
     gfm: true,
     tables: true,

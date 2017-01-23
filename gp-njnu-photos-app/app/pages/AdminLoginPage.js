@@ -1,5 +1,7 @@
 import React from 'react'
 import {render} from 'react-dom'
+import DocumentTitle from 'react-document-title'
+
 import Tabs from '../components/TabNav'
 import InputGroup from '../components/InputGroup'
 
@@ -60,11 +62,12 @@ export default class extends React.Component {
     }
 
     render() {
-        const {actions, state} = this.props
+        const {actions, state, title} = this.props
         const {admin} = state
         const {username, password, isLogined} = admin;
 
         return (
+            <DocumentTitle title={"管理员登录 - " + title}>
             <div style={{backgroundColor: '#fff', padding: '16px 10px'}}>
                 <div style={{width: '55%', maxWidth: 520, margin: '23px auto'}}>
                     <InputGroup showBtn={false} inputProps={{placeholder: '管理员帐号', defaultValue: username, onKeyPress: this.keyPressInput, onChange: e=>actions.setAdminUser(e.target.value)}}/>
@@ -72,6 +75,7 @@ export default class extends React.Component {
                     <InputGroup showIpt={false} btnProps={{style: {float: 'right'}, onClick: this.clickLoginBtn}} btnText="登录"/>
                 </div>
             </div>
+            </DocumentTitle>
         )
     }
 }
