@@ -10,8 +10,8 @@
     "savestus": "node pretreat/save_stus.js",
     "dev:w": "cross-env NODE_STATUS=run, NODE_ENV=dev node .",
     "dev": "cross-env NODE_STATUS=run, NODE_ENV=dev node index.js",
-    "start": "cross-env NODE_STATUS=run, NODE_ENV=prod node index.js",
-    "start:w": "cross-env NODE_STATUS=run, NODE_ENV=prod node .",
+    "start": "cross-env NODE_STATUS=run, NODE_ENV=production node index.js",
+    "start:w": "cross-env NODE_STATUS=run, NODE_ENV=production node .",
     "retrain": "npm run grayface && npm run train:force",
     "retrain:dev": "npm run grayface 2013 191301 && node pretreat/train_save.js -f --args 2013 191301",
     "test": "echo \"Error: no test specified\" && exit 1"
