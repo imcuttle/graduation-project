@@ -32,7 +32,7 @@ class App extends React.Component {
         if (location.pathname.startsWith('/about')) {
             actions.fetchRemoteMdText();
         }
-        window.actions = actions;
+        if(window) window.actions = actions;
         // actions.pushRoute(location.pathname);
         actions.checkAdminLogined();
     }
