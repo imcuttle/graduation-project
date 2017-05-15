@@ -252,10 +252,11 @@ var out = {
                                     // })
                                     // obj.distance = obj.confidence;
                                     // obj.confidence = 100 * (1 - Math.sqrt( obj.confidence / (total * total) ) / 255) + '%';
-                                    if(obj.confidence<2700) {
+                                    console.log('confidence='+obj.confidence+', label='+obj.id);
+                                    if(obj.confidence<5000) {
                                         resolve(obj.id);
                                     } else {
-                                        reject(new Error('对不起，我们认为你不是本班学生，你可以进行人脸录入, confidence='+obj.confidence+', label='+obj.id));
+                                        reject(new Error('对不起，我们认为你不是本班学生，你可以进行人脸录入'));
                                     }
                                     
                                 })
