@@ -8,6 +8,8 @@ const fs = require('fs')
 // const img_src_path = '../../gp-image-download/images/2013/191301'
 const img_dest_path = require('./utils').dest_path
 const getPreTreatFaceDetectArgs = require('./utils').getPreTreatFaceDetectArgs
+const WIDTH = require('./utils').WIDTH;
+const HEIGHT = require('./utils').HEIGHT
 const dirs_walk = require('./utils').dirs_walk
 const mkdir = require('./utils').mkdir
 const touch = require('./utils').touch
@@ -119,9 +121,9 @@ function doClassFace (img_src_path, classifier, options, fn, save, log) {
                         // faces.forEach(face=>{
                         //     img_gray.rectangle([face.x, face.y], [face.width, face.height], [0, 255, 0], 2);
                         // })
-                        if(face && (face.width !== 91 || face.height !== 91)) {
-                            img_gray = img_gray.crop(face.x, face.y, face.width, face.height)
-                            img_gray.resize(91, 91);
+                        if(face && (face.width !== WIDTH || face.height !== HEIGHT)) {
+                            img_gray = img_gray.crop(face.x, face.y, face.width, face.height);
+                            img_gray.resize(WIDTH, HEIGHT);
                             save && img_gray.save(path.join(d_p, name));
                         } else {
                             save && face && img_gray.crop(face.x, face.y, face.width, face.height)/*.rectLBP()*/.save(path.join(d_p, name));

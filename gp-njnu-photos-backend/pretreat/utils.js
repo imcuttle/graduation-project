@@ -29,7 +29,8 @@ module.exports = {
         //[path.resolve(__dirname, '../data/lbpcascade_frontalface.xml'), {}]
     },
     getPreTreatFaceDetectArgs () {
-        return [path.resolve(__dirname, '../data/lbpcascade_frontalface.xml'), {scale: 1.95}]
+        return [path.resolve(__dirname, '../data/lbpcascade_frontalface.xml'), {scale: 1.84}]
+        // return [path.resolve(__dirname, '../data/lbpcascade_frontalface.xml'), {scale: 2.21}]
     },
     getURLData (url) {
         return new Promise((resovle, reject)=>{
@@ -45,6 +46,7 @@ module.exports = {
     },
     md5Hex (text) {
         return require('crypto').createHash('md5').update(text, 'utf-8').digest('hex')
-    }
-
+    },
+    WIDTH: 91,
+    HEIGHT: 91,
 }

@@ -80,7 +80,7 @@ if [[ $REPLY =~ ^[yY]$ ]]; then
         && sudo make install)
 fi
 
-if command_exists node-gyp ;
+if command_exists node-gyp ; then
     npm install node-gyp -g --registry=https://registry.npm.taobao.org
 fi
 
@@ -90,8 +90,5 @@ cd gp-njnu-photos-backend
 npm install --registry=https://registry.npm.taobao.org
 (cd opencv && npm run install )
 npm run retrain && npm run start
-
-
-
 
 

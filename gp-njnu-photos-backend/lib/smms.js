@@ -8,35 +8,44 @@ var md5 = require('./utils').md5Hex;
 var form = new FormData();
 
 module.exports = {
-    upload(buffer) {
-        if(buffer.length>=1024*1024*5) {
+    upload(buffer, options) {
+        if (buffer.length >= 1024 * 1024 * 5) {
             return Promise.reject(false);
         }
         var form = new FormData();
-        // form.append('file_id', ''+Date.now());
-        form.append('smfile', buffer, {
-            filename: md5(buffer)
-        });
+        form.append('smfile', buffer, Object.assign({
+            filename: md5(buffer),
+            contentType: 'image/jpeg'
+        }, options));
+
 
         return new Promise((resolve, reject) => {
             var request = https.request({
-                method: 'post',
+                method: 'POST',
                 hostname: 'sm.ms',
-                path: '/api/upload',
-                headers: form.getHeaders()
+                host: 'sm.ms',
+                path: '/api/upload?ssl=true',
+                headers: Object.assign({}, form.getHeaders(), {
+                    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36',
+                })
             }, (res) => {
                 var all = '';
-                res.on('data', chunk => all+=chunk)
+                res.on('data', chunk => all += chunk)
                 res.on('end', () => {
+                    // console.log(all);
                     all = JSON.parse(all);
                     resolve(all.code == 'success' && all.data)
                 })
             }).on('error', () => resolve(false));
 
-            form.pipe(request);
+            form//.on('data', (chunk) => console.log(chunk.toString()))
+                .pipe(request);
         })
     },
     del(hash) {
-        https.get('https://sm.ms/api/delete/'+hash)
+        https.get('https://sm.ms/api/delete/' + hash)
     }
 }
+
+
+// module.exports.upload(require('fs').readFileSync('/Users/moyu/my-code/mixCode/Graduation-Project/gp-njnu-photos-backend/data/images/2013/011301/01130101.jpg'))

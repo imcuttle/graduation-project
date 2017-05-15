@@ -5,7 +5,9 @@ const cv = require('../opencv')
 const path = require('path')
 const dirs_walk = require('./utils').dirs_walk
 const utils = require('./utils');
-const getFaceDetectArgs = require('./utils').getFaceDetectArgs
+const getFaceDetectArgs = require('./utils').getFaceDetectArgs;
+const WIDTH = require('./utils').WIDTH;
+const HEIGHT = require('./utils').HEIGHT;
 const img_path = require('./utils').dest_path
 const face_path = path.resolve(img_path, '..', 'face-recognizer')
 const mkdir = require('./utils').mkdir
@@ -190,9 +192,9 @@ var out = {
                 var face = faces[0]
                 if(face) {
                     try {
-                        if(face.width !== 91 || face.height !== 91) {
+                        if(face.width !== WIDTH || face.height !== HEIGHT) {
                             img_gray = img_gray.crop(face.x, face.y, face.width, face.height);
-                            img_gray.resize(91, 91);
+                            img_gray.resize(WIDTH, HEIGHT);
                         } else{
                             img_gray = img_gray.crop(face.x, face.y, face.width, face.height);
                         }
@@ -203,7 +205,7 @@ var out = {
                     cb && cb(null, img_gray)
                 } else {
                     if (mock) {
-                        img_gray.resize(91, 91)
+                        img_gray.resize(WIDTH, HEIGHT)
                         cb && cb(null, img_gray)
                     } else {
                         cb && cb(new Error('未识别到人脸'))
