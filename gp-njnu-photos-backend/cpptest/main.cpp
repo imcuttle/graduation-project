@@ -73,7 +73,8 @@ void pca_rec();
 
 int main(int argc, const char *argv[])
 {
-    pca_rec();
+    pca_run();
+//    pca_rec();
 }
 
 void pca_rec()
