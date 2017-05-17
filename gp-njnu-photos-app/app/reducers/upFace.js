@@ -1,7 +1,7 @@
 import {Map, List} from 'immutable'
 const db = require('../common/storage')
 
-console.log("db.get('search_text')", db.get('search_text'));
+
 export const initState={
     activeSrc: 'camera',
     searchText: db.get('search_text') || '',
@@ -17,7 +17,9 @@ export const initState={
     },
     isStart: false,
     signId: ''
-}
+};
+
+console.log("db.get('search_text')", initState.searchText);
 
 const updateState = (state, key, subKey, newVal) => {
     let newState = Map(state)
