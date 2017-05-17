@@ -73,9 +73,9 @@ var facesNumObj = {}
 var facesNumObjPath = path.resolve(face_path, 'facesNumObj.json')
 
 const train_save = (year, classno, focus, idno) => {
-    let fr = cv.FaceRecognizer.createLBPHFaceRecognizer();
+    // let fr = cv.FaceRecognizer.createLBPHFaceRecognizer();
     // let fr = cv.FaceRecognizer.createFisherFaceFaceRecognizer(10);
-    // let fr = cv.FaceRecognizer.createEigenFaceRecognizer(10);
+    let fr = cv.FaceRecognizer.createEigenFaceRecognizer(10);
     let fpath = path.join(face_path, `${year}-${classno}.yaml`);
 
     var select = require('../database/face-import').select;
