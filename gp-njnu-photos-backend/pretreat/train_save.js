@@ -73,7 +73,9 @@ var facesNumObj = {}
 var facesNumObjPath = path.resolve(face_path, 'facesNumObj.json')
 
 const train_save = (year, classno, focus, idno) => {
-    let fr = cv.FaceRecognizer.createEigenFaceRecognizer();
+    let fr = cv.FaceRecognizer.createLBPHFaceRecognizer();
+    // let fr = cv.FaceRecognizer.createFisherFaceFaceRecognizer(10);
+    // let fr = cv.FaceRecognizer.createEigenFaceRecognizer(10);
     let fpath = path.join(face_path, `${year}-${classno}.yaml`);
 
     var select = require('../database/face-import').select;
@@ -253,7 +255,7 @@ var out = {
                                     // obj.distance = obj.confidence;
                                     // obj.confidence = 100 * (1 - Math.sqrt( obj.confidence / (total * total) ) / 255) + '%';
                                     console.log('confidence='+obj.confidence+', label='+obj.id);
-                                    if(obj.confidence<5000) {
+                                    if(obj.confidence<3000) {
                                         resolve(obj.id);
                                     } else {
                                         reject(new Error('对不起，我们认为你不是本班学生，你可以进行人脸录入'));

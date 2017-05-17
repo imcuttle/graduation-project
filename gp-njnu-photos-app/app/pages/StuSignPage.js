@@ -115,7 +115,10 @@ export default class extends React.Component {
                             }}
                             inputProps={{
                                 disabled: isStart, value: searchText, 
-                                onChange: (e)=>{actions.setSearchText(e.target.value)},
+                                onChange: (e)=>{
+                                    db.set('search_text', e.target.value);
+                                    actions.setSearchText(e.target.value)
+                                },
                                 placeholder: '输入班级号或者课程号（如191301）'
                             }} />
                     </div>

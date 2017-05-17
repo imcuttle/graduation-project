@@ -29,7 +29,6 @@ export default function (state=initState, action) {
         case 'SWITCH_UPFACE_SRC':
             return newState.set('activeSrc', action.src).toObject()
         case 'CHANGE_SEARCHTEXT':
-            db.set('search_text', action.text)
             return newState.set('searchText', action.text).toObject()
         case 'SET_UPFACE_START':
         	return newState.set('isStart', action.isStart).toObject()

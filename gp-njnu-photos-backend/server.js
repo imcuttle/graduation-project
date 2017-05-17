@@ -31,7 +31,7 @@ app.use(session({
 app.use(bodyParser.json({limit:'5mb'}));
 app.use(bodyParser.raw({limit:'5mb'}));
 app.use(bodyParser.urlencoded({ extended: true, limit:'5mb'}));
-app.use(logger('dev'));
+// app.use(logger('dev'));
 
 process.on('uncaughtException', console.error)
 
