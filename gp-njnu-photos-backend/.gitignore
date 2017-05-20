@@ -9,3 +9,4 @@ data/images/
 data/face-recognizer/
 data/face-recognizer.json
 cache.json
+!/data/summary.json
