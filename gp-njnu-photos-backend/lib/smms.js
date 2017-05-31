@@ -32,11 +32,14 @@ module.exports = {
                 var all = '';
                 res.on('data', chunk => all += chunk)
                 res.on('end', () => {
-                    // console.log(all);
                     all = JSON.parse(all);
+                    console.log(all);
                     resolve(all.code == 'success' && all.data)
                 })
-            }).on('error', () => resolve(false));
+            }).on('error', (err) => {
+                console.error(err);
+                resolve(false)
+            });
 
             form//.on('data', (chunk) => console.log(chunk.toString()))
                 .pipe(request);

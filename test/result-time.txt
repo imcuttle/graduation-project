@@ -1,0 +1,38 @@
+[START] clear faces which are already imported.
+{"code":500,"result":"删除失败"}
+real	0m0.185s
+user	0m0.022s
+sys	0m0.022s
+[END] clear faces which are already imported.
+[START] import face.
+{"code":500,"result":"上传失败"}
+real	0m1.044s
+user	0m0.027s
+sys	0m0.030s
+[END] import face.
+[START] face rec.
+{"code":200,"result":"19130104"}
+real	0m0.804s
+user	0m0.026s
+sys	0m0.031s
+[END] face rec.
+
+[START] clear faces which are already imported.
+{"code":500,"result":"删除失败"}
+real	0m0.183s
+user	0m0.022s
+sys	0m0.023s
+[END] clear faces which are already imported.
+[START] import face.
+{"code":500,"result":"上传失败"}
+real	0m0.937s
+user	0m0.027s
+sys	0m0.027s
+[END] import face.
+[START] face rec.
+{"code":200,"result":"19130104"}
+real	0m0.729s
+user	0m0.026s
+sys	0m0.027s
+[END] face rec.
+

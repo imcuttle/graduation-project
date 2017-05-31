@@ -141,6 +141,10 @@ void pca_run()
     imwrite("pc4.jpg", norm_0_255(pca.eigenvectors.row(3)).reshape(1, db[0].rows));
     imwrite("pc5.jpg", norm_0_255(pca.eigenvectors.row(4)).reshape(1, db[0].rows));
 
+
+    cout << "pca.eigenvalues = "<< endl << " "  << pca.eigenvalues << endl << endl;
+    cout << "pca.eigenvectors = "<< endl << " "  << pca.eigenvectors << endl << endl;
+
     Mat weightMat = pca.project(data);
     Mat backProject = pca.backProject(weightMat);
     //五个特征脸复原
@@ -149,6 +153,8 @@ void pca_run()
     imwrite("pc3-restore.jpg", norm_0_255(backProject.row(2)).reshape(1, db[0].rows));
     imwrite("pc4-restore.jpg", norm_0_255(backProject.row(3)).reshape(1, db[0].rows));
     imwrite("pc5-restore.jpg", norm_0_255(backProject.row(4)).reshape(1, db[0].rows));
+
+
 
     //五个特征脸
 //    imwrite("pc-1.jpg", pca.eigenvectors.row(0).reshape(1, db[0].rows));
