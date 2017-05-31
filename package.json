@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "face-njnu",
   "version": "1.0.0",
   "description": "## 简介 相信有不少人有过丢失邀请函、替换或借用身份牌参会的经历。可对于部分高端会议或国家级会展活动来说，确认参会人员的身份十分关键，传统的签到模式无疑给了盗用身份参会者钻空子的机会。但是随着人脸识别技术水平的不断提升，其应用领域越来越广，效率也越来越高。使得人脸识别能够很有效的解决签到问题。",
@@ -7,8 +7,8 @@
     "app:mac32": "set ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/ && nativefier -c -a ia32 -p mac --insecure -n 古南师大刷脸签到 \"https://face.moyuyc.xyz/\" -i desktop/logos/logo.icns --disable-dev-tools --disable-context-menu desktop",
     "app:mac": "npm run app:mac32 & npm run app:mac64",
     "app:win": "npm run app:win32 & npm run app:win64",
-    "app:win32": "set ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/ && nativefier -c -p win32 -a x64 --insecure -n 古南师大刷脸签到 \"https://face.moyuyc.xyz/\" -i desktop/logos/logo.png --disable-dev-tools --disable-context-menu desktop",
-    "app:win64": "set ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/ && nativefier -c -p win32 -a ia32 --insecure -n 古南师大刷脸签到 \"https://face.moyuyc.xyz/\" -i desktop/logos/logo.png --disable-dev-tools --disable-context-menu desktop",
+    "app:win32": "set ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/&& nativefier -c -p win32 -a x64 --insecure -n 古南师大刷脸签到 \"https://face.moyuyc.xyz/\" -i desktop/logos/logo.png --disable-dev-tools --disable-context-menu desktop",
+    "app:win64": "set ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/&& nativefier -c -p win32 -a ia32 --insecure -n 古南师大刷脸签到 \"https://face.moyuyc.xyz/\" -i desktop/logos/logo.png --disable-dev-tools --disable-context-menu desktop",
     "start": "cd gp-njnu-photos-backend && npm run start",
     "start:w": "cd gp-njnu-photos-backend && npm run start:w",
     "test": "echo \"Error: no test specified\" && exit 1"
